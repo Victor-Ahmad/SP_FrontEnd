@@ -1,0 +1,31 @@
+{
+    "login": {
+        "signIn": "Inschrijven",
+        "logIn": "Inloggen",
+        "phone": "Telefoonnummer",
+        "password": "Wachtwoord",
+        "register": "Nog geen account? Registreren",
+        "noAccount": "Nog geen account?"
+    },
+    "register": {
+        "signUp": "Maak een account aan",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "email": "E-mail",
+        "phone": "Telefoonnummer",
+        "password": "Wachtwoord",
+        "login": "Heeft u al een account? Inloggen"
+    },
+    "nav": {
+        "home": "Home",
+        "about": "Over",
+        "privacy": "Privacybeleid",
+        "login": "Inloggen",
+        "register": "Registreren",
+        "language": "Taal",
+        "theme": "Thema",
+        "swaps": "Ruilen",
+        "messages": "Berichten",
+        "notifications": "Meldingen"
+    }
+}

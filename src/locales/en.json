@@ -1,0 +1,31 @@
+{
+    "login": {
+        "signIn": "Sign in",
+        "logIn": "Log in",
+        "phone": "Phone Number",
+        "password": "Password",
+        "register": "Don't have an account? Register",
+        "noAccount": "No account yet?"
+    },
+    "register": {
+        "signUp": "Sign up for an account",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "password": "Password",
+        "login": "Already have an account? Login"
+    },
+    "nav": {
+        "home": "Home",
+        "about": "About",
+        "privacy": "Privacy Policy",
+        "login": "Login",
+        "register": "Register",
+        "language": "Language",
+        "theme": "Theme",
+        "swaps": "Swaps",
+        "messages": "Messages",
+        "notifications": "Notifications"
+    }
+}
