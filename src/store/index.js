@@ -94,7 +94,7 @@ const store = createStore({
             try {
                 const response = await getSwapHouses(params);
                 if (response.success) {
-                    commit('setFilteredHouses', response.result.filtered_houses);
+                    commit('setFilteredHouses', response.result.filtered_houses.data);
                 } else {
                     commit('setError', response.message);
                 }

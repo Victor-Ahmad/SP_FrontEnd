@@ -1,8 +1,8 @@
 <template>
-    <div class="flex justify-center mb-6">
+    <div class="flex justify-center mb-4">
         <div
-            class="flex w-full max-w-full rounded overflow-hidden shadow-lg bg-white relative house-card hover:border-2 hover:border-blue-500 transition-border duration-300">
-            <div class="flex-shrink-0" style="width: 400px; height: 300px;">
+            class="flex w-full max-w-full rounded overflow-hidden shadow-lg bg-white relative house-card hover:border-2 custom_hover transition-border duration-300">
+            <div class="flex-shrink-0" style="width: 33.333%; height: 200px;">
                 <swiper :slides-per-view="1" class="swiper-container" style="height: 100%;">
                     <swiper-slide v-for="(image, index) in house.images" :key="index">
                         <img :src="getImageUrl(image.image_path)" class="w-full h-full object-cover">
@@ -12,50 +12,70 @@
                     </swiper-slide>
                 </swiper>
             </div>
-            <div class="px-6 py-4 flex flex-col justify-between w-full relative">
+            <div class="px-4 py-2 flex flex-col justify-between w-2/3 relative">
                 <div class="flex justify-between items-start">
                     <div>
-                        <div class="font-bold text-xl mb-8">{{ house.location }}, {{ house.street }}</div>
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-1/2 text-gray-700 text-base flex items-center mb-2">
-                                <i class="fas fa-envelope mr-2"></i> {{ house.post_code }}
-                            </div>
-                            <div class="w-1/2 text-gray-700 text-base flex items-center mb-2">
+                        <div class="font-bold text-lg">{{ house.street }}</div>
+                        <div class="text-xs mb-4">{{ house.location }}, {{ house.post_code }}</div>
+                        <div class="grid grid-cols-3 gap-x-4 gap-y-2 mb-2">
+                            <div class="text-gray-700 text-sm flex items-center">
                                 <i class="fas fa-user mr-2"></i> {{ house.user.first_name }} {{ house.user.last_name }}
                             </div>
-                            <div class="w-1/2 text-orange-500 text-xl font-semibold flex items-center mb-2">
-                                <i class="fas fa-euro-sign mr-2"></i> {{ house.price }}
+                            <div class="text-blue-custom text-base font-semibold flex items-center">
+                                <i class="fas fa-euro-sign mr-2"></i> {{ house.price }} / month
                             </div>
-                            <div class="w-1/2 text-gray-700 text-base flex items-center mb-2">
-                                <i class="fas fa-home mr-2"></i> <strong>HuisType:</strong> {{ house.house_type.type }}
+                            <div class="text-gray-700 text-sm flex items-center">
+                                <i class="fas fa-home mr-2"></i> {{ house.house_type.type }}
                             </div>
-                            <div class="w-1/2 text-gray-700 text-base flex items-center mb-2">
-                                <i class="fas fa-door-open mr-2"></i> <strong>Kamers:</strong> {{ house.number_of_rooms
+                            <div class="text-gray-700 text-sm flex items-center">
+                                <i class="fas fa-door-open mr-2"></i> <strong>Kamers: </strong> {{ house.number_of_rooms
                                 }}
                             </div>
-                            <div class="w-1/2 text-gray-700 text-base flex items-center mb-2">
-                                <i class="fas fa-heart mr-2"></i> <strong>Interesses:</strong> {{ house.interests }}
+                            <div class="text-gray-700 text-sm flex items-center">
+                                <i class="fas fa-map-marker-alt mr-2"></i> <strong>Area: </strong> {{ house.area }} (m²)
                             </div>
+                        </div>
+                        <!-- New row with three columns and light orange background -->
+                        <!-- <div class="flex justify-between items-center mt-2 mb-2  p-1  bg-light-orange">
+                            <div :class="['flex items-center space-x-1 text-sm', isInterested ? 'text-green-500' : '']">
+                                <span>1 in 2</span>
+                                <i :class="[isInterested ? 'fas' : 'far', 'fa-handshake mr-1']"></i>
+                            </div>
+                            <div class="flex items-center space-x-1 text-sm">
+                                <span>2 in 3</span>
+                                <i class="far fa-handshake mr-1"></i>
+                            </div>
+                            <div class="flex items-center space-x-1 text-sm">
+                                <span> 3 in 1</span>
+                                <i class="far fa-handshake mr-1"></i>
+                            </div>
+                        </div> -->
+                        <hr class="my-2">
+                        <div class="flex flex-wrap space-x-2">
+                            <span v-for="property in validProperties" :key="property.id"
+                                class="px-3 py-1 bg-blue-custom text-white rounded-full text-xs">
+                                {{ property.specific_property.name }}
+                            </span>
                         </div>
                     </div>
                     <button @click="toggleFavorite"
-                        class="absolute top-4 right-4 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform">
+                        class="absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform">
                         <i :class="isFavorite ? 'fas fa-heart text-red-500' : 'far fa-heart'"></i>
                     </button>
                 </div>
-                <div class="flex justify-end space-x-2 mt-4">
-                    <button @click="toggleInterested"
-                        :class="['px-3 py-1 rounded-md flex items-center text-sm transition-transform transform active:scale-95', isInterested ? 'bg-green-500 text-white' : 'border border-green-500 text-green-500']">
-                        <i class="fas fa-thumbs-up mr-1"></i> Interested
-                    </button>
+                <div class="flex justify-end space-x-2 mt-2">
                     <button @click="toggleNotInterested"
-                        :class="['px-3 py-1 rounded-md flex items-center text-sm transition-transform transform active:scale-95', isNotInterested ? 'bg-red-500 text-white' : 'border border-red-500 text-red-500']">
+                        :class="['px-2 py-1 rounded-md flex items-center text-xs transition-transform transform active:scale-95', isNotInterested ? 'bg-red-500 text-white' : 'border border-red-500 text-red-500']">
                         <i class="fas fa-thumbs-down mr-1"></i> Not Interested
                     </button>
-                    <button
-                        class="bg-blue-500 text-white px-3 py-1 rounded-md flex items-center text-sm transition-transform transform active:scale-95">
-                        <i class="fas fa-comment mr-1"></i> Chat
+                    <button @click="toggleInterested"
+                        :class="['px-2 py-1 rounded-md flex items-center text-xs transition-transform transform active:scale-95', isInterested ? 'bg-green-500 text-white' : 'border border-green-500 text-green-500']">
+                        <i class="fas fa-thumbs-up mr-1"></i> Interested
                     </button>
+                    <button
+    class="bg-blue-custom text-white px-2 py-1 rounded-md flex items-center text-xs transition-transform transform active:scale-95">
+    <i class="fas fa-comment mr-1"></i> Chat
+</button>
                 </div>
             </div>
         </div>
@@ -84,6 +104,13 @@ export default {
             isInterested: false,
             isNotInterested: false
         };
+    },
+    computed: {
+        validProperties() {
+            return this.house.specific_properties?.filter(property =>
+                property && property.specific_property && property.specific_property.name
+            ) || [];
+        }
     },
     methods: {
         getImageUrl(path) {
@@ -145,5 +172,26 @@ button.absolute i {
 /* Button hover effects */
 button:hover {
     transform: none;
+}
+
+.bg-light-orange {
+    width: 500px;
+    background-color: rgba(255, 166, 0, 0.2);
+
+}
+.bg-blue-custom {
+    background-color: #154aa8;
+}
+.text-blue-custom{
+    color: #154aa8;
+}
+.custom_hover:hover{
+border-color: #154aa8;
+}
+.bg-green-custom {
+    background-color: #22893c;
+}
+.bg-red-custom {
+    background-color: #b3251e;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-1/4 p-4 bg-white rounded-lg shadow-lg mr-6">
+    <div class=" p-4 bg-white rounded-lg shadow-lg mr-6">
         <h2 class="text-xl font-bold mb-4">Search</h2>
         <input v-model="localFilters.search" type="text" placeholder="Search in the exchange list, for example"
             class="w-full p-2 mb-4 border rounded" />
