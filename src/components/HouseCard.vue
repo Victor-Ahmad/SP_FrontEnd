@@ -1,8 +1,7 @@
 <template>
-    <div class="flex justify-center mb-4">
-        <div
-            class="flex w-full max-w-full rounded overflow-hidden shadow-lg bg-white relative house-card hover:border-2 custom_hover transition-border duration-300">
-            <div class="flex-shrink-0" style="width: 33.333%; height: 200px;">
+    <div class="flex justify-center mb-4 " @click="goToDetailPage">
+        <div class="flex flex-col w-full max-w-full rounded overflow-hidden shadow-lg bg-white relative house-card hover:border-2 custom_hover transition-border duration-300">
+            <div class="flex-shrink-0" style="width: 100%; height: 200px;">
                 <swiper :slides-per-view="1" class="swiper-container" style="height: 100%;">
                     <swiper-slide v-for="(image, index) in house.images" :key="index">
                         <img :src="getImageUrl(image.image_path)" class="w-full h-full object-cover">
@@ -12,70 +11,49 @@
                     </swiper-slide>
                 </swiper>
             </div>
-            <div class="px-4 py-2 flex flex-col justify-between w-2/3 relative">
+            <div class="px-4 py-2 flex flex-col justify-between w-full relative house-card-content">
                 <div class="flex justify-between items-start">
                     <div>
                         <div class="font-bold text-lg">{{ house.street }}</div>
                         <div class="text-xs mb-4">{{ house.location }}, {{ house.post_code }}</div>
-                        <div class="grid grid-cols-3 gap-x-4 gap-y-2 mb-2">
-                            <div class="text-gray-700 text-sm flex items-center">
-                                <i class="fas fa-user mr-2"></i> {{ house.user.first_name }} {{ house.user.last_name }}
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-2 house-details">
+                            <div class="text-gray-700 text-sm flex items-center user-icon">
+                                <i class="fas fa-user mr-2 icon_custom_color"></i> {{ house.user.first_name }} {{ house.user.last_name }}
                             </div>
-                            <div class="text-blue-custom text-base font-semibold flex items-center">
+                            <div class="text-purple-custom text-base font-semibold flex items-center">
                                 <i class="fas fa-euro-sign mr-2"></i> {{ house.price }} / month
                             </div>
                             <div class="text-gray-700 text-sm flex items-center">
-                                <i class="fas fa-home mr-2"></i> {{ house.house_type.type }}
+                                <i class="fas fa-home mr-2 icon_custom_color"></i> {{ house.house_type.type }}
                             </div>
                             <div class="text-gray-700 text-sm flex items-center">
-                                <i class="fas fa-door-open mr-2"></i> <strong>Kamers: </strong> {{ house.number_of_rooms
-                                }}
+                                <i class="fas fa-door-open mr-2 icon_custom_color"></i> <strong>Kamers: </strong> {{ house.number_of_rooms }}
                             </div>
                             <div class="text-gray-700 text-sm flex items-center">
-                                <i class="fas fa-map-marker-alt mr-2"></i> <strong>Area: </strong> {{ house.area }} (m²)
+                                <i class="fas fa-map-marker-alt mr-2 icon_custom_color"></i> <strong>Area: </strong> {{ house.area }} (m²)
                             </div>
                         </div>
-                        <!-- New row with three columns and light orange background -->
-                        <!-- <div class="flex justify-between items-center mt-2 mb-2  p-1  bg-light-orange">
-                            <div :class="['flex items-center space-x-1 text-sm', isInterested ? 'text-green-500' : '']">
-                                <span>1 in 2</span>
-                                <i :class="[isInterested ? 'fas' : 'far', 'fa-handshake mr-1']"></i>
-                            </div>
-                            <div class="flex items-center space-x-1 text-sm">
-                                <span>2 in 3</span>
-                                <i class="far fa-handshake mr-1"></i>
-                            </div>
-                            <div class="flex items-center space-x-1 text-sm">
-                                <span> 3 in 1</span>
-                                <i class="far fa-handshake mr-1"></i>
-                            </div>
-                        </div> -->
-                        <hr class="my-2">
-                        <div class="flex flex-wrap space-x-2">
-                            <span v-for="property in validProperties" :key="property.id"
-                                class="px-3 py-1 bg-blue-custom text-white rounded-full text-xs">
+                        <div :class="{'border-t border-gray-200 pt-2': validProperties.length}" class="flex flex-wrap space-x-2">
+                            <span v-for="property in validProperties" :key="property.id" class="px-3 py-1 bg-purple-custom text-white rounded-full text-xs">
                                 {{ property.specific_property.name }}
                             </span>
                         </div>
                     </div>
-                    <button @click="toggleFavorite"
-                        class="absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform">
+                    <button @click="handleFavoriteClick" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform">
                         <i :class="isFavorite ? 'fas fa-heart text-red-500' : 'far fa-heart'"></i>
                     </button>
                 </div>
-                <div class="flex justify-end space-x-2 mt-2">
-                    <button @click="toggleNotInterested"
-                        :class="['px-2 py-1 rounded-md flex items-center text-xs transition-transform transform active:scale-95', isNotInterested ? 'bg-red-500 text-white' : 'border border-red-500 text-red-500']">
-                        <i class="fas fa-thumbs-down mr-1"></i> Not Interested
-                    </button>
-                    <button @click="toggleInterested"
-                        :class="['px-2 py-1 rounded-md flex items-center text-xs transition-transform transform active:scale-95', isInterested ? 'bg-green-500 text-white' : 'border border-green-500 text-green-500']">
+              
+                <div class="flex justify-between items-center mt-2 space-x-2 border-t border-gray-200 pt-2">
+                    <button @click="handleInterestedClick" :class="['flex-1 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95', isInterested ? 'bg-interested-active text-white' : 'border border-interested-active text-interested-active']">
                         <i class="fas fa-thumbs-up mr-1"></i> Interested
                     </button>
-                    <button
-    class="bg-blue-custom text-white px-2 py-1 rounded-md flex items-center text-xs transition-transform transform active:scale-95">
-    <i class="fas fa-comment mr-1"></i> Chat
-</button>
+                    <button @click="toggleNotInterested" :class="['flex-2 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95', isNotInterested ? 'bg-red-custom text-white' : 'border border-red-custom text-red-custom']">
+                        <i class="fas fa-thumbs-down mr-1"></i> Not Interested
+                    </button>
+                    <button class="px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-purple-custom2 text-white">
+                        <i class="fas fa-comment mr-1"></i> Chat
+                    </button>
                 </div>
             </div>
         </div>
@@ -85,6 +63,7 @@
 <script>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper-bundle.css';
+import { expressInterest, addToFavorites } from '@/services/apiService';
 
 export default {
     name: 'HouseCard',
@@ -116,13 +95,27 @@ export default {
         getImageUrl(path) {
             return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
         },
-        toggleFavorite() {
+        async handleFavoriteClick() {
             this.isFavorite = !this.isFavorite;
+            if (this.isFavorite) {
+                try {
+                    const response = await addToFavorites(this.house.id);
+                    console.log('Added to favorites successfully:', response);
+                } catch (error) {
+                    console.error('Error adding to favorites:', error);
+                }
+            }
         },
-        toggleInterested() {
+        async handleInterestedClick() {
             this.isInterested = !this.isInterested;
             if (this.isInterested) {
                 this.isNotInterested = false;
+                try {
+                    const response = await expressInterest(this.house.id);
+                    console.log('Interest expressed successfully:', response);
+                } catch (error) {
+                    console.error('Error expressing interest:', error);
+                }
             }
         },
         toggleNotInterested() {
@@ -130,6 +123,9 @@ export default {
             if (this.isNotInterested) {
                 this.isInterested = false;
             }
+        },
+        goToDetailPage() {
+            this.$router.push({ name: 'HouseDetail', params: { id: this.house.id } });
         }
     }
 };
@@ -177,21 +173,79 @@ button:hover {
 .bg-light-orange {
     width: 500px;
     background-color: rgba(255, 166, 0, 0.2);
+}
 
+.text-purple-custom {
+    color: #c36087;
 }
-.bg-blue-custom {
-    background-color: #154aa8;
+.text-green-custom {
+    color: #22893c;
 }
-.text-blue-custom{
-    color: #154aa8;
+.text-red-custom {
+    color: #FF0000;
 }
-.custom_hover:hover{
-border-color: #154aa8;
+.border-red-custom {
+    border: solid #FF0000;
+}
+.custom_hover:hover {
+    border-color: #5e1675;
 }
 .bg-green-custom {
     background-color: #22893c;
 }
+.bg-purple-custom {
+    background-color: #e2b8a054;
+    color:#000;
+}
+.bg-purple-custom2 {
+    background-color: #5e1675;
+    color: #fff;
+}
 .bg-red-custom {
-    background-color: #b3251e;
+    background-color: #FF0000;
+    border: solid #FF0000;
+}
+
+.border-interested-active {
+    border-color: #5e1675;
+}
+.text-interested-active {
+    color: #5e1675;
+}
+.bg-interested-active {
+    background-color: #5e1675;
+}
+
+.user-icon i {
+    color: #c36087;
+}
+
+.icon_custom_color{
+    color: #c36087;
+}
+
+.house-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.house-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 16px;
+}
+
+.border-t {
+    border-top-width: 1px;
+}
+
+.border-gray-300 {
+    border-color: #D1D5DB; /* Tailwind's gray-300 color */
+}
+
+.pt-2 {
+    padding-top: 0.5rem; /* Tailwind's padding top 2 */
 }
 </style>

@@ -6,9 +6,9 @@
             <div class="w-1/4">
                 <Sidebar :filters="filters" @applyFilters="applyFilters" />
             </div>
-            <div class="w-3/4 space-y-6">
-                <div class="progress-background">
-                    <div class="progress-container ">
+            <div class="w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div   v-if="progress < 100" class="progress-background col-span-full">
+                    <div class="progress-container">
                         <div class="progress-circle">
                             <svg viewBox="0 0 100 100">
                                 <circle class="background" cx="50" cy="50" r="45"></circle>
@@ -18,26 +18,33 @@
                         </div>
                         <div class="missing-steps">
                             <p>Complete your account to get better house exchange matches</p>
-                            <a href="#">Go to profile</a>
+                            <router-link :to="profileCompletionLink">Go to profile</router-link>
                         </div>
                     </div>
                 </div>
-                
-                <div class="tab-buttons underlined-tabs">
-                    <button 
-                        :class="{'active-tab': activeTab === 'houses'}" 
-                        @click="activeTab = 'houses'">All List</button>
-                    <button 
-                        :class="{'active-tab': activeTab === 'other1'}" 
-                        @click="activeTab = 'other1'">Perfect Triangles</button>
+
+                <div class="tab-buttons col-span-full underlined-tabs">
+                    <button
+                        :class="{'active-tab': activeTab === 'houses'}"
+                        @click="setActiveTab('houses')">All List</button>
+                    <button
+                        :class="{'active-tab': activeTab === 'other1'}"
+                        @click="setActiveTab('other1')">Perfect Triangles</button>
                 </div>
-                <div v-if="activeTab === 'houses'">
+                <div v-if="activeTab === 'houses'" class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <HouseCard v-for="house in filteredHouses" :key="house.id" :house="house" />
+                    <div  class="col-span-full">
+                        <BasePagination
+                            :currentPage="currentPage"
+                            :totalPages="totalPages"
+                            @changePage="fetchFilteredHouses"
+                        />
+                    </div>
                 </div>
-                <div v-else-if="activeTab === 'other1'">
-                    <p>This is the content for the other tab 1.</p>
+                <div v-else-if="activeTab === 'other1'" class="col-span-full ">
+                    <p style="height: 150vh;">This is the content for the other tab 1.</p>
                 </div>
-              
+               
             </div>
         </div>
     </div>
@@ -48,18 +55,22 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import HouseCard from '@/components/HouseCard.vue';
 import Sidebar from '@/components/Sidebar.vue';
-
+import BasePagination from '@/components/BasePagination.vue';
+import { getProfileProgress } from '@/services/apiService';
 export default {
     name: 'Home',
     components: {
         HouseCard,
-        Sidebar
+        Sidebar,
+        BasePagination
     },
     setup() {
         const store = useStore();
         const isLoading = computed(() => store.getters.isLoading);
         const error = computed(() => store.getters.error);
         const filteredHouses = computed(() => store.getters.filteredHouses);
+        const pagination = computed(() => store.getters.pagination);
+
         const filters = ref({
             search: '',
             exchangeType: [],
@@ -71,31 +82,51 @@ export default {
             numberOfRooms: [],
             areas: []
         });
-        const progress = ref(60); // Set progress to 60%
-        const activeTab = ref('houses'); // State variable for the active tab
 
-        onMounted(async () => {
-            await store.dispatch('fetchFilteredHouses', {
-                price_min: null,
-                price_max: null,
-                number_of_rooms: null,
-                location: null
-            });
-            updateProgress();
-        });
+        const progress = ref(60);
+        const activeTab = ref('houses');
+        const currentPage = ref(1);
+        const totalPages = ref(1);
+        const showDescription = ref(false);
+        const showImages = ref(false);
 
-        const applyFilters = async (filters) => {
-            await store.dispatch('fetchFilteredHouses', {
-                search: filters.search,
-                exchangeType: filters.exchangeType,
-                hiddenFavorite: filters.hiddenFavorite,
-                amenities: filters.amenities,
-                rentRange: filters.rentRange,
-                sizeRange: filters.sizeRange,
-                floorRange: filters.floorRange,
-                numberOfRooms: filters.numberOfRooms,
-                areas: filters.areas
-            });
+        const fetchFilteredHouses = async (page = 1) => {
+            try {
+                await store.dispatch('fetchFilteredHouses', {
+                    ...filters.value,
+                    page
+                });
+                currentPage.value = pagination.value.current_page;
+                totalPages.value = pagination.value.last_page;
+                await fetchProfileProgress();
+
+            } catch (error) {
+                console.error('Error fetching houses:', error);
+            }
+        };
+        const fetchProfileProgress = async () => {
+            try {
+                const response = await getProfileProgress();
+                if (response.success) {
+                    const progressPercentage = parseInt(response.result.progress);
+                    progress.value = progressPercentage;
+                    updateProgress(progressPercentage);
+                    processMissingSteps(response.result.missing_steps);
+                }
+            } catch (error) {
+                console.error('Error fetching profile progress:', error);
+            }
+        };
+        const processMissingSteps = (missingSteps) => {
+            showDescription.value = missingSteps.some(step => step.toLowerCase().includes('description'));
+            showImages.value = missingSteps.some(step => step.toLowerCase().includes('image'));
+        };
+        const applyFilters = async () => {
+            await fetchFilteredHouses(1);
+        };
+
+        const setActiveTab = (tab) => {
+            activeTab.value = tab;
         };
 
         const updateProgress = () => {
@@ -103,13 +134,19 @@ export default {
             const circumference = 2 * Math.PI * 45;
             const offset = circumference - (progressValue / 100) * circumference;
             const foregroundCircle = document.querySelector('.progress-circle .foreground');
-            const progressText = document.querySelector('.progress-text');
-
-            foregroundCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-            foregroundCircle.style.strokeDashoffset = offset;
-            progressText.textContent = `${progressValue}%`;
+            if (foregroundCircle) {
+                foregroundCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+                foregroundCircle.style.strokeDashoffset = offset;
+            }
         };
 
+        onMounted(() => {
+            fetchFilteredHouses();
+        });
+        const profileCompletionLink = computed(() => ({
+            name: 'ProfileCompletion',
+            query: { showDescription: showDescription.value, showImages: showImages.value }
+        }));
         watch(progress, updateProgress);
 
         return {
@@ -119,21 +156,106 @@ export default {
             filters,
             applyFilters,
             progress,
-            activeTab
+            activeTab,
+            currentPage,
+            totalPages,
+            setActiveTab,
+            fetchFilteredHouses,
+            profileCompletionLink
         };
     }
 };
 </script>
 
 <style scoped>
+/* Ensure fixed height for the swiper */
+.swiper-container {
+    height: 100%;
+}
+
+button i.fas.fa-heart,
+button i.far.fa-heart {
+    transition: color 0.3s;
+    font-size: 24px;
+    /* Increase font size for larger icon */
+}
+
+button i.fas,
+button i.far {
+    font-size: 16px;
+    /* Decrease icon size for smaller buttons */
+}
+
+.house-card {
+    transition: border 0.3s ease;
+}
+
+button.absolute {
+    padding: 8px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: none;
+}
+
+button.absolute i {
+    font-size: 24px;
+}
+
+/* Button hover effects */
+button:hover {
+    transform: none;
+}
+
+.bg-light-orange {
+    width: 500px;
+    background-color: rgba(255, 166, 0, 0.2);
+}
+
+.bg-blue-custom {
+    background-color: #fc3025;
+}
+.text-blue-custom {
+    color: #154aa8;
+}
+.text-purple-custom {
+    color: #5e1675;
+}
+.text-green-custom {
+    color: #22893c;
+}
+.text-orange-custom {
+    color: #FF6500;
+}
+.custom_hover:hover {
+    border-color: #FF6500;
+}
+.bg-green-custom {
+    background-color: #22893c;
+}
+.bg-purple-custom {
+    background-color: #5e1675;
+}
+.bg-red-custom {
+    background-color: #5e1675;
+}
+.bg-blue-custom {
+    background-color: #154aa8;
+}
+.bg-orange-custom {
+    background-color: #FF6500;
+}
+
+/* Additional CSS for the grid layout */
+.grid {
+    display: grid;
+}
+
 /* Background for the progress section */
 .progress-background {
-    /* background-color: #ffedd5; */
     padding: 20px;
     border-radius: 100px ; 
     margin-bottom: 20px;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.315);
-
 }
 
 .progress-container {
@@ -160,13 +282,11 @@ export default {
 }
 
 .progress-circle .background {
-    stroke: #154ba854;
-    /* stroke: #22893c; */
-    /* stroke:#b3251e; */
+    stroke: #c3608867;
 }
 
 .progress-circle .foreground {
-    stroke: #154aa8;
+    stroke: #722262;
     stroke-linecap: round;
     stroke-dasharray: 0 100;
     transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
@@ -194,7 +314,7 @@ export default {
 
 .missing-steps a {
     display: block;
-    color: #154aa8;
+    color: #c36087;
     text-decoration: none;
     margin-bottom: 5px;
     font-weight: bold;
@@ -203,7 +323,7 @@ export default {
 
 .missing-steps a:hover {
     text-decoration: underline;
-    color: #154aa8;
+    color: #722262;
 }
 
 /* Underlined Tabs Styling */
@@ -229,23 +349,44 @@ export default {
 }
 
 .underlined-tabs button:hover {
-background-color:#154ba854;
-    /* background-color: rgba(0, 0, 0, 0.05); */
+    background-color:#e2b8a078;
 }
 
 .underlined-tabs .active-tab {
-    border-bottom: 3px solid #154aa8;
+    border-bottom: 3px solid #722262;
     font-weight: 700;
-    /* background-color: #ffedd5; */
-    background-color: #154ba835;
+    background-color: #e2b8a054;
 }
-.bg-blue-custom {
-    background-color: #154aa8;
+/* Pagination Styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
 }
-.bg-green-custom {
-    background-color: #22893c;
+
+.pagination-container button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
 }
-.bg-red-custom {
-    background-color: #b3251e;
+
+.pagination-container button.active {
+    background-color: #722262;
+    color: #fff;
+}
+
+.pagination-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-container button:hover:not(:disabled) {
+    background-color: #e0e0e0;
 }
 </style>

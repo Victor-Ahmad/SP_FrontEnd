@@ -1,16 +1,26 @@
 <template>
-    <div>
-        <h1>Messages Page</h1>
-        <p>Welcome to the messages page!</p>
-    </div>
-</template>
-
-<script>
-export default {
-    name: 'Messages'
-};
-</script>
-
-<style scoped>
-/* Add your styles here */
-</style>
+    <vue-advanced-chat
+      :current-user-id="currentUserId"
+      :rooms="rooms"
+      :messages="messages"
+      :room-actions="roomActions"
+    />
+  </template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        currentUserId: '1234',
+        rooms: [],
+        messages: [],
+        roomActions: [
+          { name: 'inviteUser', title: 'Invite User' },
+          { name: 'removeUser', title: 'Remove User' },
+          { name: 'deleteRoom', title: 'Delete Room' }
+        ]
+      }
+    }
+  }
+  </script>
+  

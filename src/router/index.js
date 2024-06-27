@@ -7,7 +7,10 @@ import Register from '@/pages/Register.vue';
 import Swaps from '@/pages/Swaps.vue';
 import Messages from '@/pages/Messages.vue';
 import Notifications from '@/pages/Notifications.vue';
+import ProfileCompletion from '@/pages/ProfileCompletion.vue';
+import HouseDetail from '@/pages/HouseDetail.vue';
 import store from '@/store';
+
 
 const routes = [
   {
@@ -15,7 +18,7 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
-        path: '',
+        path: 'home',
         component: Home,
         meta: { requiresAuth: true }
       },
@@ -45,6 +48,17 @@ const routes = [
         path: 'notifications',
         component: Notifications,
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'profileCompletion',
+        name: 'ProfileCompletion',
+        component: ProfileCompletion,
+        meta: { requiredsAuth: true }
+      },
+      {
+        path: '/house/:id',
+        component: HouseDetail,
+        name: 'HouseDetail'
       }
     ]
   }

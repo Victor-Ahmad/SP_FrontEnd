@@ -5,20 +5,14 @@
             <div class="text-2xl font-bold">MyLogo</div>
         </div>
         <nav class="flex space-x-4 items-center">
-            <router-link to="/" class="hover:text-orange-500 transition duration-300 ease-in-out">{{ $t('nav.home')
-                }}</router-link>
-            <router-link to="/swaps" class="hover:text-orange-500 transition duration-300 ease-in-out">{{ $t('nav.swaps')
-                }}</router-link>
-            <router-link to="/messages" class="hover:text-orange-500 transition duration-300 ease-in-out">{{
-                $t('nav.messages') }}</router-link>
-            <router-link to="/notifications" class="hover:text-orange-500 transition duration-300 ease-in-out">{{
-                $t('nav.notifications') }}</router-link>
+            <router-link to="/home" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.home') }}</router-link>
+            <router-link to="/swaps" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.swaps') }}</router-link>
+            <router-link to="/messages" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.messages') }}</router-link>
         </nav>
         <div class="flex space-x-4 items-center">
-            <router-link to="/login" class="hover:text-orange-500 transition duration-300 ease-in-out">{{ $t('nav.login')
-                }}</router-link>
-            <router-link to="/register" class="hover:text-orange-500 transition duration-300 ease-in-out">{{
-                $t('nav.register') }}</router-link>
+            <NotificationDropdown />
+            <router-link to="/login" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.login') }}</router-link>
+            <router-link to="/register" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.register') }}</router-link>
             <LanguageDropdown />
         </div>
     </header>
@@ -26,15 +20,25 @@
 
 <script>
 import LanguageDropdown from '@/components/LanguageDropdown.vue';
+import NotificationDropdown from '@/components/NotificationDropdown.vue';
 
 export default {
     name: 'Header',
     components: {
-        LanguageDropdown
+        LanguageDropdown,
+        NotificationDropdown
     }
 };
 </script>
 
 <style scoped>
 /* Add any custom styles here */
+.active {
+    color: #c36087; /* Highlight color for active link */
+    font-weight: bold;
+}
+
+.hover-color:hover {
+    color: #5e1675; /* Hover color */
+}
 </style>

@@ -7,7 +7,13 @@ const store = createStore({
         user: null,
         token: localStorage.getItem('token') || null,
         error: null,
-        filteredHouses: []
+        filteredHouses: [],
+        pagination: {
+            current_page: 1,
+            last_page: 1,
+            per_page: 12,
+            total: 0
+        }
     },
     mutations: {
         setLoading(state, status) {
@@ -18,6 +24,7 @@ const store = createStore({
         },
         setToken(state, token) {
             state.token = token;
+            console.log('Token:', token);
             if (token) {
                 localStorage.setItem('token', token);
             } else {
@@ -29,6 +36,9 @@ const store = createStore({
         },
         setFilteredHouses(state, houses) {
             state.filteredHouses = houses;
+        },
+        setPagination(state, pagination) {
+            state.pagination = pagination;
         },
         clearAuthData(state) {
             state.user = null;
@@ -58,6 +68,7 @@ const store = createStore({
                 if (response.success) {
                     commit('setUser', response.result.user);
                     commit('setToken', response.result.token);
+
                 } else {
                     commit('setError', response.message);
                     throw new Error(response.message);
@@ -95,6 +106,12 @@ const store = createStore({
                 const response = await getSwapHouses(params);
                 if (response.success) {
                     commit('setFilteredHouses', response.result.filtered_houses.data);
+                    commit('setPagination', {
+                        current_page: response.result.filtered_houses.current_page,
+                        last_page: response.result.filtered_houses.last_page,
+                        per_page: response.result.filtered_houses.per_page,
+                        total: response.result.filtered_houses.total
+                    });
                 } else {
                     commit('setError', response.message);
                 }
@@ -110,7 +127,8 @@ const store = createStore({
         user: state => state.user,
         token: state => state.token,
         error: state => state.error,
-        filteredHouses: state => state.filteredHouses
+        filteredHouses: state => state.filteredHouses,
+        pagination: state => state.pagination
     },
 });
 
