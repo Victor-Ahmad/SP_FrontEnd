@@ -218,7 +218,7 @@ button:hover {
     color: #154aa8;
 }
 .text-purple-custom {
-    color: #5e1675;
+    color: #07A984;
 }
 .text-green-custom {
     color: #22893c;
@@ -233,7 +233,7 @@ button:hover {
     background-color: #22893c;
 }
 .bg-purple-custom {
-    background-color: #5e1675;
+    background-color: #07A984;
 }
 .bg-red-custom {
     background-color: #5e1675;
@@ -282,11 +282,11 @@ button:hover {
 }
 
 .progress-circle .background {
-    stroke: #c3608867;
+    stroke: #E8FDF6;
 }
 
 .progress-circle .foreground {
-    stroke: #722262;
+    stroke: #07A984;
     stroke-linecap: round;
     stroke-dasharray: 0 100;
     transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
@@ -314,7 +314,7 @@ button:hover {
 
 .missing-steps a {
     display: block;
-    color: #c36087;
+    color: #07A984;
     text-decoration: none;
     margin-bottom: 5px;
     font-weight: bold;
@@ -323,7 +323,7 @@ button:hover {
 
 .missing-steps a:hover {
     text-decoration: underline;
-    color: #722262;
+    color: #07A984;
 }
 
 /* Underlined Tabs Styling */
@@ -349,13 +349,13 @@ button:hover {
 }
 
 .underlined-tabs button:hover {
-    background-color:#e2b8a078;
+    background-color:#07a98332;
 }
 
 .underlined-tabs .active-tab {
-    border-bottom: 3px solid #722262;
+    border-bottom: 3px solid #07A984;
     font-weight: 700;
-    background-color: #e2b8a054;
+    background-color: #E8FDF6;
 }
 /* Pagination Styles */
 .pagination-container {
@@ -377,7 +377,7 @@ button:hover {
 }
 
 .pagination-container button.active {
-    background-color: #722262;
+    background-color: #E8FDF6;
     color: #fff;
 }
 

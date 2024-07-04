@@ -74,7 +74,7 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    router.push('/');
+                    router.push('/home');
                 });
             } catch (error) {
                 Swal.fire({

@@ -77,7 +77,7 @@
   }
   
   .pagination-container button.active {
-    background-color: #722262;
+    background-color: #07A984;
     color: #fff;
   }
   

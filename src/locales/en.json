@@ -26,6 +26,7 @@
         "theme": "Theme",
         "swaps": "Swaps",
         "messages": "Messages",
-        "notifications": "Notifications"
+        "notifications": "Notifications",
+        "profile": "Profile"
     }
 }

@@ -31,6 +31,9 @@ export const getSwapHouses = async (params) => {
         throw error;
     }
 };
+
+
+
 export const expressInterest = async (houseId) => {
     try {
         const response = await axiosInstance.post(`/interest/${houseId}`);
@@ -48,9 +51,11 @@ export const addToFavorites = async (houseId) => {
         throw error;
     }
 };
+
 export const getProfileProgress = async () => {
     try {
         const response = await axiosInstance.get('/profile_progress');
+        console.log(response.data);
         return response.data;
     } catch (error) {
         throw error;
@@ -85,6 +90,15 @@ export const getSwapWithMe = async () => {
 export const getCompleteInterest = async () => {
     try {
         const response = await axiosInstance.get('/complete_interest');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getProfile = async () => {
+    try {
+        const response = await axiosInstance.get('/get_profile');
         return response.data;
     } catch (error) {
         throw error;
@@ -132,5 +146,36 @@ export const getHouseById = async (houseId) => {
     }
 };
 
+export const getChats = async () => {
+    try {
+        const response = await axiosInstance.get(`/chats`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 
+export const getChatMessages = async (chatId) => {
+    try {
+        const response = await axiosInstance.get(`/show_chats/${chatId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+
+export const sendMessage = async (message, receiverUserId) => {
+    try {
+        const response = await axiosInstance.post('/send_message', { message, receiver_user_id: receiverUserId });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const saveProfile = async (data) => {
+    console.log(data);
+};

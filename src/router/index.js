@@ -5,11 +5,13 @@ import About from '@/pages/About.vue';
 import Login from '@/pages/Login.vue';
 import Register from '@/pages/Register.vue';
 import Swaps from '@/pages/Swaps.vue';
-import Messages from '@/pages/Messages.vue';
+import ChatPage from '@/pages/ChatPage.vue';
 import Notifications from '@/pages/Notifications.vue';
 import ProfileCompletion from '@/pages/ProfileCompletion.vue';
 import HouseDetail from '@/pages/HouseDetail.vue';
 import store from '@/store';
+import Profile from '@/pages/profile.vue';
+import WizardForm from '@/components/WizardForm.vue';
 
 
 const routes = [
@@ -21,6 +23,10 @@ const routes = [
         path: 'home',
         component: Home,
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'wizardForm',
+        component: WizardForm
       },
       {
         path: 'about',
@@ -40,8 +46,13 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: 'messages',
-        component: Messages,
+        path: 'chatPage',
+        component: ChatPage,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'profile',
+        component: Profile,
         meta: { requiresAuth: true }
       },
       {

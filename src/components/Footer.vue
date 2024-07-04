@@ -9,7 +9,7 @@
                 }}</router-link>
             <router-link to="/swaps" class="hover:text-gray-400 transition duration-300 ease-in-out">{{ $t('nav.swaps')
                 }}</router-link>
-            <router-link to="/messages" class="hover:text-gray-400 transition duration-300 ease-in-out">{{
+            <router-link to="/chatPage" class="hover:text-gray-400 transition duration-300 ease-in-out">{{
                 $t('nav.messages')
             }}</router-link>
             <router-link to="/notifications" class="hover:text-gray-400 transition duration-300 ease-in-out">{{

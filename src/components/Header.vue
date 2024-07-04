@@ -7,7 +7,8 @@
         <nav class="flex space-x-4 items-center">
             <router-link to="/home" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.home') }}</router-link>
             <router-link to="/swaps" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.swaps') }}</router-link>
-            <router-link to="/messages" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.messages') }}</router-link>
+            <router-link to="/chatPage" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.messages') }}</router-link>
+            <router-link to="/profile" class="hover-color transition duration-300 ease-in-out" active-class="active">{{ $t('nav.profile') }}</router-link>
         </nav>
         <div class="flex space-x-4 items-center">
             <NotificationDropdown />
@@ -34,11 +35,11 @@ export default {
 <style scoped>
 /* Add any custom styles here */
 .active {
-    color: #c36087; /* Highlight color for active link */
+    color: #07A984; /* Highlight color for active link */
     font-weight: bold;
 }
 
 .hover-color:hover {
-    color: #5e1675; /* Hover color */
+    color: #07A984; /* Hover color */
 }
 </style>
