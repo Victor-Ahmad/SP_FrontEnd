@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row justify-between h-full p-6" ref="formContainer">
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-t-2 border-b-2 border-gray-300 py-2 mb-4">
-        <h3 class="text-2xl font-bold text-[#07A984]">Your House</h3>
+        <h3 class="text-2xl font-bold text-[#07A984]">My House</h3>
       </div>
 
       <div class="mb-6">
@@ -10,11 +10,13 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">Post Code</h3>
-              <input type="text" v-model="formData.post_code" placeholder="Enter post code" class="input-field w-full p-2 border rounded">
+              <input type="text" v-model="formData.post_code" placeholder="Enter post code" class="input-field w-full p-2 border rounded" @input="fetchCityFromPostCode">
+              <div v-if="errors.post_code" class="invalid-feedback">{{ errors.post_code }}</div>
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">House Number</h3>
-              <input type="text" v-model="formData.house_number" placeholder="Enter house number" class="input-field w-full p-2 border rounded">
+              <input type="text" v-model="formData.house_number" placeholder="Enter house number" class="input-field w-full p-2 border rounded" @input="fetchStreetFromPostCodeAndHouseNumber">
+              <div v-if="errors.house_number" class="invalid-feedback">{{ errors.house_number }}</div>
             </div>
           </div>
         </div>
@@ -23,11 +25,13 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">Location</h3>
-              <input type="text" v-model="formData.location_name" placeholder="Enter location name" class="input-field w-full p-2 border rounded">
+              <input type="text" v-model="formData.location_name" placeholder="Enter location name" class="input-field w-full p-2 border rounded" readonly>
+              <div v-if="errors.location_name" class="invalid-feedback">{{ errors.location_name }}</div>
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">Street</h3>
-              <input type="text" v-model="formData.street" placeholder="Enter street name" class="input-field w-full p-2 border rounded">
+              <input type="text" v-model="formData.street" placeholder="Enter street name" class="input-field w-full p-2 border rounded" readonly>
+              <div v-if="errors.street" class="invalid-feedback">{{ errors.street }}</div>
             </div>
           </div>
         </div>
@@ -37,15 +41,17 @@
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">House Type</h3>
               <div class="relative" ref="houseTypeDropdown">
-                <input type="text" v-model="formData.house_type" placeholder="Select an option" readonly class="input-field w-full p-2 border rounded cursor-pointer" @click="toggleDropdown('showDropdown')">
+                <input type="text" v-model="selectedHouseTypeName" placeholder="Select an option" readonly class="input-field w-full p-2 border rounded cursor-pointer" @click="toggleDropdown('showDropdown')">
                 <ul v-show="showDropdown" class="dropdown-content">
-                  <li v-for="(type, index) in houseTypes" :key="index" @click="selectHouseType(type)" class="p-2 hover:bg-gray-100 cursor-pointer">{{ type }}</li>
+                  <li v-for="(type, index) in houseTypes" :key="index" @click="selectHouseType(type)" class="p-2 hover:bg-gray-100 cursor-pointer">{{ type.type }}</li>
                 </ul>
               </div>
+              <div v-if="errors.house_type" class="invalid-feedback">{{ errors.house_type }}</div>
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">Rent Price (€)</h3>
               <input type="number" v-model="formData.price" placeholder="Enter price" class="input-field w-full p-2 border rounded" step="0.01">
+              <div v-if="errors.price" class="invalid-feedback">{{ errors.price }}</div>
             </div>
           </div>
         </div>
@@ -59,10 +65,12 @@
                   {{ number }}
                 </li>
               </ul>
+              <div v-if="errors.number_of_rooms" class="invalid-feedback">{{ errors.number_of_rooms }}</div>
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">Floor</h3>
               <input type="number" v-model="formData.floor" placeholder="Enter floor number" class="input-field w-full p-2 border rounded" min="0" step="1">
+              <div v-if="errors.floor" class="invalid-feedback">{{ errors.floor }}</div>
             </div>
           </div>
         </div>
@@ -77,6 +85,7 @@
                   <li v-for="(area, index) in areas" :key="index" @click="selectArea(area)" class="p-2 hover:bg-gray-100 cursor-pointer">{{ area }}</li>
                 </ul>
               </div>
+              <div v-if="errors.area" class="invalid-feedback">{{ errors.area }}</div>
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#07A984] mb-2">House Features</h3>
@@ -86,8 +95,14 @@
                   <li v-for="(feature, index) in features" :key="index" @click="toggleFeature(feature)" class="p-2 hover:bg-gray-100 cursor-pointer" :class="{'bg-gray-200': formData.features.includes(feature)}">{{ feature }}</li>
                 </ul>
               </div>
+              <div v-if="errors.features" class="invalid-feedback">{{ errors.features }}</div>
             </div>
           </div>
+        </div>
+        <div class="form-group mb-4">
+          <h3 class="text-lg font-semibold text-[#07A984] mb-2">Housing Corporation </h3>
+          <input type="text" v-model="formData.swap_company" placeholder="Enter my Housing Corporation" class="input-field w-full p-2 border rounded">
+          <div v-if="errors.swap_company" class="invalid-feedback">{{ errors.swap_company }}</div>
         </div>
 
       </div>
@@ -97,23 +112,27 @@
     </div>
   </div>
 </template>
+
 <script>
+import { getHouseTypes } from '@/services/apiService'; // Adjust the path as necessary
+
 export default {
   props: ['formData', 'image'],
   data() {
     return {
-      houseTypes: ['Apartment', 'House', 'Studio'],
+      houseTypes: [],
+      selectedHouseTypeName: '',
       numberOfRooms: [1, 2, 3, 4, 5],
       areas: ['50', '100', '150', '200'],
       features: ['Balcony', 'Garage', 'Garden'],
       showDropdown: false,
       showAreaDropdown: false,
-      showFeaturesDropdown: false
+      showFeaturesDropdown: false,
+      errors: {}
     };
   },
   methods: {
     toggleDropdown(dropdown) {
-      // Close other dropdowns before opening the clicked one
       if (dropdown === 'showDropdown') {
         this.showDropdown = !this.showDropdown;
         this.showAreaDropdown = false;
@@ -129,7 +148,8 @@ export default {
       }
     },
     selectHouseType(type) {
-      this.formData.house_type = type;
+      this.formData.house_type = type.id;
+      this.selectedHouseTypeName = type.type;
       this.showDropdown = false;
     },
     selectNumberOfRooms(number) {
@@ -146,8 +166,6 @@ export default {
       } else {
         this.formData.features.push(feature);
       }
-      // Do not close the dropdown for multi-select
-      // this.showFeaturesDropdown = false;
     },
     roomClasses(number) {
       return {
@@ -178,16 +196,124 @@ export default {
       if (featuresDropdown && !featuresDropdown.contains(event.target)) {
         this.showFeaturesDropdown = false;
       }
+    },
+    async loadHouseTypes() {
+      try {
+        const response = await getHouseTypes();
+        if (response.success) {
+          this.houseTypes = response.result;
+        } else {
+          console.error('Failed to load house types:', response.message);
+        }
+      } catch (error) {
+        console.error('Error loading house types:', error);
+      }
+    },
+    fetchCityFromPostCode() {
+      const postCode = this.formData.post_code;
+      if (!this.validatePostCode(postCode)) {
+        this.errors.post_code = 'Invalid Post Code';
+        return;
+      }
+
+      this.errors.post_code = null;
+
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${postCode}&components=country:NL&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'OK' && data.results.length > 0) {
+            let city = '';
+            let localityFound = false;
+
+            data.results[0].address_components.forEach(component => {
+              if (component.types.includes('locality')) {
+                city = component.long_name;
+                localityFound = true;
+              } else if (component.types.includes('administrative_area_level_2') || component.types.includes('administrative_area_level_3')) {
+                if (!localityFound) {
+                  city = component.long_name;
+                }
+              }
+            });
+
+            if (city) {
+              this.formData.location_name = city;
+              this.errors.location_name = null;
+            }
+          } else {
+            this.errors.location_name = 'Failed to fetch location name';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching address:', error);
+          this.errors.location_name = 'Failed to fetch location name';
+        });
+    },
+    fetchStreetFromPostCodeAndHouseNumber() {
+      const postCode = this.formData.post_code;
+      const houseNumber = this.formData.house_number;
+      if (!this.validatePostCode(postCode)) {
+        this.errors.post_code = 'Invalid Post Code';
+        return;
+      }
+
+      this.errors.post_code = null;
+
+      const address = `${houseNumber} ${postCode}, Netherlands`;
+
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'OK' && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            const lat = location.lat;
+            const lng = location.lng;
+
+            fetch('/get-place-details-by-coords', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': this.csrfToken
+              },
+              body: JSON.stringify({ lat, lng })
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.street) {
+                  this.formData.street = data.street;
+                  this.errors.street = null;
+                } else {
+                  this.errors.street = 'Failed to fetch street details';
+                }
+              })
+              .catch(error => {
+                console.error('Error fetching place details:', error);
+                this.errors.street = 'Failed to fetch street details';
+              });
+          } else {
+            this.errors.street = 'Failed to fetch street details';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching address:', error);
+          this.errors.street = 'Failed to fetch street details';
+        });
+    },
+    validatePostCode(postCode) {
+      const regex = /^[0-9]{4}[A-Za-z]{2}$/;
+      return regex.test(postCode);
     }
   },
   mounted() {
+    this.loadHouseTypes();
     document.addEventListener('click', this.handleClickOutside);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside);
   }
 };
 </script>
+
 <style scoped>
 .input-field {
   @apply w-full p-2 border border-gray-300 rounded;
@@ -223,5 +349,8 @@ export default {
 .dropdown-content li,
 .multi-select-content li {
   @apply cursor-pointer p-2 hover:bg-gray-100;
+}
+.invalid-feedback {
+  @apply text-red-600 text-sm;
 }
 </style>

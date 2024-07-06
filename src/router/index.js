@@ -3,7 +3,6 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import Home from '@/pages/Home.vue';
 import About from '@/pages/About.vue';
 import Login from '@/pages/Login.vue';
-import Register from '@/pages/Register.vue';
 import Swaps from '@/pages/Swaps.vue';
 import ChatPage from '@/pages/ChatPage.vue';
 import Notifications from '@/pages/Notifications.vue';
@@ -38,7 +37,7 @@ const routes = [
       },
       {
         path: 'register',
-        component: Register
+        component: WizardForm
       },
       {
         path: 'swaps',

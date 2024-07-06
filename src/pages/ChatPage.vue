@@ -12,6 +12,7 @@
 <script>
 import ChatList from './ChatList.vue';
 import MessageInterface from './MessageInterface.vue';
+import { getChatMessages } from '@/services/apiService';
 
 export default {
   components: {
@@ -24,9 +25,27 @@ export default {
     };
   },
   methods: {
-    selectChat(chat) {
+    async selectChat(chat) {
       this.selectedChat = chat;
+      try {
+        const response = await getChatMessages(chat.id);
+        if (response.success) {
+          this.selectedChat.messages = response.result;
+        } else {
+          console.error('Failed to fetch chat messages:', response.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch chat messages:', error);
+      }
     },
+  },
+  async mounted() {
+    const chatId = this.$route.query.chatId;
+    if (chatId) {
+      const chat = { id: chatId, other_person: {}, messages: [] }; // Initialize with empty user and messages
+      this.selectedChat = chat;
+      await this.selectChat(chat);
+    }
   },
 };
 </script>

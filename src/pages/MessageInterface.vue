@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <div v-if="selectedChat" class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center">
+    <div v-if="selectedChat && selectedChat.other_person" class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center">
       <div>
         <div class="font-bold text-lg">{{ selectedChat.other_person.first_name }} {{ selectedChat.other_person.last_name }}</div>
         <div class="text-sm text-gray-600">{{ selectedChat.other_person.email }}</div>
@@ -49,7 +49,7 @@ export default {
   props: {
     selectedChat: {
       type: Object,
-      required: false
+      default: () => null
     }
   },
   data() {
@@ -60,7 +60,7 @@ export default {
   },
   watch: {
     selectedChat(newChat) {
-      if (newChat) {
+      if (newChat && newChat.id) {
         this.fetchMessages(newChat.id);
       }
     }
@@ -69,7 +69,7 @@ export default {
     async fetchMessages(chatId) {
       try {
         const response = await getChatMessages(chatId);
-        if (response.success) {
+        if (response.success && response.result.length > 0) {
           this.messages = response.result[0].messages;
         }
       } catch (error) {
@@ -111,7 +111,7 @@ export default {
       }, 2000);
     },
     goToProfile() {
-      if (this.selectedChat) {
+      if (this.selectedChat && this.selectedChat.other_person) {
         this.$router.push({ name: 'UserProfile', params: { userId: this.selectedChat.other_person.id } });
       }
     },
@@ -131,5 +131,4 @@ export default {
 .bg-E8FDF6 {
   background-color: #E8FDF6;
 }
-
 </style>

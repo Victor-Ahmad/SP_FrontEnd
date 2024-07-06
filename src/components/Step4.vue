@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row justify-between h-full p-6">
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-t-2 border-b-2 border-gray-300 py-2 mb-4">
-        <h3 class="text-2xl font-bold text-[#07A984]">More About Your House</h3>
+        <h3 class="text-2xl font-bold text-[#07A984]">My House Description & Pictures</h3>
       </div>
 
       <div class="mb-6">
@@ -57,6 +57,7 @@ export default {
       const files = Array.from(event.target.files);
       this.images = files.map(file => URL.createObjectURL(file));
       this.currentSlide = 0;
+      this.updateFormDataImages(files);
     },
     prevSlide() {
       if (this.currentSlide > 0) {
@@ -72,6 +73,21 @@ export default {
       this.images.splice(index, 1);
       if (this.currentSlide >= this.images.length - 5 && this.currentSlide > 0) {
         this.currentSlide--;
+      }
+      this.updateFormDataImages();
+    },
+    updateFormDataImages(files = null) {
+      const galleryInput = document.getElementById('gallery');
+      if (files) {
+        this.formData.gallery = files;
+      } else {
+        const dataTransfer = new DataTransfer();
+        this.images.forEach((src, i) => {
+          const file = galleryInput.files[i];
+          dataTransfer.items.add(file);
+        });
+        galleryInput.files = dataTransfer.files;
+        this.formData.gallery = galleryInput.files;
       }
     }
   }

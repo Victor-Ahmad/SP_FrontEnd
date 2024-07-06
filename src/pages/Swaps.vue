@@ -17,6 +17,9 @@
                     <div class="mb-4 underlined-tabs">
                         <button :class="{'active-tab': activeTab === 'my_favorites'}" @click="setActiveTab('my_favorites')">My Favorites</button>
                     </div>
+                    <div class="mb-4 underlined-tabs">
+                        <button :class="{'active-tab': activeTab === 'my_disinterests'}" @click="setActiveTab('my_disinterests')">My Disinterests</button>
+                    </div>
                 </div>
             </div>
             <div class="w-3/4 pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -32,6 +35,9 @@
                 <div v-else-if="activeTab === 'my_favorites'" class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <HouseCardWithSwap v-for="house in my_favorites" :key="house.id" :house="house" />
                 </div>
+                <div v-else-if="activeTab === 'my_disinterests'" class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <HouseCardWithSwap v-for="house in my_disinterests" :key="house.id" :house="house" />
+                </div>
             </div>
         </div>
     </div>
@@ -41,7 +47,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import HouseCardWithSwap from '@/components/HouseCardWithSwap.vue';
-import { getMyInterests, getMyFavorites, getSwapWithMe, getCompleteInterest } from '@/services/apiService';
+import { getMyInterests, getMyFavorites, getSwapWithMe, getCompleteInterest, getMyDisinterests } from '@/services/apiService';
 
 export default {
     name: 'Home',
@@ -56,6 +62,7 @@ export default {
         const my_favorites = ref([]);
         const swap_with_me = ref([]);
         const complete_interest = ref([]);
+        const my_disinterests = ref([]);
         const activeTab = ref('houses');
 
         const fetchMyInterests = async () => {
@@ -98,7 +105,18 @@ export default {
                     complete_interest.value = response.result;
                 }
             } catch (error) {
-                console.error('Error fetching swaps:', error);
+                console.error('Error fetching complete interest:', error);
+            }
+        };
+
+        const fetchMyDisinterests = async () => {
+            try {
+                const response = await getMyDisinterests();
+                if (response && response.success) {
+                    my_disinterests.value = response.result;
+                }
+            } catch (error) {
+                console.error('Error fetching disinterests:', error);
             }
         };
 
@@ -109,6 +127,7 @@ export default {
                 await fetchMyFavorites();
                 await fetchSwapWithMe();
                 await fetchCompleteInterest();
+                await fetchMyDisinterests();
             } finally {
                 store.commit('setLoading', false); // Finish loading
             }
@@ -129,6 +148,7 @@ export default {
             my_favorites,
             swap_with_me,
             complete_interest,
+            my_disinterests,
             activeTab,
             setActiveTab,
             fetchAllData

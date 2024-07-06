@@ -42,6 +42,24 @@ export const expressInterest = async (houseId) => {
         throw error;
     }
 };
+export const removeInterest = async (houseId) => {
+    try {
+        const response = await axiosInstance.delete(`/delete_interest`, {
+            params: { house_id: houseId }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+export const disinterest = async (houseId) => {
+    try {
+        const response = await axiosInstance.post(`/disinterest/${houseId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 export const addToFavorites = async (houseId) => {
     try {
@@ -95,6 +113,16 @@ export const getCompleteInterest = async () => {
         throw error;
     }
 };
+
+export const getMyDisinterests = async () => {
+    try {
+        const response = await axiosInstance.get('/my_disinterests');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 
 export const getProfile = async () => {
     try {
@@ -178,4 +206,74 @@ export const sendMessage = async (message, receiverUserId) => {
 
 export const saveProfile = async (data) => {
     console.log(data);
+};
+
+
+export const isChatExisting = async (userId) => {
+    try {
+        const response = await axiosInstance.get(`/is_chat_existing/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export const registerUser = async (formData) => {
+    const form = new FormData();
+
+    // Append all form data to FormData object
+    for (const key in formData) {
+        if (Array.isArray(formData[key])) {
+            formData[key].forEach((item, index) => {
+                if (item instanceof File) {
+                    form.append(`${key}[${index}]`, item);
+                } else {
+                    form.append(`${key}[${index}]`, item);
+                }
+            });
+        } else {
+            form.append(key, formData[key]);
+        }
+    }
+
+    try {
+        const response = await axiosInstance.post('/register', form, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error registering user:', error);
+        throw error;
+    }
+};
+
+export const validateEmailAndPhone = async (email, phoneNumber) => {
+    try {
+        const response = await axiosInstance.post('/check-email-phone', {
+            email: email,
+            phone_number: phoneNumber
+        }, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error validating email and phone number:', error);
+        throw error;
+    }
+};
+
+
+export const getHouseTypes = async () => {
+    try {
+        const response = await axiosInstance.get('/get_houses_types');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 };

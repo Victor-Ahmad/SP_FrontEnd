@@ -63,7 +63,8 @@
 <script>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper-bundle.css';
-import { expressInterest, addToFavorites, sendMessage } from '@/services/apiService';
+import { expressInterest, removeInterest, addToFavorites, disinterest, sendMessage, isChatExisting } from '@/services/apiService';
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'HouseCard',
@@ -88,7 +89,6 @@ export default {
         // Initialize the button states based on the house data
         this.isFavorite = this.house.is_favorite;
         this.isInterested = this.house.is_interested;
-        // this.isNotInterested = !this.house.is_interested;
     },
     computed: {
         validProperties() {
@@ -124,25 +124,50 @@ export default {
                 } catch (error) {
                     console.error('Error expressing interest:', error);
                 }
+            } else {
+                try {
+                    const response = await removeInterest(this.house.id);
+                    console.log('Interest removed successfully:', response);
+                } catch (error) {
+                    console.error('Error removing interest:', error);
+                }
             }
         },
-        toggleNotInterested(event) {
+        async toggleNotInterested(event) {
             event.stopPropagation();
             this.isNotInterested = !this.isNotInterested;
             if (this.isNotInterested) {
                 this.isInterested = false;
+                try {
+                    const response = await disinterest(this.house.id);
+                    console.log('Not interested successfully:', response);
+                } catch (error) {
+                    console.error('Error expressing disinterest:', error);
+                }
             }
         },
         async startChat(event) {
             event.stopPropagation();
             try {
-                const message = "Hi, I am interested in your house.";
-                const receiverUserId = this.house.user.id;
-                const response = await sendMessage(message, receiverUserId);
+                const response = await isChatExisting(this.house.user.id);
+                let chatId;
                 if (response.success) {
-                    this.$router.push({ name: 'ChatPage' });
+                    if (Array.isArray(response.result)) {
+                        chatId = response.result[0]?.chat?.id;
+                    } else {
+                        chatId = response.result.id;
+                    }
+
+                    if (chatId) {
+                        this.$router.push({
+                            path: '/chatPage',
+                            query: { chatId },
+                        });
+                    } else {
+                        console.error('Chat ID not found in the response:', response);
+                    }
                 } else {
-                    console.error('Failed to send message:', response.message);
+                    console.error('Failed to check chat existence:', response.message);
                 }
             } catch (error) {
                 console.error('Failed to start chat:', error);
