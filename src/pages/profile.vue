@@ -1,153 +1,512 @@
 <template>
-  <div class="profile-page flex flex-col items-center p-6 min-h-screen bg-white">
-    <div v-if="profile" class="w-full max-w-5xl bg-white p-8 rounded-lg shadow-lg">
-      <div class="flex justify-between items-center mb-8">
-        <div class="profile-header flex items-center">
+  <div
+    class="profile-page flex flex-col items-center pb-20 lg:p-6 min-h-screen bg-white"
+  >
+    <div v-if="profile" class="w-full max-w-7xl bg-white p-8">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div class="profile-header flex flex-col md:flex-row items-center">
           <img
             :src="profile.profile_picture || 'https://via.placeholder.com/150'"
             alt="Profile Picture"
-            class="w-24 h-24 rounded-full mr-6 border-4 border-[#07A984]"
+            class="w-24 h-24 rounded-full mb-4 md:mb-0 md:mr-6 border-4 border-[#1c592f]"
           />
-          <div>
-            <h1 class="text-4xl font-bold text-[#07A984]">{{ profile.first_name }} {{ profile.last_name }}</h1>
+          <div class="text-center md:text-left">
+            <h1 class="text-2xl md:text-4xl font-bold text-[#1c592f]">
+              {{ profile.first_name }} {{ profile.last_name }}
+            </h1>
             <p class="text-gray-700">{{ profile.email }}</p>
             <p class="text-gray-700">{{ profile.number }}</p>
           </div>
         </div>
-        <div class="flex space-x-4">
-          <button @click="toggleEdit" class="bg-[#07A984] text-white px-4 py-2 rounded shadow hover:bg-[#06826e] transition">
-            {{ isEditable ? 'Save' : 'Edit' }}
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <button
+            @click="toggleEdit"
+            class="bg-[#1c592f] text-white px-4 py-2 rounded shadow hover:bg-[#06826e] transition"
+          >
+            {{ isEditable ? "Save" : "Edit" }}
           </button>
-          <button v-if="isEditable" @click="cancelEdit" class="bg-gray-400 text-white px-4 py-2 rounded shadow hover:bg-gray-500 transition">
+          <button
+            v-if="isEditable"
+            @click="cancelEdit"
+            class="bg-gray-400 text-white px-4 py-2 rounded shadow hover:bg-gray-500 transition"
+          >
             Cancel
           </button>
         </div>
       </div>
-      <div class="tabs flex space-x-4 mb-8">
-        <button @click="setActiveTab('details')" :class="tabClass('details')">User Details</button>
-        <button @click="setActiveTab('house')" :class="tabClass('house')">House Details</button>
-        <button @click="setActiveTab('wishes')" :class="tabClass('wishes')">Wishes</button>
+      <div
+        class="tabs flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-8"
+      >
+        <button @click="setActiveTab('details')" :class="tabClass('details')">
+          User Details
+        </button>
+        <button @click="setActiveTab('house')" :class="tabClass('house')">
+          House Details
+        </button>
+        <button @click="setActiveTab('wishes')" :class="tabClass('wishes')">
+          Wishes
+        </button>
       </div>
       <div v-if="activeTab === 'details'" class="user-details">
-        <h2 class="text-3xl font-semibold text-[#07A984] mb-4">User Details</h2>
+        <h2 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mb-4">
+          User Details
+        </h2>
         <div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">First Name:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.first_name" class="input-editable w-2/3" />
+          <div class="grid grid-cols-1 gap-4">
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0">First Name:</strong>
+              <input
+                :readonly="true"
+                :class="inputClass"
+                v-model="profile.first_name"
+                class="input-editable w-full"
+              />
             </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Last Name:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.last_name" class="input-editable w-2/3" />
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0">Last Name:</strong>
+              <input
+                :readonly="true"
+                :class="inputClass"
+                v-model="profile.last_name"
+                class="input-editable w-full"
+              />
             </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Email:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.email" class="input-editable w-2/3" />
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0">Email:</strong>
+              <input
+                :readonly="true"
+                :class="inputClass"
+                v-model="profile.email"
+                class="input-editable w-full"
+              />
             </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Phone:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.number" class="input-editable w-2/3" />
-            </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Password:</strong>
-              <div class="w-2/3">******</div> <!-- Displaying password as hidden -->
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0">Phone:</strong>
+              <input
+                :readonly="true"
+                :class="inputClass"
+                v-model="profile.number"
+                class="input-editable w-full"
+              />
             </div>
           </div>
         </div>
       </div>
       <div v-if="activeTab === 'house'" class="house-details">
-        <h2 class="text-3xl font-semibold text-[#07A984] mb-4">House Details</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Type:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.one_to_one_swap_house.house_type.type" class="input-editable w-2/3" />
-            </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Location:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.one_to_one_swap_house.location" class="input-editable w-2/3" />
-            </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Number of Rooms:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.one_to_one_swap_house.number_of_rooms" class="input-editable w-2/3" />
+        <h2 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mb-4">
+          House Details
+        </h2>
+        <div class="grid grid-cols-1 gap-4">
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0">Type:</strong>
+            <input
+              :readonly="true"
+              :class="inputClass"
+              v-model="profile.one_to_one_swap_house.house_type.type"
+              class="input-editable w-full"
+            />
+          </div>
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0">Location:</strong>
+            <input
+              :readonly="true"
+              :class="inputClass"
+              v-model="profile.one_to_one_swap_house.location"
+              class="input-editable w-full"
+            />
+          </div>
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              >Number of Rooms:</strong
+            >
+            <div class="w-full flex items-center">
+              <ul v-if="isEditable" class="flex w-full no-gap-list">
+                <li
+                  v-for="number in numberOfRooms"
+                  :key="number"
+                  @click="selectNumberOfRooms(number)"
+                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                  :class="
+                    roomClasses(
+                      profile.one_to_one_swap_house.number_of_rooms,
+                      number
+                    )
+                  "
+                >
+                  {{ number }}
+                </li>
+              </ul>
+              <p v-else class="input-editable w-full">
+                {{ profile.one_to_one_swap_house.number_of_rooms }}
+              </p>
             </div>
           </div>
-          <div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Price:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.one_to_one_swap_house.price" class="input-editable w-2/3" />
-            </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Description:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="profile.one_to_one_swap_house.description" class="input-editable w-2/3" />
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0">Floor Number:</strong>
+            <input
+              :readonly="!isEditable"
+              :class="inputClass"
+              v-model="profile.one_to_one_swap_house.floor_number"
+              class="input-editable w-full"
+            />
+          </div>
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0">Price:</strong>
+            <input
+              :readonly="!isEditable"
+              :class="inputClass"
+              v-model="profile.one_to_one_swap_house.price"
+              class="input-editable w-full"
+            />
+          </div>
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0">Description:</strong>
+            <textarea
+              :readonly="!isEditable"
+              :class="inputClass"
+              v-model="profile.one_to_one_swap_house.description"
+              class="input-editable w-full"
+            ></textarea>
+          </div>
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0">Swap Reason:</strong>
+            <textarea
+              :readonly="!isEditable"
+              :class="inputClass"
+              v-model="profile.one_to_one_swap_house.swap_reason"
+              class="input-editable w-full"
+            ></textarea>
+          </div>
+          <div
+            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+          >
+            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              >Specific Properties:</strong
+            >
+            <div class="w-full flex flex-wrap">
+              <span
+                v-for="(property, propertyIndex) in profile
+                  .one_to_one_swap_house.specific_properties"
+                :key="property.id"
+                :class="isEditable ? 'w-auto' : 'w-fit'"
+                class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative"
+                :style="isEditable ? { paddingRight: '1.5rem' } : {}"
+              >
+                {{ property.specific_property.name }}
+                <button
+                  v-if="isEditable"
+                  @click="removeHouseProperty(propertyIndex)"
+                  class="absolute -top-1 right-2 text-red-500 rounded-full text-lg"
+                >
+                  x
+                </button>
+              </span>
+              <div v-if="isEditable" class="relative w-full mt-2">
+                <input
+                  type="text"
+                  v-model="selectedFeatureNames"
+                  placeholder="Add specific properties"
+                  readonly
+                  class="input-editable w-full p-2 border rounded cursor-pointer"
+                  @click="toggleDropdown('showFeaturesDropdown')"
+                />
+                <ul v-show="showFeaturesDropdown" class="dropdown-content">
+                  <li
+                    v-for="(feature, index) in features"
+                    :key="index"
+                    @click="toggleFeature(feature)"
+                    :class="{
+                      'bg-gray-200':
+                        profile.one_to_one_swap_house.specific_properties.some(
+                          (property) =>
+                            property.specific_property.id === feature.id
+                        ),
+                    }"
+                    class="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {{ feature.name }}
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-        <h3 class="text-2xl font-semibold text-[#07A984] mt-8 mb-4">House Gallery</h3>
+        <h3 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mt-8 mb-4">
+          House Gallery
+        </h3>
         <div>
           <div class="mb-8">
-            <h4 class="text-xl font-semibold text-[#07A984] mb-2">Leading Image</h4>
+            <h4 class="text-xl md:text-2xl font-semibold text-[#1c592f] mb-2">
+              Leading Image
+            </h4>
             <div class="relative">
-              <img v-if="leadingImage" :src="leadingImage" class="w-full h-96 object-cover rounded-lg shadow-lg cursor-pointer" alt="Leading House Image" @click="openImage(leadingImage)">
-              <div v-if="!leadingImage" class="w-full h-96 flex items-center justify-center bg-gray-100 rounded-lg shadow-lg">No Leading Image</div>
-              <button v-if="isEditable && leadingImage" @click="removeLeadingImage" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2">X</button>
-              <input v-if="isEditable" type="file" @change="uploadLeadingImage" class="mt-4" accept="image/*">
+              <img
+                v-if="leadingImage"
+                :src="leadingImage"
+                class="w-full h-64 md:h-96 object-cover cursor-pointer rounded-lg"
+                alt="Leading House Image"
+                @click="openImage(leadingImage)"
+              />
+              <div
+                v-if="!leadingImage"
+                class="w-full h-64 md:h-96 flex items-center justify-center bg-gray-100"
+              >
+                No Leading Image
+              </div>
+              <button
+                v-if="isEditable && leadingImage"
+                @click="removeLeadingImage"
+                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2"
+              >
+                X
+              </button>
+              <input
+                v-if="isEditable"
+                type="file"
+                @change="uploadLeadingImage"
+                class="mt-4"
+                accept="image/*"
+              />
             </div>
           </div>
           <div v-if="profile.one_to_one_swap_house.images.length > 0">
-            <h4 class="text-xl font-semibold text-[#07A984] mb-2">Other Images</h4>
-            <div class="images-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div v-for="(image, index) in profile.one_to_one_swap_house.images" :key="image.id" class="relative w-full pb-[66.66%] overflow-hidden rounded-lg shadow-md">
-                <img :src="getImageUrl(image.image_path)" class="absolute top-0 left-0 w-full h-full object-cover cursor-pointer" alt="House Image" @click="openImage(getImageUrl(image.image_path))">
-                <button v-if="isEditable" @click="removeImage(index)" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2">X</button>
+            <h4 class="text-xl md:text-2xl font-semibold text-[#1c592f] mb-2">
+              Other Images
+            </h4>
+            <div
+              class="images-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              <div
+                v-for="(image, index) in profile.one_to_one_swap_house.images"
+                :key="image.id"
+                class="relative w-full pb-[66.66%] overflow-hidden"
+              >
+                <img
+                  :src="getImageUrl(image.image_path)"
+                  class="absolute top-0 left-0 w-full h-full object-cover cursor-pointer rounded-lg"
+                  alt="House Image"
+                  @click="openImage(getImageUrl(image.image_path))"
+                />
+                <button
+                  v-if="isEditable"
+                  @click="removeImage(index)"
+                  class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2"
+                >
+                  X
+                </button>
               </div>
             </div>
-            <input v-if="isEditable" type="file" @change="uploadNewImages" class="mt-4" multiple accept="image/*">
+            <input
+              v-if="isEditable"
+              type="file"
+              @change="uploadNewImages"
+              class="mt-4"
+              multiple
+              accept="image/*"
+            />
           </div>
         </div>
       </div>
       <div v-if="activeTab === 'wishes'" class="wishes">
-        <h2 class="text-3xl font-semibold text-[#07A984] mb-4">Wishes</h2>
-        <div v-for="(wish, index) in profile.wishes" :key="index" class="mb-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Location:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="wishLocations[index]" class="input-editable w-2/3" />
+        <h2 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mb-4">
+          Wishes
+        </h2>
+        <div
+          v-for="(wish, wishIndex) in profile.wishes"
+          :key="wishIndex"
+          class="mb-4"
+        >
+          <div class="grid grid-cols-1 gap-4">
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0">Location:</strong>
+              <div class="w-full flex flex-wrap">
+                <span
+                  v-for="(location, locationIndex) in wish.wish_locations"
+                  :key="locationIndex"
+                  :class="isEditable ? 'w-auto' : 'w-fit'"
+                  class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative"
+                  :style="isEditable ? { paddingRight: '1.5rem' } : {}"
+                >
+                  {{ location.location }}
+                  <button
+                    v-if="isEditable"
+                    @click="removeWishLocation(wishIndex, locationIndex)"
+                    class="absolute -top-1 right-2 text-red-500 rounded-full text-lg"
+                  >
+                    x
+                  </button>
+                </span>
+                <div v-if="isEditable" class="w-full mt-2">
+                  <input
+                    type="text"
+                    :id="'wishAutocompleteInput' + wishIndex"
+                    placeholder="Enter a location of interest"
+                    class="input-editable w-full p-2 border rounded"
+                  />
+                </div>
+              </div>
             </div>
-            <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Number of Rooms:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="wish.number_of_rooms" class="input-editable w-2/3" />
+
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+                >Number of Rooms:</strong
+              >
+              <div v-if="!isEditable" class="input-editable w-full p-2">
+                {{ wish.number_of_rooms }}
+              </div>
+              <div v-else class="w-full">
+                <ul class="flex w-full no-gap-list">
+                  <li
+                    v-for="(number, index) in numberOfRooms"
+                    :key="index"
+                    @click="selectWishNumberOfRooms(wishIndex, number)"
+                    class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                    :class="roomClasses(wish.number_of_rooms, number)"
+                  >
+                    {{ number }}
+                  </li>
+                </ul>
+              </div>
             </div>
-            
-              <div class="flex items-center border-b py-2">
-              <strong class="w-1/3">Price:</strong>
-              <input :readonly="!isEditable" :class="inputClass" v-model="wish.price" class="input-editable w-2/3" />
+
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+                >Floor Number:</strong
+              >
+              <input
+                :readonly="!isEditable"
+                :class="inputClass"
+                v-model="wish.floor_number"
+                class="input-editable w-full"
+              />
+            </div>
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0">Price:</strong>
+              <input
+                :readonly="!isEditable"
+                :class="inputClass"
+                v-model="wish.price"
+                class="input-editable w-full"
+              />
+            </div>
+            <div
+              class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
+            >
+              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+                >Specific Properties:</strong
+              >
+              <div class="w-full flex flex-wrap">
+                <span
+                  v-for="(property, propertyIndex) in wish.specific_properties"
+                  :key="property.id"
+                  :class="isEditable ? 'w-auto' : 'w-fit'"
+                  class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative"
+                  :style="isEditable ? { paddingRight: '1.5rem' } : {}"
+                >
+                  {{ property.specific_property.name }}
+                  <button
+                    v-if="isEditable"
+                    @click="removeWishProperty(wishIndex, propertyIndex)"
+                    class="absolute -top-1 right-2 text-red-500 rounded-full text-lg"
+                  >
+                    x
+                  </button>
+                </span>
+                <div v-if="isEditable" class="relative w-full mt-2">
+                  <input
+                    type="text"
+                    v-model="wish.selectedFeatureNames"
+                    placeholder="Add specific properties"
+                    readonly
+                    class="input-editable w-full p-2 border rounded cursor-pointer"
+                    @click="toggleWishDropdown(wishIndex)"
+                  />
+                  <ul
+                    v-show="wish.showFeaturesDropdown"
+                    class="dropdown-content"
+                  >
+                    <li
+                      v-for="(feature, index) in features"
+                      :key="index"
+                      @click="toggleWishFeature(wishIndex, feature)"
+                      :class="{
+                        'bg-gray-200': wish.specific_properties.some(
+                          (property) =>
+                            property.specific_property.id === feature.id
+                        ),
+                      }"
+                      class="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {{ feature.name }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-else class="w-full max-w-5xl bg-white p-8 rounded-lg shadow-lg text-center">
+    <div v-else class="w-full max-w-7xl bg-white p-8 text-center">
       <p>Loading profile...</p>
     </div>
-    <ImagePopup :imageSrc="selectedImage" :visible="isPopupVisible" @close="isPopupVisible = false" />
+    <ImagePopup
+      :imageSrc="selectedImage"
+      :visible="isPopupVisible"
+      @close="isPopupVisible = false"
+    />
   </div>
 </template>
 
 <script>
-import { getProfile, saveProfile } from '@/services/apiService';
-import ImagePopup from '@/components/ImagePopup.vue'; // Adjust the import path as necessary
+import {
+  getProfile,
+  updateProfile,
+  getHouseFeatures,
+} from "@/services/apiService";
+
+import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
 
 export default {
-  name: 'ProfilePage',
+  name: "ProfilePage",
   components: {
-    ImagePopup
+    ImagePopup,
   },
   data() {
     return {
       profile: null,
       originalProfile: null,
-      activeTab: 'details',
+      activeTab: "details",
       isEditable: false,
       error: null,
       wishLocations: [],
@@ -156,8 +515,12 @@ export default {
       newImages: [],
       newLeadingImage: null,
       leadingImage: null,
-      selectedImage: '',
-      isPopupVisible: false
+      selectedImage: "",
+      isPopupVisible: false,
+      features: [],
+      selectedFeatureNames: "",
+      showFeaturesDropdown: false,
+      numberOfRooms: [1, 2, 3, 4, 5],
     };
   },
   async created() {
@@ -166,41 +529,99 @@ export default {
       if (response.success) {
         this.profile = response.result;
         this.originalProfile = JSON.parse(JSON.stringify(this.profile)); // Deep copy of the profile object
-        this.wishLocations = this.profile.wishes.map(wish => (wish.wish_locations.length ? wish.wish_locations[0].location : ''));
-        this.leadingImage = this.profile.one_to_one_swap_house.images.length > 0 ? this.getImageUrl(this.profile.one_to_one_swap_house.images[0].image_path) : null;
+        this.wishLocations = this.profile.wishes.map((wish) =>
+          wish.wish_locations.map((location) => location.location)
+        );
+        this.leadingImage =
+          this.profile.one_to_one_swap_house.images.length > 0
+            ? this.getImageUrl(
+                this.profile.one_to_one_swap_house.images[0].image_path
+              )
+            : null;
+        this.profile.wishes.forEach((wish) => {
+          this.$set(wish, "showFeaturesDropdown", false);
+          this.$set(
+            wish,
+            "selectedFeatureNames",
+            wish.specific_properties
+              .map((property) => property.specific_property.name)
+              .join(", ")
+          );
+        });
       } else {
         this.error = response.message;
       }
     } catch (error) {
-      this.error = 'Failed to load profile data.';
+      this.error = "Failed to load profile data.";
     }
+    this.loadGoogleMapsScript();
   },
   computed: {
     inputClass() {
-      return this.isEditable ? 'border-2 border-blue-500 bg-blue-50 shadow-md py-2 px-3' : 'bg-transparent py-2 px-3';
-    }
+      return this.isEditable
+        ? "border-2 border-blue-500 bg-blue-50 shadow-md py-2 px-3"
+        : "bg-transparent py-2 px-3";
+    },
   },
   methods: {
+    loadGoogleMapsScript() {
+      if (!window.google) {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${
+          import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+        }&libraries=places`;
+        script.onload = () => {
+          this.profile.wishes.forEach((wish, wishIndex) => {
+            this.initWishAutocomplete(wishIndex);
+          });
+        };
+        document.head.appendChild(script);
+      } else {
+        this.profile.wishes.forEach((wish, wishIndex) => {
+          this.initWishAutocomplete(wishIndex);
+        });
+      }
+    },
     getImageUrl(path) {
       // Do not add base URL for local images
-      return path.startsWith('data:image') ? path : `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
+      return path.startsWith("data:image")
+        ? path
+        : `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
     },
     setActiveTab(tab) {
       this.activeTab = tab;
     },
     tabClass(tab) {
-      return this.activeTab === tab ? 'bg-[#07A984] text-white px-4 py-2 rounded shadow' : 'bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition';
+      return this.activeTab === tab
+        ? "bg-[#1c592f] text-white px-4 py-2 rounded shadow"
+        : "bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition";
     },
+    async loadHouseTypesAndFeatures() {
+      try {
+        const featuresResponse = await getHouseFeatures();
+
+        if (featuresResponse.success) {
+          this.features = featuresResponse.result.map((feature) => ({
+            id: feature.id,
+            name: feature.name,
+          }));
+        } else {
+          console.error(
+            "Failed to load house features:",
+            featuresResponse.message
+          );
+        }
+      } catch (error) {
+        console.error("Error loading house types or features:", error);
+      }
+    },
+
     toggleEdit() {
       if (this.isEditable) {
-        saveProfile({
-          ...this.profile,
-          removedImages: this.removedImages,
-          removedLeadingImage: this.removedLeadingImage,
-          newImages: this.newImages,
-          newLeadingImage: this.newLeadingImage
-        })
-          .then(response => {
+        const modifiedProfileData = this.getModifiedProfileData();
+
+        updateProfile(modifiedProfileData) // Save the profile data
+          .then((response) => {
             if (response.success) {
               this.profile = response.result;
               this.originalProfile = JSON.parse(JSON.stringify(this.profile)); // Update original profile with saved data
@@ -208,16 +629,157 @@ export default {
               this.newImages = [];
               this.newLeadingImage = null;
               this.removedLeadingImage = null;
-              this.leadingImage = this.profile.one_to_one_swap_house.images.length > 0 ? this.getImageUrl(this.profile.one_to_one_swap_house.images[0].image_path) : null;
+              this.leadingImage =
+                this.profile.one_to_one_swap_house.images.length > 0
+                  ? this.getImageUrl(
+                      this.profile.one_to_one_swap_house.images[0].image_path
+                    )
+                  : null;
             } else {
               this.error = response.message;
             }
           })
           .catch(() => {
-            this.error = 'Failed to save profile data.';
+            this.error = "Failed to save profile data.";
           });
+      } else {
+        this.loadHouseTypesAndFeatures();
+        this.profile.wishes.forEach((wish, wishIndex) => {
+          this.$nextTick(() => {
+            this.initWishAutocomplete(wishIndex);
+          });
+        });
       }
       this.isEditable = !this.isEditable;
+    },
+
+    initWishAutocomplete(wishIndex) {
+      this.$nextTick(() => {
+        const inputId = `wishAutocompleteInput${wishIndex}`;
+        const input = document.getElementById(inputId);
+        if (input) {
+          const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ["(cities)"],
+            componentRestrictions: { country: "NL" },
+          });
+
+          autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            if (place && place.address_components) {
+              const city = place.address_components[0].long_name;
+              if (
+                !this.profile.wishes[wishIndex].wish_locations.some(
+                  (location) => location.location === city
+                )
+              ) {
+                this.profile.wishes[wishIndex].wish_locations.push({
+                  location: city,
+                });
+                input.value = "";
+              }
+            }
+          });
+        }
+      });
+    },
+    removeWishLocation(wishIndex, locationIndex) {
+      this.profile.wishes[wishIndex].wish_locations.splice(locationIndex, 1);
+    },
+
+    // removeWishLocation(wishIndex, locationIndex) {
+    //   this.profile.wishes[wishIndex].wish_locations.splice(locationIndex, 1);
+    //   this.wishLocations[wishIndex].splice(locationIndex, 1);
+    // },
+
+    selectNumberOfRooms(number) {
+      this.profile.one_to_one_swap_house.number_of_rooms = number;
+    },
+    selectWishNumberOfRooms(wishIndex, number) {
+      this.profile.wishes[wishIndex].number_of_rooms = number;
+    },
+    roomClasses(selectedNumber, number) {
+      return {
+        "bg-white": selectedNumber === number,
+        "text-[#1c592f]": selectedNumber === number,
+        "hover:bg-white": true,
+        "hover:shadow-[0_0_10px_#1c592f]": true,
+        "hover:text-[#1c592f]": true,
+        "border-gray-300": true,
+        "hover:border-[#1c592f]": true,
+        transition: true,
+        "duration-300": true,
+        "ease-in-out": true,
+        "selected-room": selectedNumber === number,
+      };
+    },
+
+    toggleWishDropdown(wishIndex) {
+      this.profile.wishes[wishIndex].showFeaturesDropdown =
+        !this.profile.wishes[wishIndex].showFeaturesDropdown;
+    },
+    toggleWishFeature(wishIndex, feature) {
+      const wish = this.profile.wishes[wishIndex];
+      const index = wish.specific_properties.findIndex(
+        (property) => property.specific_property.id === feature.id
+      );
+      if (index > -1) {
+        wish.specific_properties.splice(index, 1);
+      } else {
+        wish.specific_properties.push({
+          id: feature.id,
+          specific_property: feature,
+        });
+      }
+      this.updateWishSelectedFeatureNames(wishIndex);
+    },
+    updateWishSelectedFeatureNames(wishIndex) {
+      const wish = this.profile.wishes[wishIndex];
+      wish.selectedFeatureNames = wish.specific_properties
+        .map((property) => property.specific_property.name)
+        .join(", ");
+    },
+    removeWishProperty(wishIndex, propertyIndex) {
+      this.profile.wishes[wishIndex].specific_properties.splice(
+        propertyIndex,
+        1
+      );
+    },
+
+    toggleDropdown(dropdown) {
+      if (dropdown === "showDropdown") {
+        this.showDropdown = !this.showDropdown;
+        this.showFeaturesDropdown = false;
+      } else if (dropdown === "showFeaturesDropdown") {
+        this.showFeaturesDropdown = !this.showFeaturesDropdown;
+        this.showDropdown = false;
+      }
+    },
+    toggleFeature(feature) {
+      const index =
+        this.profile.one_to_one_swap_house.specific_properties.findIndex(
+          (property) => property.specific_property.id === feature.id
+        );
+      if (index > -1) {
+        this.profile.one_to_one_swap_house.specific_properties.splice(index, 1);
+      } else {
+        this.profile.one_to_one_swap_house.specific_properties.push({
+          id: feature.id,
+          specific_property: feature,
+        });
+      }
+      this.updateSelectedFeatureNames();
+    },
+    updateSelectedFeatureNames() {
+      this.selectedFeatureNames =
+        this.profile.one_to_one_swap_house.specific_properties
+          .map((property) => property.specific_property.name)
+          .join(", ");
+    },
+    removeHouseProperty(propertyIndex) {
+      this.profile.one_to_one_swap_house.specific_properties.splice(
+        propertyIndex,
+        1
+      );
     },
     cancelEdit() {
       this.profile = JSON.parse(JSON.stringify(this.originalProfile)); // Revert to original profile
@@ -225,15 +787,137 @@ export default {
       this.newImages = [];
       this.newLeadingImage = null;
       this.removedLeadingImage = null;
-      this.leadingImage = this.profile.one_to_one_swap_house.images.length > 0 ? this.getImageUrl(this.profile.one_to_one_swap_house.images[0].image_path) : null;
+      this.leadingImage =
+        this.profile.one_to_one_swap_house.images.length > 0
+          ? this.getImageUrl(
+              this.profile.one_to_one_swap_house.images[0].image_path
+            )
+          : null;
       this.isEditable = false;
     },
+    getModifiedProfileData() {
+      const modifiedData = {};
+
+      if (this.profile.first_name !== this.originalProfile.first_name) {
+        modifiedData.first_name = this.profile.first_name;
+      }
+      if (this.profile.last_name !== this.originalProfile.last_name) {
+        modifiedData.last_name = this.profile.last_name;
+      }
+      if (this.profile.email !== this.originalProfile.email) {
+        modifiedData.email = this.profile.email;
+      }
+      if (this.profile.number !== this.originalProfile.number) {
+        modifiedData.phone_number = this.profile.number;
+      }
+
+      modifiedData.one_to_one_swap_house = {};
+
+      if (
+        this.profile.one_to_one_swap_house.house_type.type !==
+        this.originalProfile.one_to_one_swap_house.house_type.type
+      ) {
+        modifiedData.one_to_one_swap_house.house_type =
+          this.profile.one_to_one_swap_house.house_type.type;
+      }
+      if (
+        this.profile.one_to_one_swap_house.location !==
+        this.originalProfile.one_to_one_swap_house.location
+      ) {
+        modifiedData.one_to_one_swap_house.location =
+          this.profile.one_to_one_swap_house.location;
+      }
+      if (
+        this.profile.one_to_one_swap_house.number_of_rooms !==
+        this.originalProfile.one_to_one_swap_house.number_of_rooms
+      ) {
+        modifiedData.one_to_one_swap_house.number_of_rooms =
+          this.profile.one_to_one_swap_house.number_of_rooms;
+      }
+      if (
+        this.profile.one_to_one_swap_house.floor_number !==
+        this.originalProfile.one_to_one_swap_house.floor_number
+      ) {
+        modifiedData.one_to_one_swap_house.floor_number =
+          this.profile.one_to_one_swap_house.floor_number;
+      }
+      if (
+        this.profile.one_to_one_swap_house.price !==
+        this.originalProfile.one_to_one_swap_house.price
+      ) {
+        modifiedData.one_to_one_swap_house.price =
+          this.profile.one_to_one_swap_house.price;
+      }
+      if (
+        this.profile.one_to_one_swap_house.description !==
+        this.originalProfile.one_to_one_swap_house.description
+      ) {
+        modifiedData.one_to_one_swap_house.description =
+          this.profile.one_to_one_swap_house.description;
+      }
+      if (
+        this.profile.one_to_one_swap_house.swap_reason !==
+        this.originalProfile.one_to_one_swap_house.swap_reason
+      ) {
+        modifiedData.one_to_one_swap_house.swap_reason =
+          this.profile.one_to_one_swap_house.swap_reason;
+      }
+      if (
+        this.profile.one_to_one_swap_house.specific_properties !==
+        this.originalProfile.one_to_one_swap_house.specific_properties
+      ) {
+        modifiedData.one_to_one_swap_house.specific_properties =
+          this.profile.one_to_one_swap_house.specific_properties.map(
+            (property) => property.specific_property.id
+          );
+      }
+
+      modifiedData.wishes = this.profile.wishes.map((wish, index) => {
+        const originalWish = this.originalProfile.wishes[index];
+        const modifiedWish = {};
+
+        if (wish.house_type_id !== originalWish.house_type_id) {
+          modifiedWish.house_type_id = wish.house_type_id;
+        }
+        if (wish.price !== originalWish.price) {
+          modifiedWish.price = wish.price;
+        }
+        if (wish.number_of_rooms !== originalWish.number_of_rooms) {
+          modifiedWish.number_of_rooms = wish.number_of_rooms;
+        }
+        if (wish.floor_number !== originalWish.floor_number) {
+          modifiedWish.floor_number = wish.floor_number;
+        }
+        if (wish.specific_properties !== originalWish.specific_properties) {
+          modifiedWish.features = wish.specific_properties.map(
+            (property) => property.specific_property.id
+          );
+        }
+        if (
+          wish.wish_locations.length &&
+          wish.wish_locations[0].location !==
+            originalWish.wish_locations[0].location
+        ) {
+          modifiedWish.locations = wish.wish_locations.map(
+            (location) => location.location
+          );
+        }
+
+        return modifiedWish;
+      });
+
+      return modifiedData;
+    },
     removeImage(index) {
-      const removedImage = this.profile.one_to_one_swap_house.images.splice(index, 1)[0];
+      const removedImage = this.profile.one_to_one_swap_house.images.splice(
+        index,
+        1
+      )[0];
       this.removedImages.push(removedImage.id);
     },
     removeLeadingImage() {
-      this.removedLeadingImage = this.profile.one_to_one_swap_house.images[0].id;
+      this.removedLeadingImage =
+        this.profile.one_to_one_swap_house.images[0].id;
       this.profile.one_to_one_swap_house.images.splice(0, 1);
       this.leadingImage = null;
     },
@@ -246,7 +930,7 @@ export default {
         reader.onload = (e) => {
           this.profile.one_to_one_swap_house.images.push({
             id: null,
-            image_path: e.target.result // Directly use base64 image path
+            image_path: e.target.result, // Directly use base64 image path
           });
           this.$forceUpdate(); // Ensure the component updates and renders the new image
         };
@@ -268,12 +952,41 @@ export default {
     openImage(image) {
       this.selectedImage = image;
       this.isPopupVisible = true;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
+.input-field,
+.input-editable {
+  @apply w-full p-2 border border-gray-300 rounded;
+}
+.input-field:focus,
+.input-editable:focus {
+  border-color: #1c592f;
+  outline: none;
+  box-shadow: 0 0 5px rgba(7, 169, 132, 0.5);
+}
+.tags-container {
+  @apply mt-2 flex flex-wrap;
+}
+.dropdown-content {
+  @apply absolute bg-white shadow-lg max-h-48 overflow-y-auto z-10 w-full mt-1 border border-gray-300 rounded;
+}
+.dropdown-content li {
+  @apply cursor-pointer p-2 hover:bg-gray-100;
+}
+.invalid-feedback {
+  @apply text-red-600 text-sm;
+}
+
+.dropdown-content {
+  @apply absolute bg-white shadow-lg max-h-48 overflow-y-auto z-10 w-full mt-1 border border-gray-300 rounded;
+}
+.dropdown-content li {
+  @apply cursor-pointer p-2 hover:bg-gray-100;
+}
 .input-editable {
   @apply border-none text-lg w-full transition duration-300;
 }
@@ -282,5 +995,21 @@ export default {
 }
 .input-editable:focus {
   @apply outline-none bg-[#e7f7f4];
+}
+.no-gap-list li {
+  margin: 0 !important;
+}
+.room-item {
+  transition: all 0.3s ease-in-out;
+}
+.room-item:hover {
+  box-shadow: 0 0 10px #1c592f;
+  border-color: #1c592f;
+}
+.selected-room {
+  background-color: white !important;
+  color: #1c592f !important;
+  box-shadow: 0 0 10px #1c592f !important;
+  border-color: #1c592f !important;
 }
 </style>

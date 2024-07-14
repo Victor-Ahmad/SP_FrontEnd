@@ -1,5 +1,9 @@
 <template>
-  <div class="w-full p-6 flex flex-col min-h-screen">
+  <div v-if="isLoading" class="text-center">
+    <div class="spinner"></div>
+    Checking Email & Phone Number ...
+  </div>
+  <div v-else class="w-full p-6 pb-20 flex flex-col min-h-screen">
     <div class="stepper-wrapper mb-6 flex justify-between relative">
       <div
         v-for="(step, index) in steps"
@@ -7,23 +11,37 @@
         :class="[
           'stepper-item relative flex flex-col items-center flex-1 text-center',
           currentStep >= index ? 'completed' : '',
-          currentStep === index ? 'active' : ''
+          currentStep === index ? 'active' : '',
         ]"
       >
-        <div class="step-counter relative inline-block p-2 px-8 bg-gray-300 text-white font-bold text-lg transition duration-300 border-2 border-transparent">
-          {{ step.name }}
+        <div
+          class="step-counter relative inline-block p-2 md:px-8 bg-gray-300 text-white font-bold text-lg transition duration-300 border-2 border-transparent"
+        >
+          <span>{{ index + 1 }}</span>
+          <span class="hidden md:inline">{{ step.name }}</span>
           <div
             v-if="index > 0"
             class="absolute top-1/2 left-0 w-0 h-0 transform -translate-y-1/2 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-l-[12px] border-l-white"
-            :class="currentStep >= index ? 'border-l-[#07A984]' : 'border-l-white'"
+            :class="
+              currentStep >= index ? 'border-l-[#1c592f]' : 'border-l-white'
+            "
           ></div>
         </div>
       </div>
     </div>
     <transition name="fade" mode="out-in">
-      <component :is="steps[currentStep].component" :formData="formData" :image="steps[currentStep].image" :key="currentStep"></component>
+      <component
+        :is="steps[currentStep].component"
+        :formData="formData"
+        :image="steps[currentStep].image"
+        :errors="errors"
+        :key="currentStep"
+        v-bind="getStepProps()"
+      ></component>
     </transition>
-    <div class="form-navigation flex w-3/5 justify-between p-6 space-x-4">
+    <div
+      class="form-navigation flex w-full md:w-3/5 justify-between p-6 space-x-4"
+    >
       <button
         @click="prevStep"
         :disabled="currentStep === 0"
@@ -34,14 +52,14 @@
       <button
         v-if="currentStep < steps.length - 1"
         @click="nextStep"
-        class="px-4 py-2 bg-[#07A984] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
+        class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
         Next
       </button>
       <button
         v-if="currentStep === steps.length - 1"
         @click="submitForm"
-        class="px-4 py-2 bg-[#07A984] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
+        class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
         Submit
       </button>
@@ -50,69 +68,133 @@
 </template>
 
 <script>
-import Step1 from './Step1.vue';
-import Step2 from './Step2.vue';
-import Step3 from './Step3.vue';
-import Step4 from './Step4.vue';
-import { registerUser, validateEmailAndPhone } from '@/services/apiService'; // Corrected import path
-
+import { computed } from "vue";
+import { markRaw } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+import Step1 from "./Step1.vue";
+import Step2 from "./Step2.vue";
+import Step3 from "./Step3.vue";
+import Step4 from "./Step4.vue";
+import { validateEmailAndPhone } from "@/services/apiService";
+import step1Image from "@/assets/images/step1.jpg";
+import step2Image from "@/assets/images/step2.jpg";
+import step3Image from "@/assets/images/step3.jpg";
+import step4Image from "@/assets/images/step4.jpg";
 export default {
-  components: { Step1, Step2, Step3, Step4 },
+  components: {
+    Step1: markRaw(Step1),
+    Step2: markRaw(Step2),
+    Step3: markRaw(Step3),
+    Step4: markRaw(Step4),
+  },
   data() {
     return {
       currentStep: 0,
       formData: {
-        location_names: '',
-        house_type_wish: '',
-        price_wish: '',
-        number_of_rooms_wish: '',
-        area_wish: '',
-        features_wish: [],
-        floor_wish: '',
-        reason_for_swap: '',
-        post_code: '',
-        house_number: '',
-        location_name: '',
-        street: '',
-        house_type: '',
-        price: '',
-        number_of_rooms: '',
-        area: '',
+        location_names: "",
+        wish: {
+          house_type_id: "",
+          price: "",
+          number_of_rooms: "",
+          area: "",
+          features: [],
+          floor_number: "",
+          locations: [],
+        },
+        reason_for_swap: "",
+        post_code: "",
+        house_number: "",
+        location_name: "",
+        street: "",
+        house_type: "",
+        price: "",
+        number_of_rooms: "",
+        area: "",
         features: [],
-        floor: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone_number: '',
-        password: '',
-        password_confirmation: '',
-        privacy_policy_and_terms_of_use: false,
-        house_description: '',
-        gallery: []
+        floor: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone_number: "",
+        password: "",
+        password_confirmation: "",
+        agreed_privacy_policy: false,
+        agreed_terms_of_use: false,
+        house_description: "",
+        gallery: [],
       },
+      errors: {},
+      emailError: false,
+      emailErrorMessage: "",
+      phoneError: false,
+      phoneErrorMessage: "",
+      showPrivacyPolicyError: false,
+      isLoading: false,
       steps: [
-        { name: 'Step 1', component: Step1, image: 'https://via.placeholder.com/400x300' },
-        { name: 'Step 2', component: Step2, image: 'https://via.placeholder.com/400x300' },
-        { name: 'Step 3', component: Step3, image: 'https://via.placeholder.com/400x300' },
-        { name: 'Step 4', component: Step4, image: 'https://via.placeholder.com/400x300' }
-      ]
+        {
+          name: "Step 1",
+          component: markRaw(Step1),
+          image: step1Image,
+        },
+        {
+          name: "Step 2",
+          component: markRaw(Step2),
+          image: step2Image,
+        },
+        {
+          name: "Step 3",
+          component: markRaw(Step3),
+          image: step3Image,
+        },
+        {
+          name: "Step 4",
+          component: markRaw(Step4),
+          image: step4Image,
+        },
+      ],
+    };
+  },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const isLoading = computed(() => store.getters.isLoading);
+    const error = computed(() => store.getters.error);
+
+    return {
+      store,
+      router,
+      isLoading,
+      error,
     };
   },
   methods: {
     async nextStep() {
       if (this.currentStep === 2) {
-        // Perform email and phone validation before moving from Step 3 to Step 4
-        try {
-          const response = await validateEmailAndPhone(this.formData.email, this.formData.phone_number);
-          if (response.success === 1) {
-            this.currentStep++;
-          } else {
-            // Handle validation error
-            alert(response.message);
+        // Email and phone validation step
+        if (this.formData.email && this.formData.phone_number) {
+          this.isLoading = true;
+          try {
+            const response = await validateEmailAndPhone(
+              this.formData.email,
+              this.formData.phone_number
+            );
+            this.isLoading = false;
+            if (response.success === 1) {
+              this.emailError = false;
+              this.phoneError = false;
+              this.currentStep++;
+            } else {
+              this.handleValidationErrors(response.message);
+            }
+          } catch (error) {
+            console.error("Validation error:", error);
+            this.isLoading = false;
+            alert("Error validating email and phone number");
           }
-        } catch (error) {
-          console.error('Validation error:', error);
-          alert('Error validating email and phone number');
+        } else {
+          alert("Please enter both email and phone number");
         }
       } else {
         if (this.currentStep < this.steps.length - 1) {
@@ -120,34 +202,83 @@ export default {
         }
       }
     },
+    handleValidationErrors(message) {
+      if (message.includes("Both")) {
+        this.emailError = true;
+        this.emailErrorMessage = "Both Email and Number already exist";
+        this.phoneError = true;
+        this.phoneErrorMessage = "Both Email and Number already exist";
+      } else if (message.includes("email")) {
+        this.emailError = true;
+        this.emailErrorMessage = "This email already exists";
+        this.phoneError = false; // reset phone error
+        this.phoneErrorMessage = "";
+      } else if (message.includes("number")) {
+        this.phoneError = true;
+        this.phoneErrorMessage = "This number already exists";
+        this.emailError = false; // reset email error
+        this.emailErrorMessage = "";
+      }
+    },
+    getStepProps() {
+      if (this.currentStep === 2) {
+        return {
+          emailError: this.emailError,
+          emailErrorMessage: this.emailErrorMessage,
+          phoneError: this.phoneError,
+          phoneErrorMessage: this.phoneErrorMessage,
+          showPrivacyPolicyError: this.showPrivacyPolicyError,
+        };
+      }
+      return {};
+    },
     prevStep() {
       if (this.currentStep > 0) {
         this.currentStep--;
       }
     },
     async submitForm() {
-      try {
-        const response = await registerUser(this.formData);
-        if (response.success) {
-          alert('Form submitted successfully!');
-          // Redirect or perform any other action after successful submission
-        } else {
-          alert('Form submission failed: ' + response.message);
-        }
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('Error submitting form!');
+      if (
+        !this.formData.agreed_privacy_policy ||
+        !this.formData.agreed_terms_of_use
+      ) {
+        this.showPrivacyPolicyError = true;
+        alert("You must agree to the privacy policy and terms of use");
+        return;
       }
-    }
-  }
+
+      this.isLoading = true;
+      try {
+        await this.store.dispatch("registerUser", this.formData);
+        this.isLoading = false;
+        Swal.fire({
+          icon: "success",
+          title: "Registration successful",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          this.router.push("/home");
+        });
+      } catch (error) {
+        this.isLoading = false;
+        Swal.fire({
+          icon: "error",
+          title: "Registration failed",
+          text: this.store.getters.error,
+        });
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 .stepper-wrapper {
@@ -158,7 +289,7 @@ export default {
 }
 .stepper-item::before,
 .stepper-item::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -176,22 +307,29 @@ export default {
 }
 .stepper-item.completed::before,
 .stepper-item.completed::after,
-.stepper-item.active::before, 
+.stepper-item.active::before,
 .stepper-item.active::after {
-  border-top-color: #07A984;
+  border-top-color: #1c592f;
 }
 .step-counter {
   z-index: 5;
   width: 105%;
-  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 20px) 0,
+    100% 50%,
+    calc(100% - 20px) 100%,
+    0 100%,
+    20px 50%
+  );
 }
 .stepper-item.active .step-counter,
 .stepper-item.completed .step-counter {
-  background-color: #07A984;
+  background-color: #1c592f;
 }
 .stepper-item:first-child .step-counter::before,
 .stepper-item:last-child .step-counter::after {
-  border-color: transparent #07A984 transparent transparent;
+  border-color: transparent #1c592f transparent transparent;
 }
 .stepper-item:first-child::before,
 .stepper-item:last-child::after {
@@ -203,5 +341,23 @@ export default {
 .form-navigation button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #1c592f;
+  animation: spin 1s ease infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

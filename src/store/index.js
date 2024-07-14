@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { login, register, getSwapHouses } from '@/services/apiService';
+import { login, registerUser, getSwapHouses } from '@/services/apiService';
 
 const store = createStore({
     state: {
@@ -24,7 +24,6 @@ const store = createStore({
         },
         setToken(state, token) {
             state.token = token;
-            console.log('Token:', token);
             if (token) {
                 localStorage.setItem('token', token);
             } else {
@@ -68,7 +67,6 @@ const store = createStore({
                 if (response.success) {
                     commit('setUser', response.result.user);
                     commit('setToken', response.result.token);
-
                 } else {
                     commit('setError', response.message);
                     throw new Error(response.message);
@@ -80,14 +78,16 @@ const store = createStore({
                 commit('stopLoading');
             }
         },
-        async register({ commit }, { firstName, lastName, email, phone, password }) {
+        async registerUser({ commit }, formData) {
             commit('startLoading');
             commit('setError', null); // Clear previous errors
             try {
-                const response = await register({ firstName, lastName, email, phone, password });
+                const response = await registerUser(formData);
                 if (response.success) {
-                    commit('setUser', response.result.user);
-                    commit('setToken', response.result.token);
+                    const user = response.result[0].user;
+                    const token = response.result[0].token;
+                    commit('setUser', user);
+                    commit('setToken', token);
                 } else {
                     commit('setError', response.message);
                     throw new Error(response.message);

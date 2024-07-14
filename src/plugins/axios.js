@@ -4,7 +4,7 @@ import store from '@/store';
 // Create an Axios instance
 const axiosInstance = axios.create({
     baseURL: 'https://phplaravel-1239567-4600161.cloudwaysapps.com/api/',
-    timeout: 10000,
+    timeout: 100000,
 });
 
 // Request interceptor for adding Authorization headers, etc.
