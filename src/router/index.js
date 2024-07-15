@@ -13,6 +13,9 @@ import Profile from "@/pages/profile.vue";
 import WizardForm from "@/components/WizardForm.vue";
 import ChatListPage from "@/pages/ChatList.vue";
 import MessageInterfacePage from "@/pages/MessageInterface.vue";
+import ForgotPassword from "@/pages/ForgotPassword.vue";
+import OtpVerification from "@/pages/OtpVerification.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
 const routes = [
   {
     path: "/",
@@ -80,6 +83,23 @@ const routes = [
         path: "/house/:id",
         component: HouseDetail,
         name: "HouseDetail",
+      },
+      // existing routes...
+      {
+        path: "forgot-password",
+        component: ForgotPassword,
+      },
+      {
+        path: "otp-verification",
+        name: "OtpVerification",
+        component: OtpVerification,
+        props: true,
+      },
+      {
+        path: "reset-password",
+        name: "ResetPassword",
+        component: ResetPassword,
+        props: true,
       },
     ],
   },

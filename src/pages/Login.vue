@@ -1,53 +1,53 @@
 <template>
-  <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white">
-    <div class="flex justify-center p-8">
+  <div
+    class="flex flex-col md:flex-row lg:justify-center pt-8 lg:pt-20 bg-white"
+  >
+    <div class="flex justify-center p-4 md:p-8 w-full md:w-1/2">
       <div class="max-w-md w-full bg-white p-8 space-y-6">
-        <div class="text-center">
-          <h2 class="mt-6 text-3xl font-extrabold text-[#1c592f]">
+        <div class="text-center border-gray-300 py-2 mb-10">
+          <h2 class="text-4xl font-bold text-[#1c592f]">
             {{ $t("login.logIn") }}
           </h2>
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
-          <div class="rounded-md shadow-sm">
-            <div class="mb-4">
-              <label
-                for="phone"
-                class="block text-sm font-medium text-gray-700"
-                >{{ $t("login.phone") }}</label
-              >
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                autocomplete="tel"
-                required
-                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-secondary focus:border-secondary sm:text-sm"
-                placeholder="+1 (555) 987-6543"
-                @input="preventNonNumericInput"
-                @keypress="preventNonNumericInput"
-              />
-            </div>
-            <div>
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700"
-                >{{ $t("login.password") }}</label
-              >
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                required
-                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-secondary focus:border-secondary sm:text-sm"
-                placeholder="Password"
-              />
-            </div>
+          <div class="form-group mb-4">
+            <label
+              for="phone"
+              class="block text-lg font-semibold text-[#1c592f] mb-2"
+              >{{ $t("login.phone") }}</label
+            >
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              required
+              class="input-field w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+              placeholder="+1 (555) 987-6543"
+              @input="preventNonNumericInput"
+              @keypress="preventNonNumericInput"
+            />
           </div>
-          <div>
+          <div class="form-group mb-4">
+            <label
+              for="password"
+              class="block text-lg font-semibold text-[#1c592f] mb-2"
+              >{{ $t("login.password") }}</label
+            >
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="input-field w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+              placeholder="Password"
+            />
+          </div>
+          <div class="form-group mb-4">
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#1c592f] hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+              class="px-4 py-2 bg-[#1c592f] text-white w-full rounded-full transition duration-300 hover:bg-[#065e58] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1c592f]"
               :disabled="isLoading"
             >
               <span v-if="!isLoading">{{ $t("login.logIn") }}</span>
@@ -59,17 +59,24 @@
             <div class="text-sm">
               <router-link
                 to="/register"
-                class="font-medium text-secondary hover:text-secondary-dark"
+                class="font-medium text-[#1c592f] hover:text-[#065e58]"
                 >{{ $t("login.register") }}</router-link
+              >
+            </div>
+            <div class="text-sm">
+              <router-link
+                to="/forgot-password"
+                class="font-medium text-[#1c592f] hover:text-[#065e58]"
+                >Forgot Password?</router-link
               >
             </div>
           </div>
         </form>
       </div>
     </div>
-    <div class="hidden lg:block relative">
+    <div class="hidden lg:block w-full md:w-1/2">
       <img
-        class="absolute inset-0 h-auto w-full object-contain"
+        class="w-full h-auto rounded"
         src="@/assets/images/login.jpg"
         alt="Background"
       />
@@ -81,7 +88,7 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import Swal from "sweetalert2"; // Ensure SweetAlert2 is imported
+import Swal from "sweetalert2";
 
 export default {
   name: "Login",
@@ -134,4 +141,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.input-field {
+  @apply w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400;
+}
+.input-field:focus {
+  border-color: #1c592f;
+  box-shadow: 0 0 5px rgba(7, 169, 132, 0.5);
+}
+</style>
