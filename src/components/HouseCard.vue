@@ -17,8 +17,8 @@
           </swiper-slide>
           <swiper-slide v-if="house.images.length === 0">
             <img
-              src="@/assets/images/logo.png"
-              class="w-full h-full object-contain p-10"
+              src="@/assets/images/logo2.png"
+              class="w-full h-full object-contain"
               alt="Placeholder"
             />
           </swiper-slide>

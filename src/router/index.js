@@ -22,6 +22,11 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
+        path: "/",
+        component: Home,
+        meta: { requiresAuth: true },
+      },
+      {
         path: "home",
         component: Home,
         meta: { requiresAuth: true },
