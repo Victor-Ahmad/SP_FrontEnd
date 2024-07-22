@@ -1,8 +1,12 @@
 <template>
-  <div class="flex justify-center mb-4" @click="goToDetailPage">
+  <div
+    class="flex justify-center mb-4 hover:scale-[1.02] duration-300 rounded overflow-hidden shadow-lg custom_hover"
+    @click="goToDetailPage"
+  >
     <div
-      class="flex flex-col w-full max-w-full rounded overflow-hidden shadow-lg bg-white cursor-pointer relative house-card hover:border-2 custom_hover transition-border duration-300"
+      class="flex flex-col w-full max-w-full bg-white cursor-pointer relative"
     >
+      <!-- Swiper Component -->
       <div class="flex-shrink-0" style="width: 100%; height: 200px">
         <swiper
           :slides-per-view="1"
@@ -24,6 +28,8 @@
           </swiper-slide>
         </swiper>
       </div>
+
+      <!-- House Details -->
       <div
         class="px-2 py-2 flex flex-col justify-between w-full relative house-card-content"
       >
@@ -47,7 +53,7 @@
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-home mr-2 icon_custom_color"></i>
-                {{ house.house_type.type || "" }}
+                {{ house.house_type?.type || "" }}
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-door-open mr-2 icon_custom_color"></i>
@@ -83,6 +89,7 @@
           </button>
         </div>
 
+        <!-- Action Buttons -->
         <div
           class="flex justify-between items-center mt-2 space-x-2 border-t border-gray-200 pt-2"
         >
@@ -103,7 +110,7 @@
             :class="[
               'w-1/3 lg:w-5/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 md:flex-2',
               isNotInterested
-                ? 'bg-red-custom text-white'
+                ? 'bg-gray-custom text-white '
                 : 'border border-red-custom text-red-custom',
             ]"
           >
@@ -126,6 +133,7 @@
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/swiper-bundle.css";
+import anime from "animejs";
 import {
   expressInterest,
   removeInterest,
@@ -156,7 +164,6 @@ export default {
     };
   },
   created() {
-    // Initialize the button states based on the house data
     this.isFavorite = this.house.is_favorite;
     this.isInterested = this.house.is_interested;
     this.isNotInterested = this.house.is_not_interested;
@@ -204,6 +211,8 @@ export default {
         try {
           const response = await expressInterest(this.house.id);
           console.log("Interest expressed successfully:", response);
+          // Trigger the exploding button effect
+          this.triggerExplodingButton(event.target);
         } catch (error) {
           console.error("Error expressing interest:", error);
         }
@@ -242,8 +251,8 @@ export default {
         const response = await isChatExisting(this.house.user.id);
         let chatId;
         if (response.success) {
-          if (Array.isArray(response.result)) {
-            chatId = response.result[0]?.chat?.id;
+          if (response.result && response.result.chat) {
+            chatId = response.result?.chat?.id;
           } else {
             chatId = response.result.id;
           }
@@ -266,12 +275,28 @@ export default {
     goToDetailPage() {
       this.$router.push({ name: "HouseDetail", params: { id: this.house.id } });
     },
+    triggerExplodingButton(target) {
+      anime({
+        targets: target,
+        scale: [
+          { value: 1.1, duration: 150 },
+          { value: 1, duration: 200 },
+        ],
+        rotate: {
+          value: "+=3turn",
+          duration: 600,
+          easing: "easeInOutSine",
+        },
+        easing: "easeInOutQuad",
+        duration: 800,
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
-/* Ensure fixed height for the swiper */
+/* Tailwind CSS classes are used for styling */
 .swiper-container {
   height: 100%;
 }
@@ -280,17 +305,11 @@ button i.fas.fa-heart,
 button i.far.fa-heart {
   transition: color 0.3s;
   font-size: 24px;
-  /* Increase font size for larger icon */
 }
 
 button i.fas,
 button i.far {
   font-size: 16px;
-  /* Decrease icon size for smaller buttons */
-}
-
-.house-card {
-  transition: border 0.3s ease;
 }
 
 button.absolute {
@@ -304,7 +323,6 @@ button.absolute i {
   font-size: 24px;
 }
 
-/* Button hover effects */
 button:hover {
   transform: none;
 }
@@ -324,10 +342,10 @@ button:hover {
   color: #8a8a8a;
 }
 .border-red-custom {
-  border: solid #8a8a8a;
+  border: 1px solid #8a8a8a;
 }
 .custom_hover:hover {
-  border-color: #1c592f;
+  box-shadow: 0 0 10px #1c592f;
 }
 .bg-green-custom {
   background-color: #22893c;
@@ -342,17 +360,17 @@ button:hover {
 }
 .bg-chat-custom2 {
   background-color: #154aa8;
-  border: solid #154aa8;
+  border: 1px solid #154aa8;
   color: #fff;
 }
 
-.bg-red-custom {
+.bg-gray-custom {
   background-color: #8a8a8a;
-  border: solid #8a8a8a;
+  border: 1px solid #8a8a8a;
 }
 
 .border-interested-active {
-  border-color: #1c592f;
+  border: 1px solid #1c592f;
 }
 .text-interested-active {
   color: #1c592f;
@@ -386,11 +404,7 @@ button:hover {
   border-top-width: 1px;
 }
 
-.border-gray-300 {
-  border-color: #d1d5db; /* Tailwind's gray-300 color */
-}
-
 .pt-2 {
-  padding-top: 0.5rem; /* Tailwind's padding top 2 */
+  padding-top: 0.5rem;
 }
 </style>

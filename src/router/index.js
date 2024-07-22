@@ -16,6 +16,8 @@ import MessageInterfacePage from "@/pages/MessageInterface.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
 import OtpVerification from "@/pages/OtpVerification.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
+import TriangleSwapDetails from "@/pages/TriangleSwapDetails.vue";
+
 const routes = [
   {
     path: "/",
@@ -42,10 +44,12 @@ const routes = [
       {
         path: "login",
         component: Login,
+        meta: { requiresGuest: true },
       },
       {
         path: "register",
         component: WizardForm,
+        meta: { requiresGuest: true },
       },
       {
         path: "swaps",
@@ -61,12 +65,14 @@ const routes = [
         path: "/chats",
         name: "ChatListPage",
         component: ChatListPage,
+        meta: { requiresAuth: true },
       },
       {
         path: "/chats/:chatId",
         name: "MessageInterfacePage",
         component: MessageInterfacePage,
         props: true,
+        meta: { requiresAuth: true },
       },
       {
         path: "profile",
@@ -82,14 +88,14 @@ const routes = [
         path: "profileCompletion",
         name: "ProfileCompletion",
         component: ProfileCompletion,
-        meta: { requiredsAuth: true },
+        meta: { requiresAuth: true },
       },
       {
         path: "/house/:id",
         component: HouseDetail,
         name: "HouseDetail",
+        meta: { requiresAuth: true },
       },
-      // existing routes...
       {
         path: "forgot-password",
         component: ForgotPassword,
@@ -106,6 +112,12 @@ const routes = [
         component: ResetPassword,
         props: true,
       },
+      {
+        path: "/triangle-swap-details",
+        name: "TriangleSwapDetails",
+        component: TriangleSwapDetails,
+        props: (route) => ({ triangle: route.query.triangle }),
+      },
     ],
   },
 ];
@@ -116,9 +128,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters.token;
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!store.getters.token) {
+    if (!isAuthenticated) {
       next({ path: "/login" });
+    } else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.requiresGuest)) {
+    if (isAuthenticated) {
+      next({ path: "/" });
     } else {
       next();
     }

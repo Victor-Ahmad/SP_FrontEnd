@@ -3,31 +3,11 @@
     v-if="isVisible"
     class="sidebar fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50"
   >
-    <div class="flex justify-end p-4">
+    <div class="flex justify-between items-center p-4">
+      <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
       <button @click="closeSidebar" class="close-btn">&times;</button>
     </div>
-    <nav class="flex flex-col space-y-4 p-4">
-      <!-- <router-link
-        to="/home"
-        class="hover-color transition duration-300 ease-in-out"
-        active-class="active"
-      >
-        {{ $t("nav.home") }}
-      </router-link>
-      <router-link
-        to="/swaps"
-        class="hover-color transition duration-300 ease-in-out"
-        active-class="active"
-      >
-        {{ $t("nav.swaps") }}
-      </router-link>
-      <router-link
-        to="/chatPage"
-        class="hover-color transition duration-300 ease-in-out"
-        active-class="active"
-      >
-        {{ $t("nav.messages") }}
-      </router-link> -->
+    <nav class="flex flex-col space-y-4 p-4" @click="closeSidebar">
       <router-link
         to="/profile"
         class="hover-color transition duration-300 ease-in-out"

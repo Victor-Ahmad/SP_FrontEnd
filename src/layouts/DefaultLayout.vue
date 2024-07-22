@@ -33,13 +33,22 @@ export default {
       isMobile.value = window.innerWidth <= 768;
     };
 
+    const handleClickOutside = (event) => {
+      if (isSidebarVisible.value && !event.target.closest(".sidebar")) {
+        isSidebarVisible.value = false;
+        console.log(event.target);
+      }
+    };
+
     onMounted(() => {
       checkScreenSize();
       window.addEventListener("resize", checkScreenSize);
+      document.addEventListener("click", handleClickOutside);
     });
 
     onUnmounted(() => {
       window.removeEventListener("resize", checkScreenSize);
+      document.removeEventListener("click", handleClickOutside);
     });
 
     const toggleSidebar = () => {

@@ -193,7 +193,7 @@
           </div>
         </div>
 
-        <div class="form-group mb-4">
+        <!-- <div class="form-group mb-4">
           <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
             Why do you wish to swap?
           </h3>
@@ -207,11 +207,11 @@
           <div v-if="errors.reason_for_swap" class="invalid-feedback">
             {{ errors.reason_for_swap }}
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="w-full md:w-2/5 hidden lg:flex items-start md:pl-6">
-      <img :src="image" alt="Step 1 Image" class="w-full h-auto rounded" />
+      <img :src="image" alt="Step 1 Image" class="w-10/12 h-auto rounded" />
     </div>
   </div>
 </template>

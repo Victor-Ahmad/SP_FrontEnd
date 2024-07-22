@@ -1,7 +1,31 @@
 <template>
   <div class="flex flex-col h-full">
     <div
-      v-if="selectedChat && selectedChat.other_person"
+      v-if="selectedChat && selectedChat.other_persons?.length > 0"
+      class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center"
+    >
+      <div>
+        <div class="font-bold text-lg">
+          {{ selectedChat.other_persons[0].first_name }}
+          {{ selectedChat.other_persons[0].last_name }}
+        </div>
+        <div class="text-sm text-gray-600">
+          {{ selectedChat.other_persons[0].email }}
+        </div>
+        <div class="text-xs text-gray-500">
+          {{ selectedChat.other_persons[0].street }},
+          {{ selectedChat.other_persons[0].location }}
+        </div>
+      </div>
+      <button
+        @click="goToDetailPage"
+        class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+      >
+        View House
+      </button>
+    </div>
+    <div
+      v-else-if="selectedChat && selectedChat.other_person"
       class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center"
     >
       <div>
@@ -12,17 +36,21 @@
         <div class="text-sm text-gray-600">
           {{ selectedChat.other_person.email }}
         </div>
+        <div class="text-xs text-gray-500">
+          {{ selectedChat.other_person.street }},
+          {{ selectedChat.other_person.location }}
+        </div>
       </div>
       <button
-        @click="goToProfile"
+        @click="goToDetailPage"
         class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
       >
-        House
+        View House
       </button>
     </div>
     <div
       ref="messageList"
-      class="flex-1 p-4 overflow-y-auto flex flex-col-reverse bg-gray-50"
+      class="flex-1 p-4 overflow-y-auto flex flex-col-reverse bg-gray-50 messageList-container"
     >
       <div
         v-for="message in messages"
@@ -49,7 +77,9 @@
         </div>
       </div>
     </div>
-    <div class="p-4 border-t border-gray-300 bg-white flex items-center">
+    <div
+      class="message-input-container p-4 border-t border-gray-300 bg-white flex items-center"
+    >
       <input
         type="text"
         v-model="newMessage"
@@ -96,6 +126,7 @@ export default {
         const response = await getChatMessages(chatId);
         if (response.success && response.result.length > 0) {
           this.messages = response.result[0].messages;
+          this.scrollToBottom();
         }
       } catch (error) {
         console.error("Failed to fetch messages:", error);
@@ -103,11 +134,15 @@ export default {
     },
     async sendMessage() {
       if (this.newMessage.trim() !== "") {
+        let other_person_id = null;
+        if (this.selectedChat.other_persons) {
+          other_person_id = this.selectedChat.other_persons[0].id;
+        } else if (this.selectedChat.other_person) {
+          other_person_id = this.selectedChat.other_person?.id;
+        }
+
         try {
-          const response = await sendMessage(
-            this.newMessage,
-            this.selectedChat.other_person.id
-          );
+          const response = await sendMessage(this.newMessage, other_person_id);
           if (response.success) {
             const newMsg = {
               id: this.messages.length + 1,
@@ -138,16 +173,14 @@ export default {
         message.is_read = true;
       }, 2000);
     },
-    goToProfile() {
-      if (this.selectedChat && this.selectedChat.other_person) {
+    goToDetailPage() {
+      console.log(this.selectedChat);
+
+      if (this.selectedChat && this.selectedChat.house) {
         this.$router.push({
           name: "HouseDetail",
-          params: { id: this.house.id },
+          params: { id: this.selectedChat.house.id },
         });
-        // this.$router.push({
-        //   name: "UserProfile",
-        //   params: { userId: this.selectedChat.other_person.id },
-        // });
       }
     },
     formatTime(timestamp) {
@@ -159,6 +192,12 @@ export default {
       });
     },
   },
+  mounted() {
+    const chatId = this.$route.params.chatId || this.$route.query.chatId;
+    if (chatId) {
+      this.fetchMessages(chatId);
+    }
+  },
 };
 </script>
 
@@ -169,5 +208,16 @@ export default {
 }
 .bg-E8FDF6 {
   background-color: #e8fdf6;
+}
+@media (max-width: 768px) {
+  .message-input-container {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+  }
+  .messageList-container {
+    margin-bottom: 130px;
+  }
 }
 </style>

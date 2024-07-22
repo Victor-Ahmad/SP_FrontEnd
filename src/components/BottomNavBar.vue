@@ -15,7 +15,7 @@
     >
       <i class="fas fa-comments"></i>
     </router-link>
-    <button @click="toggleSidebar" class="nav-item">
+    <button @click="toggleSidebar" class="nav-item sidebar">
       <i class="fas fa-bars"></i>
     </button>
   </nav>

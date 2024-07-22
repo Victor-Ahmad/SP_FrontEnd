@@ -1,15 +1,16 @@
 <template>
-  <div class="min-h-scree pb-20 lg:p-8 bg-gray-100 lg:bg-white">
-    <div v-if="isLoading" class="text-center">Loading...</div>
-    <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
-    <div v-else class="flex flex-col lg:flex-row">
+  <div class="min-h-screen pb-20 lg:p-8 bg-gray-100 lg:bg-white">
+    <div class="flex flex-col lg:flex-row">
       <div class="hidden lg:block w-full lg:w-1/4">
         <FilterBar :filters="filters" @applyFilters="applyFilters" />
       </div>
       <div
-        class="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 pt-8 lg:p-0"
+        class="w-full lg:w-3/4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 pt-8 lg:p-0"
       >
-        <div v-if="progress < 100" class="progress-background col-span-full">
+        <div
+          v-if="progress < 100"
+          class="progress-background col-span-full w-full rounded-full shadow-lg h-min"
+        >
           <div class="progress-container">
             <div class="progress-circle">
               <svg viewBox="0 0 100 100">
@@ -26,11 +27,17 @@
             </div>
           </div>
         </div>
-
-        <div class="tab-buttons col-span-full underlined-tabs hidden lg:flex">
+        <div v-if="isLoading" class="text-center">Loading...</div>
+        <div v-else-if="error" class="text-red-600 text-center">
+          {{ error }}
+        </div>
+        <div
+          v-else
+          class="tab-buttons col-span-full underlined-tabs hidden lg:flex"
+        >
           <button
             :class="[
-              'py-2 lg:py-2.5',
+              'py-2 lg:py-2.5 h-min',
               { 'active-tab': activeTab === 'houses' },
             ]"
             @click="setActiveTab('houses')"
@@ -38,18 +45,28 @@
             All List
           </button>
           <button
-            :class="{ 'active-tab': activeTab === 'other1' }"
-            @click="setActiveTab('other1')"
+            :class="[
+              'py-2 lg:py-2.5 h-min',
+              { 'active-tab': activeTab === 'triangles' },
+            ]"
+            @click="setActiveTab('triangles')"
           >
             Perfect Triangles
           </button>
         </div>
 
-        <!-- Added padding for mobile screens -->
         <div
           v-if="activeTab === 'houses'"
           class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
         >
+          <!-- Button to open filter drawer on mobile -->
+
+          <button
+            @click="openFilterDrawer"
+            class="lg:hidden p-4 border border-[#1c592f] text-[#1c592f] flex items-center rounded-md justify-center"
+          >
+            <i class="fas fa-filter mr-2"></i> Open Filters
+          </button>
           <HouseCard
             v-for="house in filteredHouses"
             :key="house.id"
@@ -63,11 +80,45 @@
             />
           </div>
         </div>
-        <div v-else-if="activeTab === 'other1'" class="col-span-full px-4">
-          <p style="height: 150vh">This is the content for the other tab 1.</p>
+        <div
+          v-else-if="activeTab === 'triangles'"
+          class="col-span-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
+        >
+          <TriangleSwapCard
+            v-for="triangle in triangleSwapHouses"
+            :key="triangle.house_a.id"
+            :triangle="triangle"
+          />
+          <div class="col-span-full">
+            <BasePagination
+              :currentPage="triangleCurrentPage"
+              :totalPages="triangleTotalPages"
+              @changePage="fetchTriangleSwapHouses"
+            />
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Filter Drawer for Mobile -->
+    <transition name="slide-fade">
+      <div
+        v-if="showFilterDrawer"
+        class="fixed inset-0 z-50 bg-white shadow-lg lg:hidden filter-drawer"
+      >
+        <div class="flex justify-between items-center mb-4 p-4">
+          <h2 class="text-xl font-bold text-[#1c592f]">Filters</h2>
+          <button @click="closeFilterDrawer" class="text-xl">&times;</button>
+        </div>
+        <div class="p-4 overflow-y-auto">
+          <FilterBar
+            :filters="filters"
+            @applyFilters="handleApplyFilters"
+            @clearFilters="closeFilterDrawer"
+          />
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -75,6 +126,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import HouseCard from "@/components/HouseCard.vue";
+import TriangleSwapCard from "@/components/TriangleSwapCard.vue";
 import FilterBar from "@/components/FilterBar.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import { getProfileProgress } from "@/services/apiService";
@@ -83,6 +135,7 @@ export default {
   name: "Home",
   components: {
     HouseCard,
+    TriangleSwapCard,
     FilterBar,
     BasePagination,
   },
@@ -91,38 +144,47 @@ export default {
     const isLoading = computed(() => store.getters.isLoading);
     const error = computed(() => store.getters.error);
     const filteredHouses = computed(() => store.getters.filteredHouses);
+    const triangleSwapHouses = computed(() => store.getters.triangleSwapHouses);
     const pagination = computed(() => store.getters.pagination);
+    const trianglePagination = computed(() => store.getters.trianglePagination);
 
     const filters = ref({
       search: "",
-      exchangeType: [],
-      hiddenFavorite: [],
-      amenities: [],
-      rentRange: [0, 3000],
-      sizeRange: [1, 300],
-      floorRange: [0, 10],
+      minSize: 1,
+      maxFloor: 10,
       numberOfRooms: [],
       areas: [],
+      amenities: [],
     });
 
     const progress = ref(60);
     const activeTab = ref("houses");
     const currentPage = ref(1);
     const totalPages = ref(1);
+    const triangleCurrentPage = ref(1);
+    const triangleTotalPages = ref(1);
     const showDescription = ref(false);
     const showImages = ref(false);
 
-    const fetchFilteredHouses = async (page = 1) => {
+    const showFilterDrawer = ref(false); // State for showing filter drawer
+
+    const fetchFilteredHouses = async (page = 1, formData = null) => {
       try {
-        await store.dispatch("fetchFilteredHouses", {
-          ...filters.value,
-          page,
-        });
+        await store.dispatch("fetchFilteredHouses", { formData, page });
         currentPage.value = pagination.value.current_page;
         totalPages.value = pagination.value.last_page;
-        await fetchProfileProgress();
       } catch (error) {
         console.error("Error fetching houses:", error);
+      }
+    };
+
+    const fetchTriangleSwapHouses = async (page = 1) => {
+      try {
+        await store.dispatch("fetchTriangleSwapHouses", { page });
+        triangleCurrentPage.value = trianglePagination.value.current_page;
+        triangleTotalPages.value = trianglePagination.value.last_page;
+      } catch (error) {
+        console.error("Error fetching triangle swap houses:", error);
       }
     };
 
@@ -149,12 +211,37 @@ export default {
       );
     };
 
-    const applyFilters = async () => {
-      await fetchFilteredHouses(1);
+    const applyFilters = async (formData) => {
+      const formDataEntries = [];
+      for (const [key, value] of formData.entries()) {
+        formDataEntries.push(`${key}: ${value}`);
+      }
+      console.log(formDataEntries);
+
+      await fetchFilteredHouses(1, formData);
+    };
+
+    const handleApplyFilters = async (formData) => {
+      await applyFilters(formData);
+      closeFilterDrawer();
+    };
+
+    const openFilterDrawer = () => {
+      showFilterDrawer.value = true;
+      document.body.style.overflow = "hidden"; // Disable background scroll
+    };
+
+    const closeFilterDrawer = () => {
+      showFilterDrawer.value = false;
+      document.body.style.overflow = ""; // Enable background scroll
     };
 
     const setActiveTab = (tab) => {
-      activeTab.value = tab;
+      if (tab === "triangles") {
+        activeTab.value = "triangles";
+      } else {
+        activeTab.value = tab;
+      }
     };
 
     const updateProgress = () => {
@@ -171,7 +258,9 @@ export default {
     };
 
     onMounted(() => {
+      fetchProfileProgress();
       fetchFilteredHouses();
+      fetchTriangleSwapHouses();
     });
 
     const profileCompletionLink = computed(() => ({
@@ -194,9 +283,17 @@ export default {
       activeTab,
       currentPage,
       totalPages,
+      triangleCurrentPage,
+      triangleTotalPages,
       setActiveTab,
       fetchFilteredHouses,
+      fetchTriangleSwapHouses,
       profileCompletionLink,
+      triangleSwapHouses,
+      showFilterDrawer,
+      openFilterDrawer,
+      closeFilterDrawer,
+      handleApplyFilters,
     };
   },
 };
@@ -291,22 +388,19 @@ button:hover {
 }
 
 /* Additional CSS for the grid layout */
-.grid {
-  display: grid;
-}
 
 /* Background for the progress section */
 .progress-background {
   padding: 20px;
-  border-radius: 100px;
   margin-bottom: 20px;
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.315);
+  /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.315); */
+  display: flex;
+  align-items: center;
 }
 
 .progress-container {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
 }
 
 .progress-circle {
@@ -375,13 +469,12 @@ button:hover {
 .underlined-tabs {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   border-bottom: 2px solid #ccc;
 }
 
 .underlined-tabs button {
   flex: 1;
-  /* padding: 12px 16px; */
   border: none;
   background: transparent;
   cursor: pointer;
@@ -431,5 +524,26 @@ button:hover {
 .pagination-container button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* Transition for the filter drawer */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.slide-fade-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-fade-enter-to {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+/* Filter Drawer Styling */
+.filter-drawer {
+  height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 80px; /* Ensure space for close button */
 }
 </style>

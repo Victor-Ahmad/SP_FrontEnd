@@ -17,7 +17,7 @@
         <div
           class="step-counter relative inline-block p-2 md:px-8 bg-gray-300 text-white font-bold text-lg transition duration-300 border-2 border-transparent"
         >
-          <span>{{ index + 1 }}</span>
+          <span class="inline md;hidden lg:hidden">{{ index + 1 }}</span>
           <span class="hidden md:inline">{{ step.name }}</span>
           <div
             v-if="index > 0"
@@ -78,10 +78,10 @@ import Step2 from "./Step2.vue";
 import Step3 from "./Step3.vue";
 import Step4 from "./Step4.vue";
 import { validateEmailAndPhone } from "@/services/apiService";
-import step1Image from "@/assets/images/step1.jpg";
-import step2Image from "@/assets/images/step2.jpg";
-import step3Image from "@/assets/images/step3.jpg";
-import step4Image from "@/assets/images/step4.jpg";
+import step1Image from "@/assets/images/step1.png";
+import step2Image from "@/assets/images/step2.png";
+import step3Image from "@/assets/images/step3.png";
+import step4Image from "@/assets/images/step4.png";
 export default {
   components: {
     Step1: markRaw(Step1),
@@ -170,6 +170,9 @@ export default {
     };
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
     async nextStep() {
       if (this.currentStep === 2) {
         // Email and phone validation step
@@ -185,6 +188,7 @@ export default {
               this.emailError = false;
               this.phoneError = false;
               this.currentStep++;
+              this.scrollToTop(); // Scroll to top after navigating to the next step
             } else {
               this.handleValidationErrors(response.message);
             }
@@ -199,6 +203,7 @@ export default {
       } else {
         if (this.currentStep < this.steps.length - 1) {
           this.currentStep++;
+          this.scrollToTop(); // Scroll to top after navigating to the next step
         }
       }
     },
@@ -235,6 +240,7 @@ export default {
     prevStep() {
       if (this.currentStep > 0) {
         this.currentStep--;
+        this.scrollToTop(); // Scroll to top after navigating to the previous step
       }
     },
     async submitForm() {

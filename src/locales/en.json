@@ -3,6 +3,7 @@
         "signIn": "Sign in",
         "logIn": "Log in",
         "phone": "Phone Number",
+        "email": "Email",
         "password": "Password",
         "register": "Don't have an account? Register",
         "noAccount": "No account yet?"
@@ -27,6 +28,7 @@
         "swaps": "Swaps",
         "messages": "Messages",
         "notifications": "Notifications",
-        "profile": "Profile"
+        "profile": "Profile",
+        "logout": "Log out"
     }
 }

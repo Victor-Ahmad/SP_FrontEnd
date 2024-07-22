@@ -1,6 +1,6 @@
 <template>
   <div class="pagination-container">
-    <button @click="fetchPage(1)" :disabled="currentPage <= 1">First</button>
+    <button @click="changePage(1)" :disabled="currentPage <= 1">First</button>
     <button
       class="hidden sm:block"
       @click="previousPage"
@@ -12,7 +12,7 @@
       v-for="page in pagesToShow"
       :key="page"
       :class="{ active: page === currentPage }"
-      @click="fetchPage(page)"
+      @click="changePage(page)"
     >
       {{ page }}
     </button>
@@ -24,7 +24,7 @@
       Next
     </button>
     <button
-      @click="fetchPage(totalPages)"
+      @click="changePage(totalPages)"
       :disabled="currentPage >= totalPages"
     >
       Last
@@ -44,17 +44,26 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      maxVisiblePages: 3,
+    };
+  },
   computed: {
     pagesToShow() {
-      const maxVisiblePages = 3;
+      let visiblePages = this.maxVisiblePages;
+      if (this.totalPages < this.maxVisiblePages) {
+        visiblePages = this.totalPages;
+      }
+
       let startPage = Math.max(
-        this.currentPage - Math.floor(maxVisiblePages / 2),
+        this.currentPage - Math.floor(visiblePages / 2),
         1
       );
-      let endPage = startPage + maxVisiblePages - 1;
+      let endPage = startPage + visiblePages - 1;
       if (endPage > this.totalPages) {
         endPage = this.totalPages;
-        startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+        startPage = Math.max(endPage - visiblePages + 1, 1);
       }
       const pages = [];
       for (let i = startPage; i <= endPage; i++) {
@@ -64,15 +73,32 @@ export default {
     },
   },
   methods: {
+    updateMaxVisiblePages() {
+      this.maxVisiblePages = window.innerWidth < 640 ? 3 : 10;
+    },
     previousPage() {
-      this.$emit("changePage", this.currentPage - 1);
+      this.changePage(this.currentPage - 1);
     },
     nextPage() {
-      this.$emit("changePage", this.currentPage + 1);
+      this.changePage(this.currentPage + 1);
     },
-    fetchPage(page) {
+    changePage(page) {
       this.$emit("changePage", page);
+      this.scrollToTop();
     },
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    },
+  },
+  mounted() {
+    this.updateMaxVisiblePages();
+    window.addEventListener("resize", this.updateMaxVisiblePages);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.updateMaxVisiblePages);
   },
 };
 </script>

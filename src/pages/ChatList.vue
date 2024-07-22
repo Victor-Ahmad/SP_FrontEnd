@@ -8,12 +8,25 @@
     >
       <div class="flex justify-between items-center mb-1">
         <div class="font-semibold">
-          {{ chat.other_person?.first_name ?? "" }}
-          {{ chat.other_person?.last_name ?? "" }}
+          <template v-if="chat.other_persons.length > 0">
+            {{ chat.other_persons[0].first_name }}
+            {{ chat.other_persons[0].last_name }}
+          </template>
+          <template v-else> Unknown User </template>
         </div>
-        <div class="text-sm text-gray-500">{{ chat.created_at }}</div>
+        <div class="text-sm text-gray-500">
+          {{ formatDate(chat.latest_message.created_at) }}
+        </div>
       </div>
-      <div class="text-sm text-gray-600 truncate">{{ chat.lastMessage }}</div>
+      <div class="text-sm text-gray-600 truncate">
+        {{ chat.latest_message.content }}
+      </div>
+      <div class="text-xs text-gray-500">
+        <template v-if="chat.other_persons.length > 0">
+          {{ chat.other_persons[0].street }},
+          {{ chat.other_persons[0].location }}
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -47,6 +60,10 @@ export default {
       } else {
         this.$emit("chatSelected", chat);
       }
+    },
+    formatDate(date) {
+      const options = { year: "numeric", month: "short", day: "numeric" };
+      return new Date(date).toLocaleDateString(undefined, options);
     },
   },
 };

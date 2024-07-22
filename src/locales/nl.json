@@ -3,6 +3,7 @@
         "signIn": "Inschrijven",
         "logIn": "Inloggen",
         "phone": "Telefoonnummer",
+        "email": "E-mail",
         "password": "Wachtwoord",
         "register": "Nog geen account? Registreren",
         "noAccount": "Nog geen account?"
@@ -26,6 +27,7 @@
         "theme": "Thema",
         "swaps": "Ruilen",
         "messages": "Berichten",
-        "notifications": "Meldingen"
+        "notifications": "Meldingen",
+        "logout": "Uitloggen"
     }
 }

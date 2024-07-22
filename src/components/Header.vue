@@ -3,7 +3,7 @@
     <div class="flex items-center space-x-4">
       <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
     </div>
-    <nav v-if="!isMobile" class="flex space-x-4 items-center">
+    <nav v-if="!isMobile && token" class="flex space-x-4 items-center">
       <router-link
         to="/home"
         class="hover-color transition duration-300 ease-in-out"
@@ -30,21 +30,28 @@
       >
     </nav>
     <div class="flex space-x-4 items-center">
-      <NotificationDropdown />
+      <NotificationDropdown v-if="token" />
       <router-link
-        v-if="!isMobile"
+        v-if="!isMobile && !token"
         to="/login"
         class="hover-color transition duration-300 ease-in-out"
         active-class="active"
         >{{ $t("nav.login") }}</router-link
       >
       <router-link
-        v-if="!isMobile"
+        v-if="!isMobile && !token"
         to="/register"
         class="hover-color transition duration-300 ease-in-out"
         active-class="active"
         >{{ $t("nav.register") }}</router-link
       >
+      <button
+        v-if="!isMobile && token"
+        @click="handleLogout"
+        class="hover-color transition duration-300 ease-in-out"
+      >
+        {{ $t("nav.logout") }}
+      </button>
       <LanguageDropdown v-if="!isMobile" />
     </div>
   </header>
@@ -52,6 +59,8 @@
 
 <script>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import LanguageDropdown from "@/components/LanguageDropdown.vue";
 import NotificationDropdown from "@/components/NotificationDropdown.vue";
 
@@ -62,6 +71,8 @@ export default {
     NotificationDropdown,
   },
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const isMobile = ref(false);
 
     const checkScreenSize = () => {
@@ -77,6 +88,14 @@ export default {
       window.removeEventListener("resize", checkScreenSize);
     });
 
+    const token = computed(() => store.getters.token);
+
+    const handleLogout = () => {
+      store.dispatch("logout").then(() => {
+        router.push("/login");
+      });
+    };
+
     const headerClasses = computed(() => {
       return isMobile.value
         ? "w-full bg-white text-black p-4 flex justify-between items-center shadow-md z-50"
@@ -85,6 +104,8 @@ export default {
 
     return {
       isMobile,
+      token,
+      handleLogout,
       headerClasses,
     };
   },

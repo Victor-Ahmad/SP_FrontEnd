@@ -6,31 +6,22 @@ const removeNullValues = (params) => {
   );
 };
 
-export const login = async (number, password) => {
+export const login = async (email, password) => {
   try {
-    const response = await axiosInstance.post("/login", { number, password });
+    const response = await axiosInstance.post("/login", { email, password });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-// export const register = async ({ firstName, lastName, email, phone, password }) => {
-//     try {
-//         const response = await axiosInstance.post('/register', { first_name: firstName, last_name: lastName, email, number: phone, password });
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// };
-
-export const getSwapHouses = async (params) => {
+export const getSwapHouses = async (formData, page) => {
   try {
-    const filteredParams = removeNullValues(params);
-    const response = await axiosInstance.post(
-      "/get_swap_houses",
-      filteredParams
-    );
+    const url = `/get_swap_houses?page=${page}`;
+    if (!formData) {
+      formData = new FormData();
+    }
+    const response = await axiosInstance.post(url, formData);
     return response.data;
   } catch (error) {
     throw error;
@@ -415,6 +406,15 @@ export const getHouseTypes = async () => {
 export const getHouseFeatures = async () => {
   try {
     const response = await axiosInstance.get("/get_specific_properties");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getTriangleSwapHouses = async () => {
+  try {
+    const response = await axiosInstance.get("/three_way_exchange");
     return response.data;
   } catch (error) {
     throw error;
