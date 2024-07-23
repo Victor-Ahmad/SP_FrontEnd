@@ -1,11 +1,16 @@
 <template>
   <div class="bg-white mr-6">
-    <h2 class="text-xl font-bold mb-4 text-[#1c592f]">Filters</h2>
+    <h2 class="text-xl font-bold mb-4 text-[#1c592f]">
+      {{ $t("filters.title") }}
+    </h2>
 
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">Amenities</h3>
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.amenities") }}
+      </h3>
       <div v-if="loadingAmenities" class="text-center mb-4">
-        <i class="fas fa-spinner fa-spin"></i> Loading amenities...
+        <i class="fas fa-spinner fa-spin"></i>
+        {{ $t("filters.loadingAmenities") }}
       </div>
       <div v-else>
         <div
@@ -25,7 +30,9 @@
     </div>
 
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">Rent</h3>
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.rent") }}
+      </h3>
       <input
         type="range"
         v-model="localFilters.maxRent"
@@ -38,18 +45,22 @@
     </div>
 
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">Size</h3>
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.size") }}
+      </h3>
       <input
         type="number"
         v-model="localFilters.minSize"
         min="1"
-        placeholder="Min size (m²)"
+        :placeholder="$t('filters.minSizePlaceholder')"
         class="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f]"
       />
     </div>
 
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">Floor</h3>
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.floor") }}
+      </h3>
       <ul class="flex w-full no-gap-list">
         <li
           v-for="(floor, index) in floors"
@@ -64,7 +75,9 @@
     </div>
 
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">Number of Rooms</h3>
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.numberOfRooms") }}
+      </h3>
       <ul class="flex w-full no-gap-list">
         <li
           v-for="(number, index) in numberOfRooms"
@@ -79,11 +92,13 @@
     </div>
 
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">Areas</h3>
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.areas") }}
+      </h3>
       <input
         type="text"
         id="areasAutocompleteInput"
-        placeholder="Enter area"
+        :placeholder="$t('filters.areasPlaceholder')"
         class="input-field w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f]"
       />
       <div class="tags-container flex flex-wrap mt-2">
@@ -106,13 +121,13 @@
       @click="applyFilters"
       class="w-full bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition"
     >
-      Apply Filters
+      {{ $t("filters.apply") }}
     </button>
     <button
       @click="clearFilters"
       class="w-full bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition mt-2"
     >
-      Clear Filters
+      {{ $t("filters.clear") }}
     </button>
   </div>
 </template>

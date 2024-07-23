@@ -23,7 +23,7 @@
             <img
               src="@/assets/images/logo2.png"
               class="w-full h-full object-contain"
-              alt="Placeholder"
+              :alt="$t('page.placeholder')"
             />
           </swiper-slide>
         </swiper>
@@ -49,7 +49,7 @@
                 class="text-purple-custom text-base font-semibold flex items-center"
               >
                 <i class="fas fa-euro-sign mr-2"></i> {{ house.price || "" }} /
-                month
+                {{ $t("page.month") }}
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-home mr-2 icon_custom_color"></i>
@@ -57,11 +57,11 @@
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-door-open mr-2 icon_custom_color"></i>
-                <strong>Kamers: </strong> {{ house.number_of_rooms || "" }}
+                <strong>{{ $t("page.rooms") }}: </strong> {{ house.number_of_rooms || "" }}
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-map-marker-alt mr-2 icon_custom_color"></i>
-                <strong>Area: </strong> {{ house.area || "" }} (m²)
+                <strong>{{ $t("page.area") }}: </strong> {{ house.area || "" }} (m²)
               </div>
             </div>
             <div
@@ -103,7 +103,7 @@
             ]"
           >
             <i class="fas fa-thumbs-up mr-1"></i>
-            <span class="hidden md:inline">Interested</span>
+            <span class="hidden md:inline">{{ $t("page.interested") }}</span>
           </button>
           <button
             @click="toggleNotInterested($event)"
@@ -115,20 +115,21 @@
             ]"
           >
             <i class="fas fa-thumbs-down mr-1"></i>
-            <span class="hidden md:inline">Not Interested</span>
+            <span class="hidden md:inline">{{ $t("page.notInterested") }}</span>
           </button>
           <button
             @click="startChat($event)"
             class="w-1/3 lg:w-3/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 text-white"
           >
             <i class="fas fa-comment mr-1"></i>
-            <span class="hidden md:inline">Chat</span>
+            <span class="hidden md:inline">{{ $t("page.chat") }}</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";

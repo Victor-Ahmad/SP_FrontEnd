@@ -1,7 +1,7 @@
 <template>
   <div v-if="isLoading" class="text-center">
     <div class="spinner"></div>
-    Checking Email & Phone Number ...
+    {{ $t("stepper.checkingEmailPhone") }}
   </div>
   <div v-else class="w-full p-6 pb-20 flex flex-col min-h-screen">
     <div class="stepper-wrapper mb-6 flex justify-between relative">
@@ -17,7 +17,7 @@
         <div
           class="step-counter relative inline-block p-2 md:px-8 bg-gray-300 text-white font-bold text-lg transition duration-300 border-2 border-transparent"
         >
-          <span class="inline md;hidden lg:hidden">{{ index + 1 }}</span>
+          <span class="inline md:hidden lg:hidden">{{ index + 1 }}</span>
           <span class="hidden md:inline">{{ step.name }}</span>
           <div
             v-if="index > 0"
@@ -47,21 +47,21 @@
         :disabled="currentStep === 0"
         class="px-4 py-2 bg-gray-300 text-white w-40 rounded-full transition duration-300 hover:bg-gray-400 disabled:opacity-50"
       >
-        Previous
+        {{ $t("stepper.previous") }}
       </button>
       <button
         v-if="currentStep < steps.length - 1"
         @click="nextStep"
         class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
-        Next
+        {{ $t("stepper.next") }}
       </button>
       <button
         v-if="currentStep === steps.length - 1"
         @click="submitForm"
         class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
-        Submit
+        {{ $t("stepper.submit") }}
       </button>
     </div>
   </div>

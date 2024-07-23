@@ -5,7 +5,9 @@
   >
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-4">
-        <h3 class="text-4xl font-bold text-[#1c592f]">My House</h3>
+        <h3 class="text-4xl font-bold text-[#1c592f]">
+          {{ $t("myHouse.title") }}
+        </h3>
       </div>
 
       <div class="mb-6">
@@ -13,12 +15,12 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Post Code
+                {{ $t("myHouse.postCode") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.post_code"
-                placeholder="Enter post code"
+                :placeholder="$t('myHouse.postCodePlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 @input="fetchCityFromPostCode"
               />
@@ -28,12 +30,12 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                House Number
+                {{ $t("myHouse.houseNumber") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.house_number"
-                placeholder="Enter house number"
+                :placeholder="$t('myHouse.houseNumberPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 @input="fetchStreetFromPostCodeAndHouseNumber"
               />
@@ -48,12 +50,12 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Location
+                {{ $t("myHouse.location") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.location_name"
-                placeholder="Enter location name"
+                :placeholder="$t('myHouse.locationPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 readonly
               />
@@ -62,11 +64,13 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">Street</h3>
+              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                {{ $t("myHouse.street") }}
+              </h3>
               <input
                 type="text"
                 v-model="formData.street"
-                placeholder="Enter street name"
+                :placeholder="$t('myHouse.streetPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 readonly
               />
@@ -81,13 +85,13 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                House Type
+                {{ $t("myHouse.houseType") }}
               </h3>
               <div class="relative" ref="houseTypeDropdown">
                 <input
                   type="text"
                   v-model="selectedHouseTypeName"
-                  placeholder="Select an option"
+                  :placeholder="$t('myHouse.houseTypePlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showDropdown')"
@@ -109,12 +113,12 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Rent Price (€)
+                {{ $t("myHouse.rentPrice") }}
               </h3>
               <input
                 type="number"
                 v-model="formData.price"
-                placeholder="Enter price"
+                :placeholder="$t('myHouse.pricePlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 step="0.01"
               />
@@ -129,7 +133,7 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Number of Rooms
+                {{ $t("myHouse.numberOfRooms") }}
               </h3>
               <ul class="flex w-full no-gap-list">
                 <li
@@ -147,11 +151,13 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">Floor</h3>
+              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                {{ $t("myHouse.floor") }}
+              </h3>
               <input
                 type="number"
                 v-model="formData.floor"
-                placeholder="Enter floor number"
+                :placeholder="$t('myHouse.floorPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 min="0"
                 step="1"
@@ -167,13 +173,13 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Area (m²)
+                {{ $t("myHouse.area") }}
               </h3>
               <div class="relative" ref="areaDropdown">
                 <input
                   type="text"
                   v-model="formData.area"
-                  placeholder="Select an option"
+                  :placeholder="$t('myHouse.areaPlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showAreaDropdown')"
@@ -195,13 +201,13 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                House Features
+                {{ $t("myHouse.houseFeatures") }}
               </h3>
               <div class="relative" ref="featuresDropdown">
                 <input
                   type="text"
                   v-model="selectedFeatureNames"
-                  placeholder="Specify house features"
+                  :placeholder="$t('myHouse.featuresPlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showFeaturesDropdown')"
@@ -228,12 +234,12 @@
         </div>
         <div class="form-group mb-4">
           <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-            Housing Corporation
+            {{ $t("myHouse.housingCorporation") }}
           </h3>
           <input
             type="text"
             v-model="formData.swap_company"
-            placeholder="Enter my Housing Corporation"
+            :placeholder="$t('myHouse.housingCorporationPlaceholder')"
             class="input-field w-full p-2 border rounded"
           />
           <div v-if="errors.swap_company" class="invalid-feedback">
@@ -243,7 +249,11 @@
       </div>
     </div>
     <div class="w-full md:w-2/5 hidden lg:flex items-center md:pl-6">
-      <img :src="image" alt="Step 2 Image" class="w-full h-auto rounded" />
+      <img
+        :src="image"
+        :alt="$t('myHouse.stepImageAlt')"
+        class="w-full h-auto rounded"
+      />
     </div>
   </div>
 </template>

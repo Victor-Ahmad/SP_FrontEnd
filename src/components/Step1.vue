@@ -5,18 +5,22 @@
   >
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-10">
-        <h3 class="text-4xl font-bold text-[#1c592f]">I want to go to</h3>
+        <h3 class="text-4xl font-bold text-[#1c592f]">
+          {{ $t("form.title") }}
+        </h3>
       </div>
 
       <div class="mb-6">
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">City</h3>
+              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                {{ $t("form.city") }}
+              </h3>
               <input
                 type="text"
                 id="interestsAutocompleteInput"
-                placeholder="Enter a location of interest"
+                :placeholder="$t('form.cityPlaceholder')"
                 class="input-field w-full p-2 border rounded"
               />
             </div>
@@ -44,13 +48,13 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                House Type
+                {{ $t("form.houseType") }}
               </h3>
               <div class="relative" ref="houseTypeDropdown">
                 <input
                   type="text"
                   v-model="selectedHouseTypeName"
-                  placeholder="Select an option"
+                  :placeholder="$t('form.houseTypePlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showDropdown')"
@@ -72,12 +76,12 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Max Rent Price (€)
+                {{ $t("form.maxRentPrice") }}
               </h3>
               <input
                 type="number"
                 v-model="formData.wish.price"
-                placeholder="Enter price"
+                :placeholder="$t('form.pricePlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 step="0.01"
               />
@@ -92,7 +96,7 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Min Number of Rooms
+                {{ $t("form.minRooms") }}
               </h3>
               <ul class="flex w-full no-gap-list">
                 <li
@@ -110,17 +114,17 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">Floor</h3>
-              <!-- Correct v-model for wish.floor_number -->
+              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                {{ $t("form.floor") }}
+              </h3>
               <input
                 type="number"
                 v-model="formData.wish.floor_number"
-                placeholder="Enter floor number"
+                :placeholder="$t('form.floorPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 min="0"
                 step="1"
               />
-
               <div v-if="errors.floor_wish" class="invalid-feedback">
                 {{ errors.floor_wish }}
               </div>
@@ -132,13 +136,13 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Min Area (m²)
+                {{ $t("form.minArea") }}
               </h3>
               <div class="relative" ref="areaDropdown">
                 <input
                   type="text"
                   v-model="formData.wish.area_wish"
-                  placeholder="Select an option"
+                  :placeholder="$t('form.areaPlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showAreaDropdown')"
@@ -159,13 +163,13 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                House Features
+                {{ $t("form.houseFeatures") }}
               </h3>
               <div class="relative" ref="featuresDropdown">
                 <input
                   type="text"
                   v-model="selectedFeatureNames"
-                  placeholder="Specify house features"
+                  :placeholder="$t('form.featuresPlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showFeaturesDropdown')"
@@ -194,12 +198,10 @@
         </div>
 
         <!-- <div class="form-group mb-4">
-          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-            Why do you wish to swap?
-          </h3>
+          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">{{ $t("form.reasonForSwap") }}</h3>
           <textarea
             v-model="formData.wish.reason_for_swap"
-            placeholder="Explain your reason for the swap"
+            :placeholder="$t('form.reasonPlaceholder')"
             class="input-field w-full p-2 border rounded"
             rows="4"
             style="resize: none"
@@ -211,7 +213,11 @@
       </div>
     </div>
     <div class="w-full md:w-2/5 hidden lg:flex items-start md:pl-6">
-      <img :src="image" alt="Step 1 Image" class="w-10/12 h-auto rounded" />
+      <img
+        :src="image"
+        :alt="$t('form.stepImageAlt')"
+        class="w-10/12 h-auto rounded"
+      />
     </div>
   </div>
 </template>

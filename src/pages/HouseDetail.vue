@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen p-4 md:p-8">
-    <div v-if="isLoading" class="text-center">Loading...</div>
+    <div v-if="isLoading" class="text-center">{{ $t("page.loading") }}</div>
     <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
     <div v-else class="house-detail-page flex flex-col items-center">
       <div class="house-detail-images-container w-full pt-4 px-2 md:px-10">
@@ -14,7 +14,7 @@
             <img
               :src="getImageUrl(house.images[0].image_path)"
               class="absolute top-0 left-0 w-full h-full object-cover cursor-pointer"
-              alt="Leading Image"
+              :alt="$t('page.leadingImage')"
               @click="openImage(getImageUrl(house.images[0].image_path))"
             />
           </div>
@@ -26,7 +26,7 @@
             <img
               :src="getImageUrl(image.image_path)"
               class="absolute top-0 left-0 w-full h-full object-cover cursor-pointer"
-              alt="House Image"
+              :alt="$t('page.houseImage')"
               @click="openImage(getImageUrl(image.image_path))"
             />
           </div>
@@ -50,72 +50,89 @@
               {{ house.street }}, {{ house.location }}
             </div>
             <div class="text-lg text-[#1c592f] font-bold mt-2 md:mt-0">
-              {{ house.price }} / month
+              {{ house.price }} / {{ $t("page.month") }}
             </div>
           </div>
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
               <h2 class="text-xl font-bold text-gray-800 mb-4">
-                House Details
+                {{ $t("page.houseDetails") }}
               </h2>
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                <span class="font-medium text-gray-700">Type:</span>
+                <span class="font-medium text-gray-700"
+                  >{{ $t("page.type") }}:</span
+                >
                 <span>{{ house.house_type.type }}</span>
               </div>
               <hr class="border-t border-gray-300 my-2" />
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                <span class="font-medium text-gray-700">Number of Rooms:</span>
+                <span class="font-medium text-gray-700"
+                  >{{ $t("page.numberOfRooms") }}:</span
+                >
                 <span>{{ house.number_of_rooms }}</span>
               </div>
               <hr class="border-t border-gray-300 my-2" />
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                <span class="font-medium text-gray-700">Area:</span>
-                <span>{{ house.area || "N/A" }} m²</span>
+                <span class="font-medium text-gray-700"
+                  >{{ $t("page.area") }}:</span
+                >
+                <span>{{ house.area || $t("page.na") }} m²</span>
               </div>
             </div>
           </div>
 
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">Description</h2>
+              <h2 class="text-xl font-bold text-gray-800 mb-4">
+                {{ $t("page.description") }}
+              </h2>
               <div class="info-item py-2">
-                <span>{{
-                  house.description || "No description available"
-                }}</span>
+                <span>{{ house.description || $t("page.noDescription") }}</span>
               </div>
             </div>
           </div>
 
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">Wishes</h2>
+              <h2 class="text-xl font-bold text-gray-800 mb-4">
+                {{ $t("page.wishes") }}
+              </h2>
               <div
                 v-for="wish in houseOwner.wishes"
                 :key="wish.id"
                 class="wish-item mt-3"
               >
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700">House Type:</span>
+                  <span class="font-medium text-gray-700"
+                    >{{ $t("page.houseType") }}:</span
+                  >
                   <span>{{
-                    wish.house_type ? wish.house_type.type : "N/A"
+                    wish.house_type ? wish.house_type.type : $t("page.na")
                   }}</span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
                   <span class="font-medium text-gray-700"
-                    >Number of Rooms:</span
+                    >{{ $t("page.numberOfRooms") }}:</span
                   >
-                  <span>{{ wish.number_of_rooms || "N/A" }}</span>
+                  <span>{{ wish.number_of_rooms || $t("page.na") }}</span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700">Price:</span>
-                  <span>{{ wish.price || "N/A" }} / month</span>
+                  <span class="font-medium text-gray-700"
+                    >{{ $t("page.price") }}:</span
+                  >
+                  <span
+                    >{{ wish.price || $t("page.na") }} /
+                    {{ $t("page.month") }}</span
+                  >
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700">Area:</span>
-                  <span>{{ wish.area || "N/A" }} m²</span>
+                  <span class="font-medium text-gray-700"
+                    >{{ $t("page.area") }}:</span
+                  >
+                  <span>{{ wish.area || $t("page.na") }} m²</span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div
@@ -123,7 +140,7 @@
                   class="info-item py-2 grid grid-cols-1 md:grid-cols-2"
                 >
                   <span class="font-medium text-gray-700"
-                    >Preferred Locations:</span
+                    >{{ $t("page.preferredLocations") }}:</span
                   >
                   <div>
                     <ul class="list-disc pl-5">
@@ -145,7 +162,9 @@
           class="contact-info-container bg-white p-4 md:p-5 rounded-lg shadow-lg w-full md:w-[25%] self-start"
         >
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-gray-800">Contact Info</h2>
+            <h2 class="text-xl font-semibold text-gray-800">
+              {{ $t("page.contactInfo") }}
+            </h2>
             <button
               class="favorite-button w-10 h-10 bg-white text-red-500 border border-red-500 rounded-full hover:bg-red-500 hover:text-white flex items-center justify-center transition"
               @click="handleFavoriteClick($event)"
@@ -156,7 +175,9 @@
           <div
             class="info-item py-2 flex flex-col md:flex-row justify-between md:justify-evenly"
           >
-            <span class="font-medium text-gray-700">Name:</span>
+            <span class="font-medium text-gray-700"
+              >{{ $t("page.name") }}:</span
+            >
             <span>{{ houseOwner.first_name }} {{ houseOwner.last_name }}</span>
           </div>
           <hr class="border-t border-gray-300 my-2" />
@@ -165,7 +186,7 @@
               class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4"
               @click="startChat($event)"
             >
-              Chat
+              {{ $t("page.chat") }}
             </button>
           </div>
           <div
@@ -180,7 +201,7 @@
               ]"
               @click="handleInterestedClick($event)"
             >
-              Interested
+              {{ $t("page.interested") }}
             </button>
             <button
               class="not-interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition"
@@ -191,14 +212,14 @@
               ]"
               @click="toggleNotInterested($event)"
             >
-              Not Interested
+              {{ $t("page.notInterested") }}
             </button>
           </div>
           <div class="info-item py-2 mt-4">
             <button
               class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center"
             >
-              <i class="fas fa-share-alt mr-2"></i> Share
+              <i class="fas fa-share-alt mr-2"></i> {{ $t("page.share") }}
             </button>
           </div>
         </div>

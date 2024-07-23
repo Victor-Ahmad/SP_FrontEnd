@@ -3,18 +3,18 @@
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-4">
         <h3 class="text-4xl font-bold text-[#1c592f]">
-          My House Description & Pictures
+          {{ $t("houseDescription.title") }}
         </h3>
       </div>
 
       <div class="mb-6">
         <div class="form-group mb-4">
           <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-            House Description
+            {{ $t("houseDescription.description") }}
           </h3>
           <textarea
             v-model="formData.house_description"
-            placeholder="Describe your house"
+            :placeholder="$t('houseDescription.descriptionPlaceholder')"
             class="input-field w-full p-2 border rounded"
             rows="4"
             style="resize: none"
@@ -23,9 +23,9 @@
 
         <div class="form-group mb-4">
           <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-            House Gallery
+            {{ $t("houseDescription.gallery") }}
           </h3>
-          <p class="mt-4">Add house pictures</p>
+          <p class="mt-4">{{ $t("houseDescription.addPictures") }}</p>
           <input
             type="file"
             id="gallery"
@@ -46,7 +46,7 @@
               >
                 <img
                   :src="image"
-                  alt="House Image"
+                  :alt="$t('houseDescription.imageAlt')"
                   class="w-32 h-32 object-cover"
                 />
                 <button
@@ -80,7 +80,11 @@
     <div
       class="w-full md:w-2/5 hidden lg:flex items-center justify-center md:pl-6"
     >
-      <img :src="image" alt="Step 4 Image" class="w-full h-auto rounded" />
+      <img
+        :src="image"
+        :alt="$t('houseDescription.stepImageAlt')"
+        class="w-full h-auto rounded"
+      />
     </div>
   </div>
 </template>

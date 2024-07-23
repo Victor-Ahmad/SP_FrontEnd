@@ -2,7 +2,9 @@
   <div class="flex flex-col md:flex-row justify-between h-full">
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-4">
-        <h3 class="text-4xl font-bold text-[#1c592f]">My Information</h3>
+        <h3 class="text-4xl font-bold text-[#1c592f]">
+          {{ $t("myInfo.title") }}
+        </h3>
       </div>
 
       <div class="mb-6">
@@ -10,12 +12,12 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                First Name
+                {{ $t("myInfo.firstName") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.first_name"
-                placeholder="First Name"
+                :placeholder="$t('myInfo.firstNamePlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -25,12 +27,12 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Last Name
+                {{ $t("myInfo.lastName") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.last_name"
-                placeholder="Last Name"
+                :placeholder="$t('myInfo.lastNamePlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -44,11 +46,13 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">Email</h3>
+              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                {{ $t("myInfo.email") }}
+              </h3>
               <input
                 type="email"
                 v-model="formData.email"
-                placeholder="Email"
+                :placeholder="$t('myInfo.emailPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -58,12 +62,12 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Phone Number
+                {{ $t("myInfo.phoneNumber") }}
               </h3>
               <input
                 type="tel"
                 v-model="formData.phone_number"
-                placeholder="Phone Number"
+                :placeholder="$t('myInfo.phoneNumberPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -78,12 +82,12 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Password
+                {{ $t("myInfo.password") }}
               </h3>
               <input
                 type="password"
                 v-model="formData.password"
-                placeholder="Password"
+                :placeholder="$t('myInfo.passwordPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 required
                 @blur="validatePassword"
@@ -94,12 +98,12 @@
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-                Confirm Password
+                {{ $t("myInfo.confirmPassword") }}
               </h3>
               <input
                 type="password"
                 v-model="formData.password_confirmation"
-                placeholder="Confirm Password"
+                :placeholder="$t('myInfo.confirmPasswordPlaceholder')"
                 class="input-field w-full p-2 border rounded"
                 required
                 @blur="validatePassword"
@@ -120,18 +124,18 @@
                     required
                   />
                   <span>
-                    I agree to the
-                    <a href="#" target="_blank" class="text-[#1c592f]"
-                      >privacy policy</a
-                    >
-                    and
-                    <a href="#" target="_blank" class="text-[#1c592f]"
-                      >terms of use</a
-                    >
+                    {{ $t("myInfo.agreeTo") }}
+                    <a href="#" target="_blank" class="text-[#1c592f]">{{
+                      $t("myInfo.privacyPolicy")
+                    }}</a>
+                    {{ $t("myInfo.and") }}
+                    <a href="#" target="_blank" class="text-[#1c592f]">{{
+                      $t("myInfo.termsOfUse")
+                    }}</a>
                   </span>
                 </label>
                 <div class="invalid-feedback" v-if="showPrivacyPolicyError">
-                  You must agree to the privacy policy and terms of use
+                  {{ $t("myInfo.privacyPolicyError") }}
                 </div>
               </div>
             </div>
@@ -142,7 +146,11 @@
     <div
       class="w-full md:w-2/5 hidden lg:flex items-center justify-center md:pl-6"
     >
-      <img :src="image" alt="Step 3 Image" class="w-9/12 h-auto rounded" />
+      <img
+        :src="image"
+        :alt="$t('myInfo.stepImageAlt')"
+        class="w-9/12 h-auto rounded"
+      />
     </div>
   </div>
 </template>

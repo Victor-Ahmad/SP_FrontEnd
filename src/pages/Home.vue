@@ -20,14 +20,14 @@
               <div class="progress-text">{{ progress }}%</div>
             </div>
             <div class="missing-steps">
-              <p>Complete your account to get better house exchange matches</p>
-              <router-link :to="profileCompletionLink"
-                >Go to profile</router-link
-              >
+              <p>{{ $t("page.completeAccount") }}</p>
+              <router-link :to="profileCompletionLink">{{
+                $t("page.goToProfile")
+              }}</router-link>
             </div>
           </div>
         </div>
-        <div v-if="isLoading" class="text-center">Loading...</div>
+        <div v-if="isLoading" class="text-center">{{ $t("page.loading") }}</div>
         <div v-else-if="error" class="text-red-600 text-center">
           {{ error }}
         </div>
@@ -42,7 +42,7 @@
             ]"
             @click="setActiveTab('houses')"
           >
-            All List
+            {{ $t("page.allList") }}
           </button>
           <button
             :class="[
@@ -51,7 +51,7 @@
             ]"
             @click="setActiveTab('triangles')"
           >
-            Perfect Triangles
+            {{ $t("page.perfectTriangles") }}
           </button>
         </div>
 
@@ -59,13 +59,11 @@
           v-if="activeTab === 'houses'"
           class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
         >
-          <!-- Button to open filter drawer on mobile -->
-
           <button
             @click="openFilterDrawer"
             class="lg:hidden p-4 border border-[#1c592f] text-[#1c592f] flex items-center rounded-md justify-center"
           >
-            <i class="fas fa-filter mr-2"></i> Open Filters
+            <i class="fas fa-filter mr-2"></i> {{ $t("page.openFilters") }}
           </button>
           <HouseCard
             v-for="house in filteredHouses"
@@ -100,14 +98,15 @@
       </div>
     </div>
 
-    <!-- Filter Drawer for Mobile -->
     <transition name="slide-fade">
       <div
         v-if="showFilterDrawer"
         class="fixed inset-0 z-50 bg-white shadow-lg lg:hidden filter-drawer"
       >
         <div class="flex justify-between items-center mb-4 p-4">
-          <h2 class="text-xl font-bold text-[#1c592f]">Filters</h2>
+          <h2 class="text-xl font-bold text-[#1c592f]">
+            {{ $t("page.filters") }}
+          </h2>
           <button @click="closeFilterDrawer" class="text-xl">&times;</button>
         </div>
         <div class="p-4 overflow-y-auto">
