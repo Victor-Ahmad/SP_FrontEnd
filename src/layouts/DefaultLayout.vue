@@ -5,7 +5,7 @@
       <router-view></router-view>
     </main>
     <Footer />
-    <BottomNavBar @toggle-sidebar="toggleSidebar" v-if="isMobile" />
+    <BottomNavBar @toggle-sidebar="toggleSidebar" v-if="isMobile && token" />
     <Sidebar :isVisible="isSidebarVisible" @close-sidebar="toggleSidebar" />
   </div>
 </template>
@@ -15,7 +15,8 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import BottomNavBar from "@/components/BottomNavBar.vue";
 import Sidebar from "@/components/Sidebar.vue";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "DefaultLayout",
@@ -26,8 +27,11 @@ export default {
     Sidebar,
   },
   setup() {
+    const store = useStore();
     const isMobile = ref(false);
     const isSidebarVisible = ref(false);
+
+    const token = computed(() => store.getters.token);
 
     const checkScreenSize = () => {
       isMobile.value = window.innerWidth <= 768;
@@ -59,6 +63,7 @@ export default {
       isMobile,
       isSidebarVisible,
       toggleSidebar,
+      token,
     };
   },
 };

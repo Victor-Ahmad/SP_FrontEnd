@@ -22,7 +22,7 @@
                 v-model="formData.post_code"
                 :placeholder="$t('myHouse.postCodePlaceholder')"
                 class="input-field w-full p-2 border rounded"
-                @input="fetchCityFromPostCode"
+                @input="handlePostCodeInput"
               />
               <div v-if="errors.post_code" class="invalid-feedback">
                 {{ errors.post_code }}
@@ -37,7 +37,7 @@
                 v-model="formData.house_number"
                 :placeholder="$t('myHouse.houseNumberPlaceholder')"
                 class="input-field w-full p-2 border rounded"
-                @input="fetchStreetFromPostCodeAndHouseNumber"
+                @input="handleHouseNumberInput"
               />
               <div v-if="errors.house_number" class="invalid-feedback">
                 {{ errors.house_number }}
@@ -154,14 +154,17 @@
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.floor") }}
               </h3>
-              <input
-                type="number"
-                v-model="formData.floor"
-                :placeholder="$t('myHouse.floorPlaceholder')"
-                class="input-field w-full p-2 border rounded"
-                min="0"
-                step="1"
-              />
+              <ul class="flex w-full no-gap-list">
+                <li
+                  v-for="(floor, index) in floorOptions"
+                  :key="index"
+                  @click="selectFloor(floor)"
+                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                  :class="floorClasses(floor)"
+                >
+                  {{ floor === 0 ? "G" : floor }}
+                </li>
+              </ul>
               <div v-if="errors.floor" class="invalid-feedback">
                 {{ errors.floor }}
               </div>
@@ -259,7 +262,7 @@
 </template>
 
 <script>
-import { getHouseTypes, getHouseFeatures } from "@/services/apiService"; // Adjust the path as necessary
+import { getHouseTypes, getHouseFeatures } from "@/services/apiService";
 
 export default {
   props: ["formData", "image"],
@@ -267,7 +270,8 @@ export default {
     return {
       houseTypes: [],
       selectedHouseTypeName: "",
-      numberOfRooms: [1, 2, 3, 4, 5],
+      numberOfRooms: [1, 2, 3, 4, 5, 6],
+      floorOptions: [0, 1, 2, 3, 4, 5, 6], // G represented as 0
       areas: ["50", "100", "150", "200"],
       features: [],
       selectedFeatureNames: "",
@@ -300,6 +304,9 @@ export default {
     },
     selectNumberOfRooms(number) {
       this.formData.number_of_rooms = number;
+    },
+    selectFloor(floor) {
+      this.formData.floor = floor;
     },
     selectArea(area) {
       this.formData.area = area;
@@ -335,6 +342,21 @@ export default {
         "duration-300": true,
         "ease-in-out": true,
         "selected-room": this.formData.number_of_rooms === number,
+      };
+    },
+    floorClasses(floor) {
+      return {
+        "bg-white": this.formData.floor === floor,
+        "text-[#1c592f]": this.formData.floor === floor,
+        "hover:bg-white": true,
+        "hover:shadow-[0_0_10px_#1c592f]": true,
+        "hover:text-[#1c592f]": true,
+        "border-gray-300": true,
+        "hover:border-[#1c592f]": true,
+        transition: true,
+        "duration-300": true,
+        "ease-in-out": true,
+        "selected-room": this.formData.floor === floor,
       };
     },
     handleClickOutside(event) {
@@ -479,6 +501,17 @@ export default {
     validatePostCode(postCode) {
       const regex = /^[0-9]{4}[A-Za-z]{2}$/;
       return regex.test(postCode);
+    },
+    handlePostCodeInput() {
+      this.capitalize("post_code");
+      this.fetchCityFromPostCode();
+    },
+    handleHouseNumberInput() {
+      this.capitalize("house_number");
+      this.fetchStreetFromPostCodeAndHouseNumber();
+    },
+    capitalize(field) {
+      this.formData[field] = this.formData[field].toUpperCase();
     },
   },
   mounted() {

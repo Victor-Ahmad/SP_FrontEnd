@@ -125,13 +125,15 @@
                   />
                   <span>
                     {{ $t("myInfo.agreeTo") }}
-                    <a href="#" target="_blank" class="text-[#1c592f]">{{
+                    <!-- <a href="" target="_blank" class="text-[#1c592f]">{{
                       $t("myInfo.privacyPolicy")
-                    }}</a>
+                    }}</a> -->
+                    {{ $t("myInfo.privacyPolicy") }}
                     {{ $t("myInfo.and") }}
-                    <a href="#" target="_blank" class="text-[#1c592f]">{{
+                    <!-- <a href="#" target="_blank" class="text-[#1c592f]">{{
                       $t("myInfo.termsOfUse")
-                    }}</a>
+                    }}</a> -->
+                    {{ $t("myInfo.termsOfUse") }}
                   </span>
                 </label>
                 <div class="invalid-feedback" v-if="showPrivacyPolicyError">

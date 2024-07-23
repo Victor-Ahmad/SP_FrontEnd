@@ -117,14 +117,17 @@
               <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
                 {{ $t("form.floor") }}
               </h3>
-              <input
-                type="number"
-                v-model="formData.wish.floor_number"
-                :placeholder="$t('form.floorPlaceholder')"
-                class="input-field w-full p-2 border rounded"
-                min="0"
-                step="1"
-              />
+              <ul class="flex w-full no-gap-list">
+                <li
+                  v-for="(floor, index) in floorOptions"
+                  :key="index"
+                  @click="selectFloor(floor)"
+                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                  :class="floorClasses(floor)"
+                >
+                  {{ floor === 0 ? "G" : floor }}
+                </li>
+              </ul>
               <div v-if="errors.floor_wish" class="invalid-feedback">
                 {{ errors.floor_wish }}
               </div>
@@ -141,7 +144,7 @@
               <div class="relative" ref="areaDropdown">
                 <input
                   type="text"
-                  v-model="formData.wish.area_wish"
+                  v-model="formData.wish.area"
                   :placeholder="$t('form.areaPlaceholder')"
                   readonly
                   class="input-field w-full p-2 border rounded cursor-pointer"
@@ -152,6 +155,7 @@
                     v-for="(area, index) in areas"
                     :key="index"
                     @click="selectArea(area)"
+                    class="p-2 hover:bg-gray-100 cursor-pointer"
                   >
                     {{ area }}
                   </li>
@@ -233,7 +237,8 @@ export default {
       features: [],
       selectedHouseTypeName: "",
       selectedFeatureNames: "",
-      numberOfRooms: [1, 2, 3, 4, 5],
+      numberOfRooms: [1, 2, 3, 4, 5, 6],
+      floorOptions: [0, 1, 2, 3, 4, 5, 6], // G represented as 0
       areas: ["50", "100", "150", "200"],
       selectedCities: [],
       showDropdown: false,
@@ -264,6 +269,9 @@ export default {
     },
     selectNumberOfRooms(number) {
       this.formData.wish.number_of_rooms = number;
+    },
+    selectFloor(floor) {
+      this.formData.wish.floor_number = floor;
     },
     selectArea(area) {
       this.formData.wish.area = area;
@@ -303,6 +311,21 @@ export default {
         "duration-300": true,
         "ease-in-out": true,
         "selected-room": this.formData.wish.number_of_rooms === number,
+      };
+    },
+    floorClasses(floor) {
+      return {
+        "bg-white": this.formData.wish.floor_number === floor,
+        "text-[#1c592f]": this.formData.wish.floor_number === floor,
+        "hover:bg-white": true,
+        "hover:shadow-[0_0_10px_#1c592f]": true,
+        "hover:text-[#1c592f]": true,
+        "border-gray-300": true,
+        "hover:border-[#1c592f]": true,
+        transition: true,
+        "duration-300": true,
+        "ease-in-out": true,
+        "selected-room": this.formData.wish.floor_number === floor,
       };
     },
     handleClickOutside(event) {
