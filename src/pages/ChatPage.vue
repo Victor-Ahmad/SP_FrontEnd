@@ -31,12 +31,17 @@ export default {
     };
   },
   methods: {
-    async fetchChatMessages(chat) {
+    async fetchChatMessages(chatId) {
       try {
-        const response = await getChatMessages(chat.id);
+        const response = await getChatMessages(chatId);
         if (response.success) {
-          chat.messages = response.result[0]?.messages ?? [];
-          this.selectedChat = chat;
+          this.selectedChat = {
+            id: chatId,
+            messages: response.result.messages,
+            other_persons: response.result.chat.first_person
+              ? [response.result.chat.first_person]
+              : [],
+          };
         } else {
           console.error("Failed to fetch chat messages:", response.message);
         }
@@ -51,23 +56,11 @@ export default {
           params: { chatId: chat.id },
         });
       } else {
-        this.fetchChatMessages(chat);
+        this.fetchChatMessages(chat.id);
       }
     },
     async selectChatById(chatId) {
-      try {
-        const response = await getChats();
-        if (response.success) {
-          const chat = response.result.find((c) => c.id === Number(chatId));
-          if (chat) {
-            this.fetchChatMessages(chat);
-          } else {
-            console.error(`Chat with id ${chatId} not found`);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch chats:", error);
-      }
+      this.fetchChatMessages(chatId);
     },
     checkScreenSize() {
       this.isMobile = window.innerWidth <= 768;

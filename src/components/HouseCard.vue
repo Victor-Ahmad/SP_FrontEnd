@@ -57,11 +57,13 @@
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-door-open mr-2 icon_custom_color"></i>
-                <strong>{{ $t("page.rooms") }}: </strong> {{ house.number_of_rooms || "" }}
+                <strong>{{ $t("page.rooms") }}: </strong>
+                {{ house.number_of_rooms || "" }}
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-map-marker-alt mr-2 icon_custom_color"></i>
-                <strong>{{ $t("page.area") }}: </strong> {{ house.area || "" }} (m²)
+                <strong>{{ $t("page.area") }}: </strong>
+                {{ truncatedArea }} (m²)
               </div>
             </div>
             <div
@@ -130,7 +132,6 @@
   </div>
 </template>
 
-
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/swiper-bundle.css";
@@ -179,6 +180,9 @@ export default {
             property.specific_property.name
         ) || []
       );
+    },
+    truncatedArea() {
+      return Math.floor(this.house.area || 0);
     },
   },
   methods: {
@@ -257,12 +261,18 @@ export default {
           } else {
             chatId = response.result.id;
           }
-
           if (chatId) {
-            this.$router.push({
-              path: "/chatPage",
-              query: { chatId },
-            });
+            if (window.innerWidth <= 768) {
+              this.$router.push({
+                name: "MessageInterfacePage",
+                params: { chatId },
+              });
+            } else {
+              this.$router.push({
+                path: "/chatPage",
+                query: { chatId },
+              });
+            }
           } else {
             console.error("Chat ID not found in the response:", response);
           }

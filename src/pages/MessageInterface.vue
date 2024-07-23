@@ -111,6 +111,7 @@ export default {
     return {
       messages: [],
       newMessage: "",
+      chatId: null,
     };
   },
   watch: {
@@ -124,9 +125,12 @@ export default {
     async fetchMessages(chatId) {
       try {
         const response = await getChatMessages(chatId);
-        if (response.success && response.result.length > 0) {
-          this.messages = response.result[0].messages;
+        if (response.success && response.result) {
+          this.messages = response.result.messages;
+          this.chatId = chatId;
           this.scrollToBottom();
+        } else {
+          this.messages = [];
         }
       } catch (error) {
         console.error("Failed to fetch messages:", error);
@@ -134,19 +138,12 @@ export default {
     },
     async sendMessage() {
       if (this.newMessage.trim() !== "") {
-        let other_person_id = null;
-        if (this.selectedChat.other_persons) {
-          other_person_id = this.selectedChat.other_persons[0].id;
-        } else if (this.selectedChat.other_person) {
-          other_person_id = this.selectedChat.other_person?.id;
-        }
-
         try {
-          const response = await sendMessage(this.newMessage, other_person_id);
+          const response = await sendMessage(this.newMessage, this.chatId);
           if (response.success) {
             const newMsg = {
               id: this.messages.length + 1,
-              chat_id: this.selectedChat.id,
+              chat_id: this.chatId,
               message: this.newMessage,
               type: "sender",
               created_at: new Date().toISOString(),
@@ -174,8 +171,6 @@ export default {
       }, 2000);
     },
     goToDetailPage() {
-      console.log(this.selectedChat);
-
       if (this.selectedChat && this.selectedChat.house) {
         this.$router.push({
           name: "HouseDetail",
@@ -195,7 +190,11 @@ export default {
   mounted() {
     const chatId = this.$route.params.chatId || this.$route.query.chatId;
     if (chatId) {
+      this.chatId = chatId;
       this.fetchMessages(chatId);
+    } else if (this.selectedChat && this.selectedChat.id) {
+      this.chatId = this.selectedChat.id;
+      this.fetchMessages(this.selectedChat.id);
     }
   },
 };

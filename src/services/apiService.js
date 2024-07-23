@@ -221,7 +221,7 @@ export const sendMessage = async (message, receiverUserId) => {
   try {
     const response = await axiosInstance.post("/send_message", {
       message,
-      receiver_user_id: receiverUserId,
+      chat_id: receiverUserId,
     });
     return response.data;
   } catch (error) {
