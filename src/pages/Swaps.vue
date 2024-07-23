@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen pb-20 lg:p-4 md:p-8 bg-gray-100 lg:bg-white">
-    <div v-if="isLoading" class="text-center">Loading...</div>
+    <div v-if="isLoading" class="text-center">{{ $t("common.loading") }}</div>
     <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
     <div v-else class="flex flex-col md:flex-row">
       <div class="w-full md:w-1/4">
@@ -12,7 +12,7 @@
               :class="{ 'active-tab': activeTab === 'complete_profile' }"
               @click="setActiveTab('complete_profile')"
             >
-              Complete Interest!
+              {{ $t("profileTabs.completeProfile") }}
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -20,7 +20,7 @@
               :class="{ 'active-tab': activeTab === 'swap_with_me' }"
               @click="setActiveTab('swap_with_me')"
             >
-              Swap with me
+              {{ $t("profileTabs.swapWithMe") }}
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -28,7 +28,7 @@
               :class="{ 'active-tab': activeTab === 'my_interests' }"
               @click="setActiveTab('my_interests')"
             >
-              My Interests
+              {{ $t("profileTabs.myInterests") }}
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -36,17 +36,9 @@
               :class="{ 'active-tab': activeTab === 'my_favorites' }"
               @click="setActiveTab('my_favorites')"
             >
-              My Favorites
+              {{ $t("profileTabs.myFavorites") }}
             </button>
           </div>
-          <!-- <div class="mb-2 underlined-tabs">
-            <button
-              :class="{ 'active-tab': activeTab === 'my_disinterests' }"
-              @click="setActiveTab('my_disinterests')"
-            >
-              My Disinterests
-            </button>
-          </div> -->
         </div>
       </div>
       <div
@@ -92,16 +84,6 @@
             :house="house"
           />
         </div>
-        <!-- <div
-          v-else-if="activeTab === 'my_disinterests'"
-          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          <HouseCardWithSwap
-            v-for="house in my_disinterests"
-            :key="house.id"
-            :house="house"
-          />
-        </div> -->
       </div>
     </div>
   </div>

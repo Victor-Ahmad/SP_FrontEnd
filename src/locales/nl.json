@@ -223,5 +223,17 @@
         "emailPlaceholder": "E-mail",
         "submitButton": "Indienen",
         "backgroundAlt": "Achtergrond"
-    }
+    },
+    
+        "common": {
+            "loading": "Laden..."
+        },
+        "profileTabs": {
+            "completeProfile": "Voltooi Interesse!",
+            "swapWithMe": "Ruil met mij",
+            "myInterests": "Mijn interesses",
+            "myFavorites": "Mijn favorieten"
+        }
+    
+    
 }

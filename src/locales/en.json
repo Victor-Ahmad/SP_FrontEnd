@@ -223,5 +223,14 @@
         "emailPlaceholder": "Email",
         "submitButton": "Submit",
         "backgroundAlt": "Background"
+    },
+    "common": {
+        "loading": "Loading..."
+    },
+    "profileTabs": {
+        "completeProfile": "Complete Interest!",
+        "swapWithMe": "Swap with me",
+        "myInterests": "My Interests",
+        "myFavorites": "My Favorites"
     }
 }
