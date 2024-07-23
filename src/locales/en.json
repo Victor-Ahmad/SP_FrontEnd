@@ -155,5 +155,73 @@
         "areasPlaceholder": "Enter area",
         "apply": "Apply Filters",
         "clear": "Clear Filters"
+    },
+    "profile": {
+        "alt": {
+            "profilePicture": "Profile Picture"
+        },
+        "buttons": {
+            "save": "Save",
+            "edit": "Edit",
+            "cancel": "Cancel"
+        },
+        "tabs": {
+            "details": "User Details",
+            "house": "House Details",
+            "wishes": "Wishes"
+        },
+        "details": {
+            "title": "User Details",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "phone": "Phone"
+        },
+        "house": {
+            "title": "House Details",
+            "type": "Type",
+            "location": "Location",
+            "numberOfRooms": "Number of Rooms",
+            "floorNumber": "Floor Number",
+            "price": "Price",
+            "description": "Description",
+            "swapReason": "Swap Reason",
+            "specificProperties": "Specific Properties",
+            "addProperties": "Add specific properties",
+            "gallery": {
+                "title": "House Gallery",
+                "leadingImage": "Leading Image",
+                "leadingImageAlt": "Leading House Image",
+                "noLeadingImage": "No Leading Image",
+                "otherImages": "Other Images",
+                "houseImageAlt": "House Image"
+            }
+        },
+        "wishes": {
+            "title": "Wishes",
+            "location": "Location",
+            "locationPlaceholder": "Enter a location of interest",
+            "numberOfRooms": "Number of Rooms",
+            "floorNumber": "Floor Number",
+            "price": "Price",
+            "specificProperties": "Specific Properties",
+            "addProperties": "Add specific properties"
+        },
+        "loading": "Loading profile..."
+    },
+    "completeProfile": {
+        "title": "Complete Your Profile",
+        "submitting": "Submitting...",
+        "descriptionLabel": "Description:",
+        "descriptionPlaceholder": "Enter your description",
+        "uploadImagesLabel": "Upload Images:",
+        "completeButton": "Complete"
+    },
+    "forgotPassword": {
+        "title": "Forgot Password",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Email",
+        "submitButton": "Submit",
+        "backgroundAlt": "Background"
     }
 }

@@ -5,22 +5,25 @@
     <div class="flex justify-center p-4 md:p-8 w-full md:w-1/2">
       <div class="max-w-md w-full bg-white p-8 space-y-6">
         <div class="text-center border-gray-300 py-2 mb-10">
-          <h2 class="text-4xl font-bold text-[#1c592f]">Forgot Password</h2>
+          <h2 class="text-4xl font-bold text-[#1c592f]">
+            {{ $t("forgotPassword.title") }}
+          </h2>
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="handleForgotPassword">
           <div class="form-group mb-4">
             <label
               for="email"
               class="block text-lg font-semibold text-[#1c592f] mb-2"
-              >Email</label
             >
+              {{ $t("forgotPassword.emailLabel") }}
+            </label>
             <input
               id="email"
               name="email"
               type="email"
               required
               class="input-field w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
-              placeholder="Email"
+              :placeholder="$t('forgotPassword.emailPlaceholder')"
             />
           </div>
           <div class="form-group mb-4">
@@ -28,7 +31,7 @@
               type="submit"
               class="px-4 py-2 bg-[#1c592f] text-white w-full rounded-full transition duration-300 hover:bg-[#065e58] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1c592f]"
             >
-              Submit
+              {{ $t("forgotPassword.submitButton") }}
             </button>
           </div>
           <div v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
@@ -39,7 +42,7 @@
       <img
         class="w-8/12 h-auto rounded"
         src="@/assets/images/forget.jpg"
-        alt="Background"
+        :alt="$t('forgotPassword.backgroundAlt')"
       />
     </div>
   </div>

@@ -28,6 +28,7 @@
         "swaps": "Ruilen",
         "messages": "Berichten",
         "notifications": "Meldingen",
+        "profile":"Profiel",
         "logout": "Uitloggen"
     },
     "page": {
@@ -154,5 +155,73 @@
         "areasPlaceholder": "Voer gebied in",
         "apply": "Filters Toepassen",
         "clear": "Filters Wissen"
+    },
+    "profile": {
+        "alt": {
+            "profilePicture": "Profielfoto"
+        },
+        "buttons": {
+            "save": "Opslaan",
+            "edit": "Bewerken",
+            "cancel": "Annuleren"
+        },
+        "tabs": {
+            "details": "Gebruikersgegevens",
+            "house": "Huis Details",
+            "wishes": "Wensen"
+        },
+        "details": {
+            "title": "Gebruikersgegevens",
+            "firstName": "Voornaam",
+            "lastName": "Achternaam",
+            "email": "E-mail",
+            "phone": "Telefoon"
+        },
+        "house": {
+            "title": "Huis Details",
+            "type": "Type",
+            "location": "Locatie",
+            "numberOfRooms": "Aantal Kamers",
+            "floorNumber": "Verdieping",
+            "price": "Prijs",
+            "description": "Beschrijving",
+            "swapReason": "Ruil Reden",
+            "specificProperties": "Specifieke Eigenschappen",
+            "addProperties": "Voeg specifieke eigenschappen toe",
+            "gallery": {
+                "title": "Huis Galerie",
+                "leadingImage": "Leidend Beeld",
+                "leadingImageAlt": "Leidend Huis Beeld",
+                "noLeadingImage": "Geen Leidend Beeld",
+                "otherImages": "Andere Beelden",
+                "houseImageAlt": "Huis Beeld"
+            }
+        },
+        "wishes": {
+            "title": "Wensen",
+            "location": "Locatie",
+            "locationPlaceholder": "Voer een locatie van belang in",
+            "numberOfRooms": "Aantal Kamers",
+            "floorNumber": "Verdieping",
+            "price": "Prijs",
+            "specificProperties": "Specifieke Eigenschappen",
+            "addProperties": "Voeg specifieke eigenschappen toe"
+        },
+        "loading": "Profiel laden..."
+    },
+    "completeProfile": {
+        "title": "Voltooi uw profiel",
+        "submitting": "Indienen...",
+        "descriptionLabel": "Beschrijving:",
+        "descriptionPlaceholder": "Voer uw beschrijving in",
+        "uploadImagesLabel": "Afbeeldingen uploaden:",
+        "completeButton": "Voltooien"
+    },
+    "forgotPassword": {
+        "title": "Wachtwoord Vergeten",
+        "emailLabel": "E-mail",
+        "emailPlaceholder": "E-mail",
+        "submitButton": "Indienen",
+        "backgroundAlt": "Achtergrond"
     }
 }

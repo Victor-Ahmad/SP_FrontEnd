@@ -1,26 +1,28 @@
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Complete Your Profile</h1>
+    <h1 class="text-2xl font-bold mb-4">{{ $t("completeProfile.title") }}</h1>
 
-    <div v-if="isLoading" class="text-center">Submitting...</div>
+    <div v-if="isLoading" class="text-center">
+      {{ $t("completeProfile.submitting") }}
+    </div>
     <div v-else>
       <div v-if="showDescription" class="mb-4">
-        <label for="description" class="block text-gray-700 font-bold mb-2"
-          >Description:</label
-        >
+        <label for="description" class="block text-gray-700 font-bold mb-2">
+          {{ $t("completeProfile.descriptionLabel") }}
+        </label>
         <textarea
           id="description"
           v-model="description"
           class="w-full p-2 border border-gray-300 rounded"
           rows="4"
-          placeholder="Enter your description"
+          :placeholder="$t('completeProfile.descriptionPlaceholder')"
         ></textarea>
       </div>
 
       <div v-if="showImages" class="mb-4">
-        <label for="images" class="block text-gray-700 font-bold mb-2"
-          >Upload Images:</label
-        >
+        <label for="images" class="block text-gray-700 font-bold mb-2">
+          {{ $t("completeProfile.uploadImagesLabel") }}
+        </label>
         <input
           id="images"
           type="file"
@@ -50,7 +52,7 @@
         @click="submitForm"
         class="mt-4 complete-btn text-white p-2 rounded-lg"
       >
-        Complete
+        {{ $t("completeProfile.completeButton") }}
       </button>
     </div>
   </div>
