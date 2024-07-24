@@ -12,7 +12,9 @@
               :class="{ 'active-tab': activeTab === 'complete_profile' }"
               @click="setActiveTab('complete_profile')"
             >
-              {{ $t("profileTabs.completeProfile") }}
+              {{ $t("profileTabs.completeProfile") }} ({{
+                completeProfileCount
+              }})
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -20,7 +22,7 @@
               :class="{ 'active-tab': activeTab === 'swap_with_me' }"
               @click="setActiveTab('swap_with_me')"
             >
-              {{ $t("profileTabs.swapWithMe") }}
+              {{ $t("profileTabs.swapWithMe") }} ({{ swapWithMeCount }})
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -28,7 +30,7 @@
               :class="{ 'active-tab': activeTab === 'my_interests' }"
               @click="setActiveTab('my_interests')"
             >
-              {{ $t("profileTabs.myInterests") }}
+              {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -36,53 +38,116 @@
               :class="{ 'active-tab': activeTab === 'my_favorites' }"
               @click="setActiveTab('my_favorites')"
             >
-              {{ $t("profileTabs.myFavorites") }}
+              {{ $t("profileTabs.myFavorites") }} ({{ myFavoritesCount }})
             </button>
           </div>
         </div>
       </div>
-      <div
-        class="w-full md:w-3/4 lg:pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 lg:py-4"
-      >
+      <div class="w-full md:w-3/4 lg:pt-4 px-4 lg:py-4">
+        <!-- Complete Profile Tab -->
         <div
           v-if="activeTab === 'complete_profile'"
-          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          :class="{
+            'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
+              complete_interest.length,
+          }"
         >
-          <HouseCardWithSwap
-            v-for="house in complete_interest"
-            :key="house.id"
-            :house="house"
-          />
+          <template v-if="complete_interest.length">
+            <HouseCardWithSwap
+              v-for="house in complete_interest"
+              :key="house.id"
+              :house="house"
+            />
+          </template>
+          <template v-else>
+            <div class="placeholder">
+              <img
+                src="@/assets/images/logo2.png"
+                alt="Placeholder"
+                class="grayscale"
+              />
+            </div>
+          </template>
         </div>
+
+        <!-- Swap With Me Tab -->
         <div
           v-else-if="activeTab === 'swap_with_me'"
-          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          :class="{
+            'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
+              swap_with_me.length,
+          }"
         >
-          <HouseCardWithSwap
-            v-for="house in swap_with_me"
-            :key="house.id"
-            :house="house"
-          />
+          <template v-if="swap_with_me.length">
+            <HouseCardWithSwap
+              v-for="house in swap_with_me"
+              :key="house.id"
+              :house="house"
+            />
+          </template>
+          <template v-else>
+            <div class="placeholder">
+              <img
+                src="@/assets/images/logo2.png"
+                alt="Placeholder"
+                class="grayscale"
+              />
+            </div>
+          </template>
         </div>
+
+        <!-- My Interests Tab -->
         <div
           v-else-if="activeTab === 'my_interests'"
-          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          :class="{
+            'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
+              my_interests.length,
+          }"
         >
-          <HouseCardWithSwap
-            v-for="house in my_interests"
-            :key="house.id"
-            :house="house"
-          />
+          <template v-if="my_interests.length">
+            <HouseCardWithSwap
+              v-for="house in my_interests"
+              :key="house.id"
+              :house="house"
+              :hideWhenNotInterested="true"
+              @uninterested="removeFromInterests"
+            />
+          </template>
+          <template v-else>
+            <div class="placeholder">
+              <img
+                src="@/assets/images/logo2.png"
+                alt="Placeholder"
+                class="grayscale"
+              />
+            </div>
+          </template>
         </div>
+
+        <!-- My Favorites Tab -->
         <div
           v-else-if="activeTab === 'my_favorites'"
-          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          :class="{
+            'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
+              my_favorites.length,
+          }"
         >
-          <HouseCardWithSwap
-            v-for="house in my_favorites"
-            :key="house.id"
-            :house="house"
-          />
+          <template v-if="my_favorites.length">
+            <HouseCardWithSwap
+              v-for="house in my_favorites"
+              :key="house.id"
+              :house="house"
+            />
+          </template>
+          <template v-else>
+            <div class="placeholder">
+              <img
+                src="@/assets/images/logo2.png"
+                alt="Placeholder"
+                class="grayscale"
+              />
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -115,7 +180,7 @@ export default {
     const swap_with_me = ref([]);
     const complete_interest = ref([]);
     const my_disinterests = ref([]);
-    const activeTab = ref("houses");
+    const activeTab = ref("my_interests");
 
     const fetchMyInterests = async () => {
       try {
@@ -185,13 +250,46 @@ export default {
       }
     };
 
-    const setActiveTab = (tab) => {
+    const setActiveTab = async (tab) => {
       activeTab.value = tab;
+      store.commit("setLoading", true); // Start loading
+      try {
+        switch (tab) {
+          case "complete_profile":
+            await fetchCompleteInterest();
+            break;
+          case "swap_with_me":
+            await fetchSwapWithMe();
+            break;
+          case "my_interests":
+            await fetchMyInterests();
+            break;
+          case "my_favorites":
+            await fetchMyFavorites();
+            break;
+        }
+      } catch (error) {
+        console.error(`Error fetching data for tab ${tab}:`, error);
+      } finally {
+        store.commit("setLoading", false); // Finish loading
+      }
+    };
+
+    const removeFromInterests = (houseId) => {
+      my_interests.value = my_interests.value.filter(
+        (house) => house.id !== houseId
+      );
     };
 
     onMounted(() => {
       fetchAllData();
     });
+
+    // Computed properties for item counts
+    const completeProfileCount = computed(() => complete_interest.value.length);
+    const swapWithMeCount = computed(() => swap_with_me.value.length);
+    const myInterestsCount = computed(() => my_interests.value.length);
+    const myFavoritesCount = computed(() => my_favorites.value.length);
 
     return {
       isLoading,
@@ -204,10 +302,16 @@ export default {
       activeTab,
       setActiveTab,
       fetchAllData,
+      removeFromInterests,
+      completeProfileCount,
+      swapWithMeCount,
+      myInterestsCount,
+      myFavoritesCount,
     };
   },
 };
 </script>
+
 <style scoped>
 .underlined-tabs {
   display: flex;
@@ -221,7 +325,6 @@ export default {
   padding: 10px;
   border: none;
   background: transparent;
-  /* border-radius: 100px; */
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.875rem;
@@ -239,5 +342,19 @@ export default {
   border-bottom: 3px solid #1c592f;
   font-weight: 700;
   background-color: #e4eee6;
+}
+
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70vh;
+}
+
+.placeholder img {
+  max-width: 200px;
+  max-height: 200px;
+  filter: grayscale(100%) opacity(50%);
 }
 </style>

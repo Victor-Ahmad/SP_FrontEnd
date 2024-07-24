@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!hideWhenNotInterested || isInterested"
     class="flex justify-center mb-4 hover:scale-[1.02] duration-300 rounded overflow-hidden shadow-lg custom_hover"
     @click="goToDetailPage"
   >
@@ -140,6 +141,7 @@ import {
   expressInterest,
   removeInterest,
   addToFavorites,
+  removeFavorite,
   disinterest,
   removeNotInterest,
   isChatExisting,
@@ -156,6 +158,10 @@ export default {
     house: {
       type: Object,
       required: true,
+    },
+    hideWhenNotInterested: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

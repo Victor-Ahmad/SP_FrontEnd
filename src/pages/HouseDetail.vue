@@ -239,6 +239,8 @@ import {
   sendMessage,
   expressInterest,
   addToFavorites,
+  removeInterest,
+  removeFavorite,
   isChatExisting,
   disinterest,
 } from "@/services/apiService";
@@ -269,6 +271,9 @@ export default {
       if (response.success) {
         this.house = response.result.house;
         this.houseOwner = response.result.house_owner;
+        this.isFavorite = this.house.is_favorite;
+        this.isInterested = this.house.is_interested;
+        this.isNotInterested = this.house.is_not_interested;
       } else {
         this.error = "Failed to fetch house details: " + response.message;
       }

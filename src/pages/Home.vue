@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen pb-20 lg:p-8 bg-gray-100 lg:bg-white">
+  <div class="min-h-screen pb-20 md:py-8 lg:p-8 bg-gray-100 lg:bg-white">
     <div class="flex flex-col lg:flex-row">
       <div class="hidden lg:block w-full lg:w-1/4">
         <FilterBar :filters="filters" @applyFilters="applyFilters" />
