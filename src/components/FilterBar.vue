@@ -31,6 +31,22 @@
 
     <div class="mb-4">
       <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("filters.notInterested") }}
+      </h3>
+      <div class="flex items-center mb-2">
+        <input
+          type="checkbox"
+          v-model="localFilters.notInterested"
+          class="form-checkbox text-[#1c592f] mr-2"
+        />
+        <label class="text-gray-700">{{
+          $t("filters.notInterestedLabel")
+        }}</label>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
         {{ $t("filters.rent") }}
       </h3>
       <input
@@ -146,10 +162,14 @@ export default {
   data() {
     return {
       localFilters: {
-        ...this.filters,
-        maxRent: 3000,
-        minSize: 1,
-        maxFloor: 10,
+        search: "",
+        amenities: null,
+        maxRent: null,
+        minSize: null,
+        maxFloor: null,
+        numberOfRooms: null,
+        notInterested: false,
+        areas: "",
       },
       amenities: [],
       floors: ["G", 1, 2, 3, 4, 5, "6+"],
@@ -166,28 +186,31 @@ export default {
       if (this.localFilters.search) {
         formData.append("search", this.localFilters.search);
       }
-      if (this.localFilters.maxRent) {
+      if (this.localFilters.maxRent !== null) {
         formData.append("price_max", this.localFilters.maxRent);
       }
-      if (this.localFilters.minSize) {
+      if (this.localFilters.minSize !== null) {
         formData.append("area_min", this.localFilters.minSize);
       }
-      if (this.localFilters.maxFloor) {
+      if (this.localFilters.maxFloor !== null) {
         const maxFloor =
           this.localFilters.maxFloor === "G"
             ? 0
             : parseInt(this.localFilters.maxFloor, 10);
         formData.append("floor_max", maxFloor);
       }
-      if (this.localFilters.numberOfRooms) {
+      if (this.localFilters.numberOfRooms !== null) {
         const numberOfRooms = parseInt(this.localFilters.numberOfRooms, 10);
         formData.append("number_of_rooms", numberOfRooms);
       }
       if (this.selectedAreas.length > 0) {
         formData.append("location", this.selectedAreas.join(","));
       }
-      if (this.localFilters.amenities) {
+      if (this.localFilters.amenities !== null) {
         formData.append("house_feature", this.localFilters.amenities);
+      }
+      if (this.localFilters.notInterested) {
+        formData.append("not_interested", 1);
       }
 
       this.$emit("applyFilters", formData);
@@ -196,11 +219,12 @@ export default {
       this.localFilters = {
         search: "",
         amenities: null,
-        maxRent: 3000,
-        minSize: 1,
+        maxRent: null,
+        minSize: null,
         maxFloor: null,
         numberOfRooms: null,
         areas: "",
+        notInterested: false,
       };
       this.selectedAreas = [];
       this.$emit("applyFilters", new FormData());

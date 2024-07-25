@@ -31,6 +31,19 @@
             />
           </div>
         </div>
+        <button
+          @click="openGallery"
+          class="text-[#1c592f] py-2 px-4 rounded-lg mb-4"
+        >
+          {{ $t("page.viewAllImages") }}
+        </button>
+
+        <!-- Image Gallery Popup component -->
+        <ImageGalleryPopup
+          :images="house.images.map((img) => getImageUrl(img.image_path))"
+          :visible="isGalleryVisible"
+          @close="isGalleryVisible = false"
+        />
         <hr
           class="border-t-2 border-[#1c592f] mb-10 rounded-full"
           v-if="house.images.length"
@@ -249,12 +262,14 @@ import {
   removeNotInterest,
 } from "@/services/apiService";
 import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
+import ImageGalleryPopup from "@/components/ImageGalleryPopup.vue"; // Import the new component
 import anime from "animejs"; // Import animejs
 
 export default {
   name: "HouseDetail",
   components: {
     ImagePopup,
+    ImageGalleryPopup,
   },
   data() {
     return {
@@ -265,6 +280,7 @@ export default {
       isNotInterested: false,
       selectedImage: "",
       isPopupVisible: false,
+      isGalleryVisible: false,
       isLoading: true,
       error: null,
     };
@@ -292,6 +308,9 @@ export default {
   methods: {
     getImageUrl(path) {
       return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
+    },
+    openGallery() {
+      this.isGalleryVisible = true;
     },
     async startChat(event) {
       event.stopPropagation();

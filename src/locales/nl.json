@@ -60,7 +60,11 @@
         "price": "Prijs",
         "na": "N/B",
         "rooms": "Kamers",
-        "placeholder": "Plaatshouder"
+        "placeholder": "Plaatshouder",
+        "areYouSureNotInterested": "Weet je het zeker? Deze kaart wordt verborgen.",
+        "yes": "Ja",
+        "no": "Nee",
+         "viewAllImages": "Bekijk alle afbeeldingen"
     },
     "form": {
         "title": "Ik wil naar",
@@ -146,6 +150,8 @@
         "title": "Filters",
         "amenities": "Voorzieningen",
         "loadingAmenities": "Voorzieningen laden...",
+        "notInterested": "Niet Geïnteresseerd",
+        "notInterestedLabel": "Alleen niet geïnteresseerden weergeven",
         "rent": "Huur",
         "size": "Grootte",
         "minSizePlaceholder": "Min grootte (m²)",
@@ -225,15 +231,18 @@
         "backgroundAlt": "Achtergrond"
     },
     
-        "common": {
-            "loading": "Laden..."
-        },
-        "profileTabs": {
-            "completeProfile": "Voltooi Interesse!",
-            "swapWithMe": "Ruil met mij",
-            "myInterests": "Mijn interesses",
-            "myFavorites": "Mijn favorieten"
-        }
-    
+    "common": {
+        "loading": "Laden..."
+    },
+    "profileTabs": {
+        "completeProfile": "Voltooi Interesse!",
+        "swapWithMe": "Ruil met mij",
+        "myInterests": "Mijn interesses",
+        "myFavorites": "Mijn favorieten"
+    },
+    "chat": {
+        "viewHouse": "Bekijk Huis"
+    }
+
     
 }

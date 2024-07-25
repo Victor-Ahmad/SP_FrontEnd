@@ -1,51 +1,51 @@
 <template>
   <div class="flex flex-col h-full">
     <div
-      v-if="selectedChat && selectedChat.other_persons?.length > 0"
+      v-if="localSelectedChat && localSelectedChat.other_persons?.length > 0"
       class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center"
     >
       <div>
         <div class="font-bold text-lg">
-          {{ selectedChat.other_persons[0].first_name }}
-          {{ selectedChat.other_persons[0].last_name }}
+          {{ localSelectedChat.other_persons[0].first_name }}
+          {{ localSelectedChat.other_persons[0].last_name }}
         </div>
         <div class="text-sm text-gray-600">
-          {{ selectedChat.other_persons[0].email }}
+          {{ localSelectedChat.other_persons[0].email }}
         </div>
         <div class="text-xs text-gray-500">
-          {{ selectedChat.other_persons[0].street }},
-          {{ selectedChat.other_persons[0].location }}
+          {{ localSelectedChat.other_persons[0].street }},
+          {{ localSelectedChat.other_persons[0].location }}
         </div>
       </div>
       <button
         @click="goToDetailPage"
         class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
       >
-        View House
+        {{ $t("chat.viewHouse") }}
       </button>
     </div>
     <div
-      v-else-if="selectedChat && selectedChat.other_person"
+      v-else-if="localSelectedChat && localSelectedChat.other_person"
       class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center"
     >
       <div>
         <div class="font-bold text-lg">
-          {{ selectedChat.other_person.first_name }}
-          {{ selectedChat.other_person.last_name }}
+          {{ localSelectedChat.other_person.first_name }}
+          {{ localSelectedChat.other_person.last_name }}
         </div>
         <div class="text-sm text-gray-600">
-          {{ selectedChat.other_person.email }}
+          {{ localSelectedChat.other_person.email }}
         </div>
         <div class="text-xs text-gray-500">
-          {{ selectedChat.other_person.street }},
-          {{ selectedChat.other_person.location }}
+          {{ localSelectedChat.other_person.street }},
+          {{ localSelectedChat.other_person.location }}
         </div>
       </div>
       <button
         @click="goToDetailPage"
         class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
       >
-        View House
+        {{ $t("chat.viewHouse") }}
       </button>
     </div>
     <div
@@ -94,6 +94,18 @@
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
+    <!-- Mobile View House Button -->
+    <div
+      v-if="localSelectedChat && localSelectedChat.house"
+      class="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg lg:hidden"
+    >
+      <button
+        @click="goToDetailPage"
+        class="w-full p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+      >
+        View House
+      </button>
+    </div>
   </div>
 </template>
 
@@ -112,6 +124,7 @@ export default {
       messages: [],
       newMessage: "",
       chatId: null,
+      localSelectedChat: this.selectedChat, // Create a local copy of selectedChat
     };
   },
   watch: {
@@ -126,6 +139,13 @@ export default {
       try {
         const response = await getChatMessages(chatId);
         if (response.success && response.result) {
+          this.localSelectedChat = {
+            id: chatId,
+            messages: response.result.messages,
+            other_persons: response.result.chat.first_person
+              ? [response.result.chat.first_person]
+              : [],
+          };
           this.messages = response.result.messages;
           this.chatId = chatId;
           this.scrollToBottom();
@@ -171,10 +191,10 @@ export default {
       }, 2000);
     },
     goToDetailPage() {
-      if (this.selectedChat && this.selectedChat.house) {
+      if (this.localSelectedChat && this.localSelectedChat.house) {
         this.$router.push({
           name: "HouseDetail",
-          params: { id: this.selectedChat.house.id },
+          params: { id: this.localSelectedChat.house.id },
         });
       }
     },

@@ -69,6 +69,7 @@
             v-for="house in filteredHouses"
             :key="house.id"
             :house="house"
+            @uninterested="removeFromFilteredHouses"
           />
           <div class="col-span-full">
             <BasePagination
@@ -272,6 +273,15 @@ export default {
 
     watch(progress, updateProgress);
 
+    const removeFromFilteredHouses = (houseId) => {
+      const index = filteredHouses.value.findIndex(
+        (house) => house.id === houseId
+      );
+      if (index !== -1) {
+        filteredHouses.value.splice(index, 1);
+      }
+    };
+
     return {
       isLoading,
       error,
@@ -293,6 +303,7 @@ export default {
       openFilterDrawer,
       closeFilterDrawer,
       handleApplyFilters,
+      removeFromFilteredHouses,
     };
   },
 };

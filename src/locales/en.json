@@ -60,7 +60,11 @@
         "price": "Price",
         "na": "N/A",
         "rooms": "Rooms",
-        "placeholder": "Placeholder"
+        "placeholder": "Placeholder",
+        "areYouSureNotInterested": "Are you sure? This card will be hidden.",
+        "yes": "Yes",
+        "no": "No",
+          "viewAllImages": "View All Images"
     },
     "form": {
         "title": "I want to go to",
@@ -146,6 +150,8 @@
         "title": "Filters",
         "amenities": "Amenities",
         "loadingAmenities": "Loading amenities...",
+        "notInterested": "Not Interested",
+        "notInterestedLabel": "Show only not interested",
         "rent": "Rent",
         "size": "Size",
         "minSizePlaceholder": "Min size (m²)",
@@ -232,5 +238,8 @@
         "swapWithMe": "Swap with me",
         "myInterests": "My Interests",
         "myFavorites": "My Favorites"
+    },
+    "chat": {
+        "viewHouse": "View House"
     }
 }

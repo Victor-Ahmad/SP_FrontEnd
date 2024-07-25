@@ -75,14 +75,6 @@ export default {
         }
       },
     },
-    "$route.query.chatId": {
-      immediate: true,
-      handler(chatId) {
-        if (chatId) {
-          this.selectChatById(chatId);
-        }
-      },
-    },
   },
   mounted() {
     window.addEventListener("resize", this.checkScreenSize);

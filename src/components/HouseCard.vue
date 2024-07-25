@@ -1,8 +1,8 @@
 <template>
   <div
     v-if="!hideWhenNotInterested || isInterested"
-    class="flex justify-center mb-4 hover:scale-[1.02] duration-300 rounded overflow-hidden shadow-lg custom_hover"
-    @click="goToDetailPage"
+    class="flex justify-center mb-4 hover:scale-[1.02] duration-300 rounded overflow-hidden shadow-lg custom_hover relative"
+    @click="handleCardClick"
   >
     <div
       class="flex flex-col w-full max-w-full bg-white cursor-pointer relative"
@@ -83,7 +83,7 @@
             </div>
           </div>
           <button
-            @click="handleFavoriteClick($event)"
+            @click.stop="handleFavoriteClick($event)"
             class="absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform"
           >
             <i
@@ -97,7 +97,7 @@
           class="flex justify-between items-center mt-2 space-x-2 border-t border-gray-200 pt-2"
         >
           <button
-            @click="handleInterestedClick($event)"
+            @click.stop="handleInterestedClick($event)"
             :class="[
               'w-1/3 lg:w-4/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
               isInterested
@@ -109,7 +109,7 @@
             <span class="hidden md:inline">{{ $t("page.interested") }}</span>
           </button>
           <button
-            @click="toggleNotInterested($event)"
+            @click.stop="toggleNotInterested($event)"
             :class="[
               'w-1/3 lg:w-5/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 md:flex-2',
               isNotInterested
@@ -121,12 +121,37 @@
             <span class="hidden md:inline">{{ $t("page.notInterested") }}</span>
           </button>
           <button
-            @click="startChat($event)"
+            @click.stop="startChat($event)"
             class="w-1/3 lg:w-3/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 text-white"
           >
             <i class="fas fa-comment mr-1"></i>
             <span class="hidden md:inline">{{ $t("page.chat") }}</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Confirmation Popup -->
+      <div
+        v-if="showConfirmationPopup"
+        class="absolute inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
+        @click.stop
+      >
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <p class="mb-4">{{ $t("page.areYouSureNotInterested") }}</p>
+          <div class="flex justify-end space-x-2">
+            <button
+              @click="confirmNotInterested(true)"
+              class="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              {{ $t("page.yes") }}
+            </button>
+            <button
+              @click="confirmNotInterested(false)"
+              class="bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              {{ $t("page.no") }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -169,6 +194,7 @@ export default {
       isFavorite: false,
       isInterested: false,
       isNotInterested: false,
+      showConfirmationPopup: false,
     };
   },
   created() {
@@ -238,21 +264,37 @@ export default {
     },
     async toggleNotInterested(event) {
       event.stopPropagation();
-      this.isNotInterested = !this.isNotInterested;
       if (this.isNotInterested) {
+        await this.handleNotInterested();
+      } else {
+        this.showConfirmationPopup = true;
+      }
+    },
+    async confirmNotInterested(confirm) {
+      if (confirm) {
+        await this.handleNotInterested();
+      }
+      this.showConfirmationPopup = false;
+    },
+    async handleNotInterested() {
+      if (this.isNotInterested) {
+        this.isNotInterested = false;
+        try {
+          const response = await removeNotInterest(this.house.id);
+          this.$emit("uninterested", this.house.id);
+          console.log("Not interested removed successfully:", response);
+        } catch (error) {
+          console.error("Error removing not interested:", error);
+        }
+      } else {
+        this.isNotInterested = true;
         this.isInterested = false;
+        this.$emit("uninterested", this.house.id); // Emit uninterested event with house ID
         try {
           const response = await disinterest(this.house.id);
           console.log("Not interested successfully:", response);
         } catch (error) {
           console.error("Error expressing disinterest:", error);
-        }
-      } else {
-        try {
-          const response = await removeNotInterest(this.house.id);
-          console.log("Not Interest removed successfully:", response);
-        } catch (error) {
-          console.error("Error removing not interest:", error);
         }
       }
     },
@@ -288,6 +330,9 @@ export default {
       } catch (error) {
         console.error("Failed to start chat:", error);
       }
+    },
+    handleCardClick() {
+      this.goToDetailPage();
     },
     goToDetailPage() {
       this.$router.push({ name: "HouseDetail", params: { id: this.house.id } });
