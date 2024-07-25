@@ -186,6 +186,7 @@
               class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4"
               @click="startChat($event)"
             >
+              <i class="fas fa-comment mr-1"></i>
               {{ $t("page.chat") }}
             </button>
           </div>
@@ -193,25 +194,27 @@
             class="info-item py-2 flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 space-x-0 md:space-x-2"
           >
             <button
-              class="interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition"
+              @click="handleInterestedClick($event)"
               :class="[
+                'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95',
                 isInterested
                   ? 'bg-interested-active text-white'
-                  : 'bg-white text-[#1c592f] border border-[#1c592f] hover:bg-[#1c592f] hover:text-white',
+                  : 'border border-interested-active text-interested-active',
               ]"
-              @click="handleInterestedClick($event)"
             >
+              <i class="fas fa-thumbs-up mr-1"></i>
               {{ $t("page.interested") }}
             </button>
             <button
-              class="not-interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition"
+              @click="toggleNotInterested($event)"
               :class="[
+                'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95',
                 isNotInterested
                   ? 'bg-red-custom text-white'
-                  : 'bg-white text-[#8a8a8a] border border-[#8a8a8a] hover:bg-[#8a8a8a] hover:text-white',
+                  : 'border border-red-custom text-red-custom',
               ]"
-              @click="toggleNotInterested($event)"
             >
+              <i class="fas fa-thumbs-down mr-1"></i>
               {{ $t("page.notInterested") }}
             </button>
           </div>
@@ -243,8 +246,10 @@ import {
   removeFavorite,
   isChatExisting,
   disinterest,
+  removeNotInterest,
 } from "@/services/apiService";
 import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
+import anime from "animejs"; // Import animejs
 
 export default {
   name: "HouseDetail",
@@ -268,6 +273,7 @@ export default {
     const houseId = this.$route.params.id;
     try {
       const response = await getHouseById(houseId);
+      console.log(response.result);
       if (response.success) {
         this.house = response.result.house;
         this.houseOwner = response.result.house_owner;
@@ -291,19 +297,27 @@ export default {
       event.stopPropagation();
       try {
         const response = await isChatExisting(this.houseOwner.id);
+        console.log(response.result);
         let chatId;
         if (response.success) {
-          if (Array.isArray(response.result)) {
-            chatId = response.result[0]?.chat?.id;
+          if (response.result && response.result.chat) {
+            chatId = response.result?.chat?.id;
           } else {
             chatId = response.result.id;
           }
 
           if (chatId) {
-            this.$router.push({
-              path: "/chatPage",
-              query: { chatId },
-            });
+            if (window.innerWidth <= 768) {
+              this.$router.push({
+                name: "MessageInterfacePage",
+                params: { chatId },
+              });
+            } else {
+              this.$router.push({
+                path: "/chatPage",
+                query: { chatId },
+              });
+            }
           } else {
             console.error("Chat ID not found in the response:", response);
           }
@@ -341,6 +355,8 @@ export default {
         try {
           const response = await expressInterest(this.house.id);
           console.log("Interest expressed successfully:", response);
+          // Trigger the exploding button effect
+          this.triggerExplodingButton(event.target);
         } catch (error) {
           console.error("Error expressing interest:", error);
         }
@@ -369,13 +385,29 @@ export default {
           const response = await removeNotInterest(this.house.id);
           console.log("Not interested removed successfully:", response);
         } catch (error) {
-          console.error("Error removing disinterest:", error);
+          console.error("Error removing not interest:", error);
         }
       }
     },
     openImage(image) {
       this.selectedImage = image;
       this.isPopupVisible = true;
+    },
+    triggerExplodingButton(target) {
+      anime({
+        targets: target,
+        scale: [
+          { value: 1.1, duration: 150 },
+          { value: 1, duration: 200 },
+        ],
+        rotate: {
+          value: "+=3turn",
+          duration: 600,
+          easing: "easeInOutSine",
+        },
+        easing: "easeInOutQuad",
+        duration: 800,
+      });
     },
   },
 };
@@ -431,5 +463,91 @@ export default {
   font-size: 1.5rem;
   color: #1c592f;
   margin-top: 20px;
+}
+
+button i.fas.fa-heart,
+button i.far.fa-heart {
+  transition: color 0.3s;
+  font-size: 24px;
+}
+
+button i.fas,
+button i.far {
+  font-size: 16px;
+}
+
+button.absolute {
+  padding: 8px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+button.absolute i {
+  font-size: 24px;
+}
+
+button:hover {
+  transform: none;
+}
+
+.bg-light-orange {
+  width: 500px;
+  background-color: rgba(255, 166, 0, 0.2);
+}
+
+.text-purple-custom {
+  color: #1c592f;
+}
+.text-green-custom {
+  color: #22893c;
+}
+.text-red-custom {
+  color: #8a8a8a;
+}
+.border-red-custom {
+  border: 1px solid #8a8a8a;
+}
+.custom_hover:hover {
+  box-shadow: 0 0 10px #1c592f;
+}
+.bg-green-custom {
+  background-color: #22893c;
+}
+.bg-purple-custom {
+  background-color: #e4eee6;
+  color: #000;
+}
+.bg-purple-custom2 {
+  background-color: #1c592f;
+  color: #fff;
+}
+.bg-chat-custom2 {
+  background-color: #154aa8;
+  border: 1px solid #154aa8;
+  color: #fff;
+}
+
+.bg-gray-custom {
+  background-color: #8a8a8a;
+  border: 1px solid #8a8a8a;
+}
+
+.border-interested-active {
+  border: 1px solid #1c592f;
+}
+.text-interested-active {
+  color: #1c592f;
+}
+.bg-interested-active {
+  background-color: #1c592f;
+}
+
+.user-icon i {
+  color: #1c592f;
+}
+
+.icon_custom_color {
+  color: #1c592f;
 }
 </style>

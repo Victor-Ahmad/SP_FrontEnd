@@ -1,7 +1,9 @@
 <template>
   <header :class="headerClasses">
     <div class="flex items-center space-x-4">
-      <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
+      <router-link to="/" class="flex items-center">
+        <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
+      </router-link>
     </div>
     <nav v-if="!isMobile && token" class="flex space-x-4 items-center">
       <router-link

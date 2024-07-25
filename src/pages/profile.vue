@@ -210,7 +210,7 @@
               class="input-editable w-full"
             ></textarea>
           </div>
-          <div
+          <!-- <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
             <strong class="w-full md:w-1/3 mb-2 md:mb-0"
@@ -222,7 +222,7 @@
               v-model="profile.one_to_one_swap_house.swap_reason"
               class="input-editable w-full"
             ></textarea>
-          </div>
+          </div> -->
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
