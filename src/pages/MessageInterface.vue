@@ -53,8 +53,9 @@
       class="flex-1 p-4 overflow-y-auto flex flex-col-reverse bg-gray-50 messageList-container"
     >
       <div
-        v-for="message in messages"
+        v-for="(message, index) in messages"
         :key="message.id"
+        :ref="index === 0 ? 'lastMessage' : null"
         class="mb-4 flex flex-col"
       >
         <div
@@ -172,7 +173,6 @@ export default {
             this.messages.unshift(newMsg);
             this.newMessage = "";
             this.scrollToBottom();
-            this.simulateMessageStatus(newMsg);
           }
         } catch (error) {
           console.error("Failed to send message:", error);
@@ -181,14 +181,11 @@ export default {
     },
     scrollToBottom() {
       this.$nextTick(() => {
-        const container = this.$refs.messageList;
-        container.scrollTop = container.scrollHeight;
+        const lastMessage = this.$refs.lastMessage;
+        if (lastMessage && lastMessage[0]) {
+          lastMessage[0].scrollIntoView({ behavior: "smooth" });
+        }
       });
-    },
-    simulateMessageStatus(message) {
-      setTimeout(() => {
-        message.is_read = true;
-      }, 2000);
     },
     goToDetailPage() {
       if (this.localSelectedChat && this.localSelectedChat.house) {
