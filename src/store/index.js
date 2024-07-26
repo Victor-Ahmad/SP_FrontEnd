@@ -28,6 +28,7 @@ const store = createStore({
       per_page: 5,
       total: 0,
     },
+    currentLanguage: "nl", // Add current language state
   },
   mutations: {
     setLoading(state, status) {
@@ -70,6 +71,10 @@ const store = createStore({
     },
     stopLoading(state) {
       state.loading = false;
+    },
+    setCurrentLanguage(state, language) {
+      // Add mutation to set current language
+      state.currentLanguage = language;
     },
   },
   actions: {
@@ -178,6 +183,10 @@ const store = createStore({
     async logout({ commit }) {
       commit("clearAuthData");
     },
+    setCurrentLanguage({ commit }, language) {
+      // Add action to set current language
+      commit("setCurrentLanguage", language);
+    },
   },
   getters: {
     isLoading: (state) => state.loading,
@@ -188,6 +197,7 @@ const store = createStore({
     pagination: (state) => state.pagination,
     triangleSwapHouses: (state) => state.triangleSwapHouses,
     trianglePagination: (state) => state.trianglePagination,
+    currentLanguage: (state) => state.currentLanguage, // Add getter for current language
   },
 });
 

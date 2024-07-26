@@ -38,13 +38,13 @@
           @click="setLanguage('en')"
           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           role="menuitem"
-          >EN</a
+          >en</a
         >
         <a
           @click="setLanguage('nl')"
           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           role="menuitem"
-          >NL</a
+          >nl</a
         >
       </div>
     </div>
@@ -52,23 +52,28 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "LanguageDropdown",
-  data() {
-    return {
-      dropdownOpen: false,
-      currentLanguage: "EN",
-    };
+  computed: {
+    ...mapGetters(["currentLanguage"]),
   },
   methods: {
+    ...mapActions(["setCurrentLanguage"]),
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },
     setLanguage(lang) {
       this.$i18n.locale = lang;
-      this.currentLanguage = lang === "en" ? "EN" : "NL";
+      this.setCurrentLanguage(lang);
       this.dropdownOpen = false;
     },
+  },
+  data() {
+    return {
+      dropdownOpen: false,
+    };
   },
 };
 </script>
