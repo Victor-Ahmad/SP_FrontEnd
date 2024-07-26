@@ -32,6 +32,7 @@
           </div>
         </div>
         <button
+          v-if="house.images.length"
           @click="openGallery"
           class="text-[#1c592f] py-2 px-4 rounded-lg mb-4"
         >
@@ -293,9 +294,9 @@ export default {
       if (response.success) {
         this.house = response.result.house;
         this.houseOwner = response.result.house_owner;
-        this.isFavorite = this.house.is_favorite;
-        this.isInterested = this.house.is_interested;
-        this.isNotInterested = this.house.is_not_interested;
+        this.isFavorite = response.result.is_favorite;
+        this.isInterested = response.result.is_interested;
+        this.isNotInterested = response.result.is_not_interested;
       } else {
         this.error = "Failed to fetch house details: " + response.message;
       }

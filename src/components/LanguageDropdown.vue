@@ -25,7 +25,7 @@
     </div>
     <div
       v-if="dropdownOpen"
-      class="origin-top-right lg:absolute right-0 mt-2 w-16 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 transition duration-300 ease-in-out"
+      class="origin-top-right absolute right-0 mt-2 w-16 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 transition duration-300 ease-in-out"
       @click.stop
     >
       <div

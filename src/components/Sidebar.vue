@@ -45,7 +45,6 @@
       >
         {{ $t("nav.logout") }}
       </button>
-      <LanguageDropdown />
     </nav>
   </div>
 </template>
@@ -54,13 +53,10 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import LanguageDropdown from "@/components/LanguageDropdown.vue";
 
 export default {
   name: "Sidebar",
-  components: {
-    LanguageDropdown,
-  },
+
   props: {
     isVisible: {
       type: Boolean,

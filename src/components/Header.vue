@@ -54,7 +54,7 @@
       >
         {{ $t("nav.logout") }}
       </button>
-      <LanguageDropdown v-if="!isMobile" />
+      <LanguageDropdown />
     </div>
   </header>
 </template>
