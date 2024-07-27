@@ -105,13 +105,15 @@
           }"
         >
           <template v-if="my_interests.length">
-            <HouseCardWithSwap
-              v-for="house in my_interests"
-              :key="house.id"
-              :house="house"
-              :hideWhenNotInterested="true"
-              @uninterested="removeFromInterests"
-            />
+            <transition-group name="fade" tag="div">
+              <HouseCardWithSwap
+                v-for="house in my_interests"
+                :key="house.id"
+                :house="house"
+                :hideWhenNotInterested="true"
+                @uninterested="removeFromInterests"
+              />
+            </transition-group>
           </template>
           <template v-else>
             <div class="placeholder">
@@ -356,5 +358,14 @@ export default {
   max-width: 200px;
   max-height: 200px;
   filter: grayscale(100%) opacity(50%);
+}
+
+/* Add the fade transition styles */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
 }
 </style>
