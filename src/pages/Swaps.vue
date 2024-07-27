@@ -105,15 +105,12 @@
           }"
         >
           <template v-if="my_interests.length">
-            <transition-group name="fade" tag="div">
-              <HouseCardWithSwap
-                v-for="house in my_interests"
-                :key="house.id"
-                :house="house"
-                :hideWhenNotInterested="true"
-                @uninterested="removeFromInterests"
-              />
-            </transition-group>
+            <HouseCardWithSwap
+              v-for="house in my_interests"
+              :key="house.id"
+              :house="house"
+              :hideWhenNotInterested="true"
+            />
           </template>
           <template v-else>
             <div class="placeholder">
@@ -165,11 +162,10 @@ import {
   getMyFavorites,
   getSwapWithMe,
   getCompleteInterest,
-  getMyDisinterests,
 } from "@/services/apiService";
 
 export default {
-  name: "Home",
+  name: "Swaps",
   components: {
     HouseCardWithSwap,
   },
@@ -228,17 +224,6 @@ export default {
       }
     };
 
-    const fetchMyDisinterests = async () => {
-      try {
-        const response = await getMyDisinterests();
-        if (response && response.success) {
-          my_disinterests.value = response.result;
-        }
-      } catch (error) {
-        console.error("Error fetching disinterests:", error);
-      }
-    };
-
     const fetchAllData = async () => {
       store.commit("setLoading", true); // Start loading
       try {
@@ -246,7 +231,6 @@ export default {
         await fetchMyFavorites();
         await fetchSwapWithMe();
         await fetchCompleteInterest();
-        await fetchMyDisinterests();
       } finally {
         store.commit("setLoading", false); // Finish loading
       }
@@ -277,12 +261,6 @@ export default {
       }
     };
 
-    const removeFromInterests = (houseId) => {
-      my_interests.value = my_interests.value.filter(
-        (house) => house.id !== houseId
-      );
-    };
-
     onMounted(() => {
       fetchAllData();
     });
@@ -304,7 +282,6 @@ export default {
       activeTab,
       setActiveTab,
       fetchAllData,
-      removeFromInterests,
       completeProfileCount,
       swapWithMeCount,
       myInterestsCount,
@@ -358,14 +335,5 @@ export default {
   max-width: 200px;
   max-height: 200px;
   filter: grayscale(100%) opacity(50%);
-}
-
-/* Add the fade transition styles */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0;
 }
 </style>

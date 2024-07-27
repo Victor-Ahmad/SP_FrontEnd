@@ -52,13 +52,17 @@ export default {
   },
   methods: {
     selectChat(chat) {
+      const houseId =
+        chat.other_persons.length > 0 ? chat.other_persons[0].house_id : null;
+
       if (window.innerWidth <= 768) {
         this.$router.push({
           name: "MessageInterfacePage",
           params: { chatId: chat.id },
+          query: { otherPersonHouseId: houseId },
         });
       } else {
-        this.$emit("chatSelected", chat);
+        this.$emit("chatSelected", { chat, houseId });
       }
     },
     formatDate(date) {

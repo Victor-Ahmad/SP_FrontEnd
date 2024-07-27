@@ -330,7 +330,8 @@ export default {
             if (window.innerWidth <= 768) {
               this.$router.push({
                 name: "MessageInterfacePage",
-                params: { chatId },
+                params: { chatId: chatId },
+                query: { otherPersonHouseId: this.house.id },
               });
             } else {
               this.$router.push({

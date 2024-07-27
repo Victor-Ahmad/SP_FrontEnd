@@ -31,7 +31,7 @@ export default {
     };
   },
   methods: {
-    async fetchChatMessages(chatId) {
+    async fetchChatMessages(chatId, houseId) {
       try {
         const response = await getChatMessages(chatId);
         if (response.success) {
@@ -41,6 +41,7 @@ export default {
             other_persons: response.result.chat.first_person
               ? [response.result.chat.first_person]
               : [],
+            houseId: houseId,
           };
         } else {
           console.error("Failed to fetch chat messages:", response.message);
@@ -49,38 +50,33 @@ export default {
         console.error("Failed to fetch chat messages:", error);
       }
     },
-    handleChatSelected(chat) {
+    handleChatSelected({ chat, houseId }) {
       if (this.isMobile) {
         this.$router.push({
           name: "MessageInterfacePage",
           params: { chatId: chat.id },
+          query: { otherPersonHouseId: houseId },
         });
       } else {
-        this.fetchChatMessages(chat.id);
+        this.fetchChatMessages(chat.id, houseId);
       }
     },
-    async selectChatById(chatId) {
-      this.fetchChatMessages(chatId);
+    async selectChatById(chatId, houseId) {
+      this.fetchChatMessages(chatId, houseId);
     },
     checkScreenSize() {
       this.isMobile = window.innerWidth <= 768;
     },
   },
-  watch: {
-    "$route.params.chatId": {
-      immediate: true,
-      handler(chatId) {
-        if (chatId) {
-          this.selectChatById(chatId);
-        }
-      },
-    },
-  },
+
   mounted() {
     window.addEventListener("resize", this.checkScreenSize);
     const chatId = this.$route.params.chatId || this.$route.query.chatId;
+    const houseId =
+      this.$route.params.otherPersonHouseId ||
+      this.$route.query.otherPersonHouseId;
     if (chatId) {
-      this.selectChatById(chatId);
+      this.selectChatById(chatId, houseId);
     }
   },
   beforeDestroy() {

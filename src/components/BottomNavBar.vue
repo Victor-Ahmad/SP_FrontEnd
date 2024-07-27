@@ -9,7 +9,7 @@
       <i class="fas fa-exchange-alt"></i>
     </router-link>
     <router-link
-      :to="isMobile ? '/chats' : '/chatPage'"
+      :to="isMobile ? '/chatslist' : '/chatPage'"
       class="nav-item"
       active-class="active"
     >

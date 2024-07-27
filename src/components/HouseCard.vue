@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="!hideWhenNotInterested || isInterested"
     class="flex justify-center mb-4 hover:scale-[1.02] duration-300 rounded overflow-hidden shadow-lg custom_hover relative"
     @click="handleCardClick"
   >
@@ -289,7 +288,7 @@ export default {
       } else {
         this.isNotInterested = true;
         this.isInterested = false;
-        this.$emit("uninterested", this.house.id); // Emit uninterested event with house ID
+        this.$emit("uninterested", this.house.id);
         try {
           const response = await disinterest(this.house.id);
           console.log("Not interested successfully:", response);
@@ -313,7 +312,8 @@ export default {
             if (window.innerWidth <= 768) {
               this.$router.push({
                 name: "MessageInterfacePage",
-                params: { chatId },
+                params: { chatId: chatId },
+                query: { otherPersonHouseId: this.house.id },
               });
             } else {
               this.$router.push({

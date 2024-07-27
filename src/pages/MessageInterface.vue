@@ -126,12 +126,14 @@ export default {
       newMessage: "",
       chatId: null,
       localSelectedChat: this.selectedChat, // Create a local copy of selectedChat
+      otherPersonHouseId: null, // Add otherPersonHouseId data property
     };
   },
   watch: {
     selectedChat(newChat) {
       if (newChat && newChat.id) {
         this.fetchMessages(newChat.id);
+        this.otherPersonHouseId = newChat.houseId; // Set otherPersonHouseId when selectedChat changes
       }
     },
   },
@@ -188,10 +190,10 @@ export default {
       });
     },
     goToDetailPage() {
-      if (this.localSelectedChat && this.localSelectedChat.house) {
+      if (this.otherPersonHouseId) {
         this.$router.push({
           name: "HouseDetail",
-          params: { id: this.localSelectedChat.house.id },
+          params: { id: this.otherPersonHouseId },
         });
       }
     },
@@ -206,11 +208,24 @@ export default {
   },
   mounted() {
     const chatId = this.$route.params.chatId || this.$route.query.chatId;
+    const otherPersonHouseId =
+      this.$route.params.otherPersonHouseId ||
+      this.$route.query.otherPersonHouseId;
+
+    console.log(this.$route);
+    alert(otherPersonHouseId);
+
+    if (this.selectedChat) {
+      otherPersonHouseId = otherPersonHouseId || this.selectedChat.houseId;
+    }
+
     if (chatId) {
       this.chatId = chatId;
+      this.otherPersonHouseId = otherPersonHouseId; // Set otherPersonHouseId
       this.fetchMessages(chatId);
     } else if (this.selectedChat && this.selectedChat.id) {
       this.chatId = this.selectedChat.id;
+      this.otherPersonHouseId = otherPersonHouseId; // Set otherPersonHouseId
       this.fetchMessages(this.selectedChat.id);
     }
   },
