@@ -106,7 +106,6 @@
         </li>
       </ul>
     </div>
-
     <div class="mb-4">
       <h3 class="font-semibold mb-2 text-[#1c592f]">
         {{ $t("filters.areas") }}
@@ -276,7 +275,18 @@ export default {
       }
     },
     initAutocomplete() {
+      console.log("Initializing Google Places Autocomplete");
       const input = document.getElementById("areasAutocompleteInput");
+      if (!input) {
+        console.error("Autocomplete input field not found");
+        return;
+      }
+
+      if (!window.google || !google.maps || !google.maps.places) {
+        console.error("Google Maps Places library is not loaded");
+        return;
+      }
+
       const autocomplete = new google.maps.places.Autocomplete(input, {
         types: ["(cities)"],
         componentRestrictions: { country: "NL" },
@@ -284,6 +294,7 @@ export default {
 
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
+        console.log("Place selected:", place);
         if (place && place.address_components) {
           const area = place.address_components[0].long_name;
           if (!this.selectedAreas.includes(area)) {
@@ -295,11 +306,21 @@ export default {
       });
     },
     loadGoogleMapsScript() {
+      if (window.google) {
+        console.log("Google Maps script already loaded");
+        this.initAutocomplete();
+        return;
+      }
+
+      console.log("Loading Google Maps script");
       const script = document.createElement("script");
       script.src = `https://maps.googleapis.com/maps/api/js?key=${
         import.meta.env.VITE_GOOGLE_MAPS_API_KEY
       }&libraries=places`;
       script.onload = this.initAutocomplete;
+      script.onerror = function () {
+        console.error("Error loading Google Maps script");
+      };
       document.head.appendChild(script);
     },
     async loadHouseFeatures() {
@@ -333,6 +354,15 @@ export default {
     this.loadGoogleMapsScript();
     this.loadHouseFeatures();
     document.addEventListener("click", this.handleClickOutside);
+
+    // Ensure the input exists before initializing autocomplete
+    this.$nextTick(() => {
+      if (document.getElementById("areasAutocompleteInput")) {
+        this.initAutocomplete();
+      } else {
+        console.error("Autocomplete input field not found in nextTick");
+      }
+    });
   },
   beforeUnmount() {
     document.removeEventListener("click", this.handleClickOutside);

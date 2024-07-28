@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen pb-20 md:py-8 lg:p-8 bg-gray-100 lg:bg-white">
     <div class="flex flex-col lg:flex-row">
-      <div class="hidden lg:block w-full lg:w-1/4">
+      <div v-if="!isMobile" class="hidden lg:block w-full lg:w-1/4">
         <FilterBar :filters="filters" @applyFilters="applyFilters" />
       </div>
       <div
@@ -121,7 +121,6 @@
         </div>
         <div class="p-4 overflow-y-auto">
           <FilterBar
-            :filters="filters"
             @applyFilters="handleApplyFilters"
             @clearFilters="closeFilterDrawer"
           />
@@ -139,6 +138,7 @@ import TriangleSwapCard from "@/components/TriangleSwapCard.vue";
 import FilterBar from "@/components/FilterBar.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import { getProfileProgress } from "@/services/apiService";
+import { useScreenSize } from "@/utils/useScreenSize"; // Adjust the import path
 
 export default {
   name: "Home",
@@ -150,6 +150,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const { isMobile } = useScreenSize();
     const isLoading = computed(() => store.getters.isLoading);
     const error = computed(() => store.getters.error);
     const filteredHouses = computed(() => store.getters.filteredHouses);
@@ -308,6 +309,7 @@ export default {
     };
 
     return {
+      isMobile,
       isLoading,
       error,
       filteredHouses,
