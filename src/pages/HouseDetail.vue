@@ -90,7 +90,9 @@
                 <span class="font-medium text-gray-700"
                   >{{ $t("page.area") }}:</span
                 >
-                <span>{{ house.area || $t("page.na") }} m²</span>
+                <span
+                  >{{ Math.floor(house.area || 0) || $t("page.na") }} m²</span
+                >
               </div>
             </div>
           </div>
@@ -146,7 +148,9 @@
                   <span class="font-medium text-gray-700"
                     >{{ $t("page.area") }}:</span
                   >
-                  <span>{{ wish.area || $t("page.na") }} m²</span>
+                  <span
+                    >{{ Math.floor(wish.area || 0) || $t("page.na") }} m²</span
+                  >
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div
@@ -306,6 +310,7 @@ export default {
       this.isLoading = false;
     }
   },
+
   methods: {
     getImageUrl(path) {
       return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;

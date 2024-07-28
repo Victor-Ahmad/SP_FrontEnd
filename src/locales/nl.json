@@ -166,8 +166,8 @@
         "numberOfRooms": "Aantal Kamers",
         "areas": "Gebieden",
         "areasPlaceholder": "Voer gebied in",
-        "apply": "Filters Toepassen",
-        "clear": "Filters Wissen"
+        "apply": "Toepassen",
+        "clear": "Wissen"
     },
     "profile": {
         "alt": {

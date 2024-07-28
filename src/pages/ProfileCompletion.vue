@@ -17,13 +17,13 @@
           :class="{ 'error-border': validationErrors.description }"
           rows="4"
           :placeholder="$t('completeProfile.descriptionPlaceholder')"
-          @input="clearError('description')"
+          @input="validateInput($event, 'description')"
         ></textarea>
       </div>
 
       <div v-if="showWishes" class="mb-4">
         <!-- Start of the Wishes Content from Step1 -->
-        <label for="description" class="block text-gray-700 font-bold mb-2">
+        <label for="city" class="block text-gray-700 font-bold mb-2">
           {{ $t("form.title") }}:
         </label>
 
@@ -40,7 +40,7 @@
                   :placeholder="$t('form.cityPlaceholder')"
                   class="input-field w-full p-2 border rounded"
                   :class="{ 'error-border': validationErrors.city }"
-                  @input="clearError('city')"
+                  @input="validateInput($event, 'city')"
                 />
               </div>
 
@@ -105,7 +105,7 @@
                   class="input-field w-full p-2 border rounded"
                   :class="{ 'error-border': validationErrors.price }"
                   step="0.01"
-                  @input="clearError('price')"
+                  @input="validateInput($event, 'price')"
                 />
                 <div v-if="errors.price_wish" class="invalid-feedback">
                   {{ errors.price_wish }}
@@ -248,7 +248,6 @@
           @change="onImageChange"
           class="w-full p-2 border border-gray-300 rounded"
           :class="{ 'error-border': validationErrors.images }"
-          @input="clearError('images')"
         />
       </div>
 
@@ -277,6 +276,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
@@ -521,6 +521,22 @@ export default {
       }
     };
 
+    const validateInput = (event, field) => {
+      const regex = /^[a-zA-Z0-9\s]*$/;
+      const inputValue = event.target.value;
+      const filteredValue = inputValue.replace(/[^a-zA-Z0-9\s]/g, "");
+
+      if (inputValue !== filteredValue) {
+        event.target.value = filteredValue;
+      }
+
+      if (!regex.test(filteredValue)) {
+        validationErrors.value[field] = true;
+      } else {
+        clearError(field);
+      }
+    };
+
     const initAutocomplete = () => {
       const input = document.getElementById("interestsAutocompleteInput");
       const autocomplete = new google.maps.places.Autocomplete(input, {
@@ -610,6 +626,7 @@ export default {
       // Validation state
       validationErrors,
       clearError,
+      validateInput, // Return validateInput method
       // Wishes content
       formData,
       errors,

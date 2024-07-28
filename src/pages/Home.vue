@@ -59,12 +59,21 @@
           v-if="activeTab === 'houses'"
           class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
         >
-          <button
-            @click="openFilterDrawer"
-            class="lg:hidden p-4 border border-[#1c592f] text-[#1c592f] flex items-center rounded-md justify-center"
-          >
-            <i class="fas fa-filter mr-2"></i> {{ $t("page.openFilters") }}
-          </button>
+          <div class="flex justify-between lg:hidden">
+            <button
+              @click="openFilterDrawer"
+              class="w-2/3 p-4 border-r border-l border-t border-b border-[#1c592f] text-[#1c592f] flex items-center rounded-l-md justify-center"
+            >
+              <i class="fas fa-filter mr-2"></i> {{ $t("page.filters") }}
+            </button>
+            <button
+              @click="clearFilters"
+              class="w-1/3 p-4 border-r border-t border-b text-gray-700 border-gray-700 flex items-center rounded-r-md justify-center"
+            >
+              <i class="fas fa-times mr-2"></i> {{ $t("filters.clear") }}
+            </button>
+          </div>
+
           <HouseCard
             v-for="house in filteredHouses"
             :key="house.id"
@@ -286,6 +295,17 @@ export default {
         filteredHouses.value.splice(index, 1);
       }
     };
+    const clearFilters = async () => {
+      filters.value = {
+        search: "",
+        minSize: 1,
+        maxFloor: 10,
+        numberOfRooms: [],
+        areas: [],
+        amenities: [],
+      };
+      await applyFilters(new FormData());
+    };
 
     return {
       isLoading,
@@ -309,6 +329,7 @@ export default {
       closeFilterDrawer,
       handleApplyFilters,
       removeFromFilteredHouses,
+      clearFilters,
     };
   },
 };

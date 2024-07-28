@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white mr-6">
+  <div class="bg-white mr-6 mb-20">
     <h2 class="text-xl font-bold mb-4 text-[#1c592f]">
       {{ $t("filters.title") }}
     </h2>

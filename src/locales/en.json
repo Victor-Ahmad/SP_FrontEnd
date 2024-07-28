@@ -166,8 +166,8 @@
         "numberOfRooms": "Number of Rooms",
         "areas": "Areas",
         "areasPlaceholder": "Enter area",
-        "apply": "Apply Filters",
-        "clear": "Clear Filters"
+        "apply": "Apply",
+        "clear": "Clear"
     },
     "profile": {
         "alt": {
