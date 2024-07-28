@@ -101,10 +101,17 @@
         @keyup.enter="sendMessage"
         placeholder="Type a message..."
         class="flex-1 p-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#154aa8]"
+        :disabled="isSending"
       />
       <button
         @click="sendMessage"
-        class="ml-2 pl-3 pr-4 pt-2 pb-2 bg-[#154aa8] text-white rounded-full hover:bg-green-600 transition"
+        :class="[
+          'ml-2 pl-3 pr-4 pt-2 pb-2 rounded-full transition',
+          isSending
+            ? 'bg-gray-500 cursor-not-allowed  text-white '
+            : 'bg-[#154aa8] hover:bg-green-600  text-white ',
+        ]"
+        :disabled="isSending"
       >
         <i class="fas fa-paper-plane"></i>
       </button>
@@ -141,6 +148,7 @@ export default {
       chatId: null,
       localSelectedChat: this.selectedChat, // Create a local copy of selectedChat
       otherPersonHouseId: null, // Add otherPersonHouseId data property
+      isSending: false,
     };
   },
   watch: {
@@ -175,6 +183,7 @@ export default {
     },
     async sendMessage() {
       if (this.newMessage.trim() !== "") {
+        this.isSending = true; // Set isSending to true
         try {
           const response = await sendMessage(this.newMessage, this.chatId);
           if (response.success) {
@@ -186,15 +195,18 @@ export default {
               created_at: new Date().toISOString(),
               is_read: false,
             };
-            this.messages.unshift(newMsg);
+            this.messages.push(newMsg);
             this.newMessage = "";
             this.scrollToBottom();
           }
         } catch (error) {
           console.error("Failed to send message:", error);
+        } finally {
+          this.isSending = false; // Set isSending to false
         }
       }
     },
+    //
     scrollToBottom() {
       this.$nextTick(() => {
         const lastMessage = this.$refs.lastMessage;
