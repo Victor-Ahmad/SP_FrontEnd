@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4 mb-20">
+  <div class="container mx-auto p-4 mb-40">
     <h1 class="text-2xl font-bold mb-4">{{ $t("completeProfile.title") }}</h1>
 
     <div v-if="isLoading" class="text-center">
