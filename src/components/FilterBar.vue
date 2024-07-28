@@ -108,7 +108,7 @@
     </div>
     <div class="mb-4">
       <h3 class="font-semibold mb-2 text-[#1c592f]">
-        {{ $t("filters.areas") }}
+        {{ $t("profile.house.location") }}
       </h3>
       <input
         type="text"
@@ -134,20 +134,40 @@
 
     <button
       @click="applyFilters"
-      class="w-full bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition"
+      class="w-full bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition hidden lg:block"
     >
       {{ $t("filters.apply") }}
     </button>
     <button
       @click="clearFilters"
-      class="w-full bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition mt-2"
+      class="w-full bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition mt-2 hidden lg:block"
     >
       {{ $t("filters.clear") }}
     </button>
+
+    <!-- Mobile Bottom Navbar -->
+    <div
+      v-if="isMobile"
+      class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-evenly items-center py-2 z-50"
+    >
+      <button
+        @click="applyFilters"
+        class="w-2/5 bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition"
+      >
+        {{ $t("filters.apply") }}
+      </button>
+      <button
+        @click="clearFilters"
+        class="w-2/5 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition"
+      >
+        {{ $t("filters.clear") }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getHouseFeatures } from "@/services/apiService";
 
 export default {
@@ -157,6 +177,25 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  setup() {
+    const isMobile = ref(window.innerWidth <= 768);
+
+    const checkScreenSize = () => {
+      isMobile.value = window.innerWidth <= 768;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", checkScreenSize);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", checkScreenSize);
+    });
+
+    return {
+      isMobile,
+    };
   },
   data() {
     return {
@@ -354,6 +393,7 @@ export default {
     this.loadGoogleMapsScript();
     this.loadHouseFeatures();
     document.addEventListener("click", this.handleClickOutside);
+    window.addEventListener("resize", this.checkScreenSize);
 
     // Ensure the input exists before initializing autocomplete
     this.$nextTick(() => {
@@ -366,11 +406,18 @@ export default {
   },
   beforeUnmount() {
     document.removeEventListener("click", this.handleClickOutside);
+    window.removeEventListener("resize", this.checkScreenSize);
   },
 };
 </script>
 
 <style scoped>
+.bottom-nav-bar {
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 50; /* Ensure it is below the filter drawer */
+}
+
 .input-field {
   @apply w-full p-2 border border-gray-300 rounded;
 }
