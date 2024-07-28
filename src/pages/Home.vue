@@ -165,6 +165,7 @@ export default {
     const triangleTotalPages = ref(1);
     const showDescription = ref(false);
     const showImages = ref(false);
+    const showWishes = ref(false);
 
     const showFilterDrawer = ref(false); // State for showing filter drawer
 
@@ -208,6 +209,9 @@ export default {
       );
       showImages.value = missingSteps.some((step) =>
         step.toLowerCase().includes("image")
+      );
+      showWishes.value = missingSteps.some((step) =>
+        step.toLowerCase().includes("wish")
       );
     };
 
@@ -268,6 +272,7 @@ export default {
       query: {
         showDescription: showDescription.value,
         showImages: showImages.value,
+        showWishes: showWishes.value,
       },
     }));
 

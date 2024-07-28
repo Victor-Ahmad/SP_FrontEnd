@@ -154,13 +154,58 @@ export const getProfile = async () => {
   }
 };
 
-export const updateDescriptionAndImages = async (description, images) => {
+export const updateDescriptionAndImages = async (
+  description,
+  images,
+  wishData
+) => {
   const formData = new FormData();
-  formData.append("description", description);
+
+  // Append description
+  if (description) {
+    formData.append("description", description);
+  }
+
+  // Append images
   images.forEach((image, index) => {
     const file = dataURLtoFile(image, `image${index}.png`);
     formData.append(`house[images][${index}]`, file);
   });
+
+  // Append wish data
+  if (wishData.house_type_id) {
+    formData.append("wish[house_type_id]", wishData.house_type_id);
+  }
+  if (wishData.number_of_rooms) {
+    formData.append("wish[number_of_rooms]", wishData.number_of_rooms);
+  }
+  if (wishData.price) {
+    formData.append("wish[price]", wishData.price);
+  }
+  if (wishData.area) {
+    formData.append("wish[area]", wishData.area);
+  }
+  if (wishData.floor_number) {
+    formData.append("wish[floor_number]", wishData.floor_number);
+  }
+
+  // Append locations
+  if (wishData.locations && wishData.locations.length > 0) {
+    wishData.locations.forEach((location, index) => {
+      if (location) {
+        formData.append(`wish[locations][${index}]`, location);
+      }
+    });
+  }
+
+  // Append property_ids (house features)
+  if (wishData.features && wishData.features.length > 0) {
+    wishData.features.forEach((feature, index) => {
+      if (feature) {
+        formData.append(`wish[property_ids][${index}]`, feature);
+      }
+    });
+  }
 
   try {
     const response = await axiosInstance.post(
@@ -177,6 +222,30 @@ export const updateDescriptionAndImages = async (description, images) => {
     throw error;
   }
 };
+
+// export const updateDescriptionAndImages = async (description, images) => {
+//   const formData = new FormData();
+//   formData.append("description", description);
+//   images.forEach((image, index) => {
+//     const file = dataURLtoFile(image, `image${index}.png`);
+//     formData.append(`house[images][${index}]`, file);
+//   });
+
+//   try {
+//     const response = await axiosInstance.post(
+//       "update_description_images",
+//       formData,
+//       {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 const dataURLtoFile = (dataurl, filename) => {
   let arr = dataurl.split(",");

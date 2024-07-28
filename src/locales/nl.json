@@ -83,7 +83,14 @@
         "featuresPlaceholder": "Geef huis kenmerken aan",
         "reasonForSwap": "Waarom wilt u ruilen?",
         "reasonPlaceholder": "Leg uw reden voor de ruil uit",
-        "stepImageAlt": "Stap 1 Afbeelding"
+        "stepImageAlt": "Stap 1 Afbeelding",
+        "houseTypeRequired": "Huis type is vereist.",
+        "priceRequired": "Prijs is vereist.",
+        "numberOfRoomsRequired": "Aantal kamers is vereist.",
+        "floorRequired": "Verdieping is vereist.",
+        "areaRequired": "Oppervlakte is vereist.",
+        "featuresRequired": "Er is minstens één kenmerk vereist.",
+        "locationsRequired": "Er is minstens één locatie vereist."
     },
     "myHouse": {
         "title": "Mijn Huis",
@@ -221,7 +228,9 @@
         "descriptionLabel": "Beschrijving:",
         "descriptionPlaceholder": "Voer uw beschrijving in",
         "uploadImagesLabel": "Afbeeldingen uploaden:",
-        "completeButton": "Voltooien"
+        "completeButton": "Voltooien",
+        "descriptionRequired": "Beschrijving is vereist.",
+        "imagesRequired": "Er is minstens één afbeelding vereist."
     },
     "forgotPassword": {
         "title": "Wachtwoord Vergeten",

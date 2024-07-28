@@ -52,29 +52,43 @@
       ref="messageList"
       class="flex-1 p-4 overflow-y-auto flex flex-col-reverse bg-gray-50 messageList-container"
     >
-      <div
-        v-for="(message, index) in messages"
-        :key="message.id"
-        :ref="index === 0 ? 'lastMessage' : null"
-        class="mb-4 flex flex-col"
-      >
+      <div v-if="messages.length > 0">
         <div
-          :class="{
-            'self-end bg-[#E8FDF6] text-right': message.type === 'sender',
-            'self-start bg-white': message.type === 'receiver',
-          }"
-          class="p-4 rounded-lg shadow-md max-w-xs relative"
+          v-for="(message, index) in messages"
+          :key="message.id"
+          :ref="index === 0 ? 'lastMessage' : null"
+          class="mb-4 flex flex-col"
         >
-          <div class="message-content mb-2">{{ message.message }}</div>
-          <div class="text-xs text-gray-500 flex justify-end items-center">
-            <span class="message-timestamp">{{
-              formatTime(message.created_at)
-            }}</span>
-            <div class="relative ml-2">
-              <i v-if="message.is_read" class="fas fa-check text-green-500"></i>
-              <i v-else class="fas fa-check text-gray-500"></i>
+          <div
+            :class="{
+              'self-end bg-[#E8FDF6] text-right': message.type === 'sender',
+              'self-start bg-white': message.type === 'receiver',
+            }"
+            class="p-4 rounded-lg shadow-md max-w-xs relative"
+          >
+            <div class="message-content mb-2">{{ message.message }}</div>
+            <div class="text-xs text-gray-500 flex justify-end items-center">
+              <span class="message-timestamp">{{
+                formatTime(message.created_at)
+              }}</span>
+              <div class="relative ml-2">
+                <i
+                  v-if="message.is_read"
+                  class="fas fa-check text-green-500"
+                ></i>
+                <i v-else class="fas fa-check text-gray-500"></i>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div v-else>
+        <div class="placeholder">
+          <img
+            src="@/assets/images/logo2.png"
+            alt="Placeholder"
+            class="grayscale"
+          />
         </div>
       </div>
     </div>
@@ -213,7 +227,6 @@ export default {
       this.$route.query.otherPersonHouseId;
 
     console.log(this.$route);
-    alert(otherPersonHouseId);
 
     if (this.selectedChat) {
       otherPersonHouseId = otherPersonHouseId || this.selectedChat.houseId;
@@ -239,6 +252,18 @@ export default {
 }
 .bg-E8FDF6 {
   background-color: #e8fdf6;
+}
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50vh;
+}
+.placeholder img {
+  max-width: 200px;
+  max-height: 200px;
+  filter: grayscale(100%) opacity(50%);
 }
 @media (max-width: 768px) {
   .message-input-container {

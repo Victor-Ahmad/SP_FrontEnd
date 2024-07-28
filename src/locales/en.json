@@ -83,7 +83,14 @@
         "featuresPlaceholder": "Specify house features",
         "reasonForSwap": "Why do you wish to swap?",
         "reasonPlaceholder": "Explain your reason for the swap",
-        "stepImageAlt": "Step 1 Image"
+        "stepImageAlt": "Step 1 Image",
+        "houseTypeRequired": "House type is required.",
+        "priceRequired": "Price is required.",
+        "numberOfRoomsRequired": "Number of rooms is required.",
+        "floorRequired": "Floor number is required.",
+        "areaRequired": "Area is required.",
+        "featuresRequired": "At least one feature is required.",
+        "locationsRequired": "At least one location is required."
     },
     "myHouse": {
         "title": "My House",
@@ -221,7 +228,9 @@
         "descriptionLabel": "Description:",
         "descriptionPlaceholder": "Enter your description",
         "uploadImagesLabel": "Upload Images:",
-        "completeButton": "Complete"
+        "completeButton": "Complete",
+        "descriptionRequired": "Description is required.",
+        "imagesRequired": "At least one image is required."
     },
     "forgotPassword": {
         "title": "Forgot Password",
