@@ -111,7 +111,7 @@
     <transition name="slide-fade">
       <div
         v-if="showFilterDrawer"
-        class="fixed inset-0 z-50 bg-white shadow-lg lg:hidden filter-drawer"
+        class="fixed inset-0 z-100 bg-white shadow-lg lg:hidden filter-drawer"
       >
         <div class="flex justify-between items-center mb-4 p-4">
           <h2 class="text-xl font-bold text-[#1c592f]">
@@ -582,6 +582,7 @@ button:hover {
 .filter-drawer {
   height: 100vh;
   overflow-y: auto;
+  z-index: 100;
   padding-bottom: 80px; /* Ensure space for close button */
 }
 </style>
