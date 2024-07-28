@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 overflow-y-auto h-full">
+  <div class="p-4 overflow-y-auto h-full mb-20">
     <div
       class="mb-4 p-4 bg-white shadow rounded-lg cursor-pointer hover:bg-gray-100 transition"
       v-for="chat in chats"

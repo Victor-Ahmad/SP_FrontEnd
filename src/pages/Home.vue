@@ -96,6 +96,7 @@
             v-for="triangle in triangleSwapHouses"
             :key="triangle.house_a.id"
             :triangle="triangle"
+            :myHouse="triangleSwapHousesMyHouse"
           />
           <div class="col-span-full">
             <BasePagination
@@ -155,6 +156,9 @@ export default {
     const error = computed(() => store.getters.error);
     const filteredHouses = computed(() => store.getters.filteredHouses);
     const triangleSwapHouses = computed(() => store.getters.triangleSwapHouses);
+    const triangleSwapHousesMyHouse = computed(
+      () => store.getters.triangleSwapHousesMyHouse
+    );
     const pagination = computed(() => store.getters.pagination);
     const trianglePagination = computed(() => store.getters.trianglePagination);
 
@@ -326,6 +330,7 @@ export default {
       fetchTriangleSwapHouses,
       profileCompletionLink,
       triangleSwapHouses,
+      triangleSwapHousesMyHouse,
       showFilterDrawer,
       openFilterDrawer,
       closeFilterDrawer,

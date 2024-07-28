@@ -15,27 +15,46 @@
         alt="Arrow Right"
       />
     </div>
-
+    <div class="flex justify-center items-center space-x-4">
+      <img
+        :src="rightArrow"
+        :class="rightArrowClass"
+        class="h-16 w-16"
+        alt="Arrow Up"
+      />
+      <button
+        class="px-8 py-2 bg-[#1c592f] text-white text-lg font-bold rounded"
+      >
+        {{ myHouse.first_name }}
+      </button>
+      <img
+        :src="downArrow"
+        :class="downArrowClass"
+        class="h-16 w-16"
+        alt="Arrow Down"
+      />
+    </div>
     <!-- Top Row: House Cards with Arrow (Desktop Only) -->
     <div
       class="hidden md:flex md:flex-row lg:flex lg:flex-row items-center justify-center lg:items-start lg:w-full relative lg:p-10"
     >
       <!-- First House Card -->
       <div class="flex flex-col w-full lg:w-1/2 max-w-sm h-auto">
-        <HouseCardTriangle :house="triangle.house_a" />
+        <HouseCardTriangle :house="triangle.house_b" />
       </div>
       <!-- Curved Arrow (Desktop Only) -->
       <div class="flex justify-center items-center lg:mx-8">
         <img
-          :src="rightArrow"
-          :class="rightArrowClass"
+          :src="upArrow"
+          :class="upArrowClass"
           class="h-20 w-20"
           alt="Arrow Right"
         />
       </div>
       <!-- Second House Card -->
+
       <div class="flex flex-col w-full lg:w-1/2 max-w-sm h-auto">
-        <HouseCardTriangle :house="triangle.house_b" />
+        <HouseCardTriangle :house="triangle.house_a" />
       </div>
     </div>
 
@@ -54,25 +73,6 @@
     </div>
 
     <!-- Bottom Row: Swap Button with Arrows -->
-    <div class="flex justify-center items-center space-x-4">
-      <img
-        :src="upArrow"
-        :class="upArrowClass"
-        class="h-16 w-16"
-        alt="Arrow Up"
-      />
-      <button
-        class="px-8 py-2 bg-[#1c592f] text-white text-lg font-bold rounded"
-      >
-        Join Swap
-      </button>
-      <img
-        :src="downArrow"
-        :class="downArrowClass"
-        class="h-16 w-16"
-        alt="Arrow Down"
-      />
-    </div>
   </router-link>
 </template>
 
@@ -92,6 +92,10 @@ export default {
       type: Object,
       required: true,
     },
+    myHouse: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     upArrow() {
@@ -105,14 +109,18 @@ export default {
     },
     rightArrowClass() {
       return this.triangle.is_a_interested_in_b
+        ? "green-arrow "
+        : "gray-arrow ";
+    },
+    downArrowClass() {
+      return this.triangle.is_b_interested_in_c
         ? "green-arrow special_rotation"
         : "gray-arrow special_rotation";
     },
-    downArrowClass() {
-      return this.triangle.is_b_interested_in_c ? "green-arrow" : "gray-arrow";
-    },
     upArrowClass() {
-      return this.triangle.is_c_interested_in_a ? "green-arrow" : "gray-arrow";
+      return this.triangle.is_c_interested_in_a
+        ? "green-arrow special_rotation2"
+        : "gray-arrow special_rotation2";
     },
   },
 };
@@ -156,6 +164,9 @@ export default {
     hue-rotate(170deg) brightness(87%) contrast(88%);
 }
 .special_rotation {
-  transform: rotate(35deg);
+  transform: rotate(-90deg);
+}
+.special_rotation2 {
+  transform: rotate(-45deg);
 }
 </style>

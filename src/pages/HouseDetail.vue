@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen p-4 md:p-8">
+  <div class="min-h-screen p-4 mb-10 md:p-8">
     <div v-if="isLoading" class="text-center">{{ $t("page.loading") }}</div>
     <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
     <div v-else class="house-detail-page flex flex-col items-center">
@@ -255,7 +255,7 @@
 
     <!-- Fixed Bottom Navbar -->
     <div
-      class="fixed-bottom-navbar fixed bottom-0 left-0 w-full bg-white shadow-lg flex lg:hidden justify-around items-center p-2 z-50 gap-2"
+      class="fixed-bottom-navbar fixed bottom-0 left-0 w-full bg-white shadow-lg flex lg:hidden justify-around items-center py-4 px-2 z-50 gap-2"
     >
       <button
         @click="handleInterestedClick"

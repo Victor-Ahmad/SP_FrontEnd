@@ -16,6 +16,7 @@ const store = createStore({
     error: null,
     filteredHouses: [],
     triangleSwapHouses: [],
+    triangleSwapHousesMyHouse: null,
     pagination: {
       current_page: 1,
       last_page: 1,
@@ -53,6 +54,9 @@ const store = createStore({
     },
     setTriangleSwapHouses(state, houses) {
       state.triangleSwapHouses = houses;
+    },
+    setTriangleSwapHouseMyHouse(state, house) {
+      state.triangleSwapHousesMyHouse = house;
     },
     setPagination(state, pagination) {
       state.pagination = pagination;
@@ -161,13 +165,14 @@ const store = createStore({
       try {
         const response = await getTriangleSwapHouses(params);
         if (response.success) {
-          commit("setTriangleSwapHouses", response.result.data);
+          commit("setTriangleSwapHouses", response.result.paginatedItems.data);
           commit("setTrianglePagination", {
-            current_page: response.result.current_page,
-            last_page: response.result.last_page,
-            per_page: response.result.per_page,
-            total: response.result.total,
+            current_page: response.result.paginatedItems.current_page,
+            last_page: response.result.paginatedItems.last_page,
+            per_page: response.result.paginatedItems.per_page,
+            total: response.result.paginatedItems.total,
           });
+          commit("setTriangleSwapHouseMyHouse", response.result.my_house);
         } else {
           commit("setError", response.message);
         }
@@ -197,6 +202,7 @@ const store = createStore({
     pagination: (state) => state.pagination,
     triangleSwapHouses: (state) => state.triangleSwapHouses,
     trianglePagination: (state) => state.trianglePagination,
+    triangleSwapHousesMyHouse: (state) => state.triangleSwapHousesMyHouse,
     currentLanguage: (state) => state.currentLanguage, // Add getter for current language
   },
 });

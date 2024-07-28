@@ -56,7 +56,7 @@
         <div
           v-for="(message, index) in messages"
           :key="message.id"
-          :ref="index === 0 ? 'lastMessage' : null"
+          :ref="index === messages.length - 1 ? 'lastMessage' : null"
           class="mb-4 flex flex-col"
         >
           <div
@@ -163,7 +163,7 @@ export default {
               ? [response.result.chat.first_person]
               : [],
           };
-          this.messages = response.result.messages;
+          this.messages = response.result.messages.reverse();
           this.chatId = chatId;
           this.scrollToBottom();
         } else {
