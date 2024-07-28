@@ -64,7 +64,8 @@
         "areYouSureNotInterested": "Weet je het zeker? Deze kaart wordt verborgen.",
         "yes": "Ja",
         "no": "Nee",
-         "viewAllImages": "Bekijk alle afbeeldingen"
+        "viewAllImages": "Bekijk alle afbeeldingen",
+        "linkCopied": "Link gekopieerd naar klembord"
     },
     "form": {
         "title": "Ik wil naar",

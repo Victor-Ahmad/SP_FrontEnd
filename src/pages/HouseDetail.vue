@@ -238,6 +238,7 @@
           </div>
           <div class="info-item py-2 mt-4">
             <button
+              @click="copyLink"
               class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center"
             >
               <i class="fas fa-share-alt mr-2"></i> {{ $t("page.share") }}
@@ -254,7 +255,7 @@
 
     <!-- Fixed Bottom Navbar -->
     <div
-      class="fixed-bottom-navbar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center p-2 z-50 gap-2"
+      class="fixed-bottom-navbar fixed bottom-0 left-0 w-full bg-white shadow-lg flex lg:hidden justify-around items-center p-2 z-50 gap-2"
     >
       <button
         @click="handleInterestedClick"
@@ -303,6 +304,7 @@ import {
 import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
 import ImageGalleryPopup from "@/components/ImageGalleryPopup.vue"; // Import the new component
 import anime from "animejs"; // Import animejs
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 export default {
   name: "HouseDetail",
@@ -322,6 +324,7 @@ export default {
       isGalleryVisible: false,
       isLoading: true,
       error: null,
+      showCopyMessage: false,
     };
   },
   async created() {
@@ -468,6 +471,24 @@ export default {
         easing: "easeInOutQuad",
         duration: 800,
       });
+    },
+    async copyLink() {
+      const link = window.location.href;
+      try {
+        await navigator.clipboard.writeText(link);
+        Swal.fire({
+          icon: "success",
+          title: this.$t("page.linkCopied"),
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Failed to copy link",
+          text: error.message,
+        });
+      }
     },
   },
 };

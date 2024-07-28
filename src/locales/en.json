@@ -64,7 +64,8 @@
         "areYouSureNotInterested": "Are you sure? This card will be hidden.",
         "yes": "Yes",
         "no": "No",
-          "viewAllImages": "View All Images"
+        "viewAllImages": "View All Images",
+        "linkCopied": "Link copied to clipboard"
     },
     "form": {
         "title": "I want to go to",
