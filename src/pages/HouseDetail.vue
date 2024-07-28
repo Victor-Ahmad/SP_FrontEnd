@@ -251,6 +251,40 @@
         @close="isPopupVisible = false"
       />
     </div>
+
+    <!-- Fixed Bottom Navbar -->
+    <div
+      class="fixed-bottom-navbar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center p-2 z-50 gap-2"
+    >
+      <button
+        @click="handleInterestedClick"
+        :class="[
+          'w-1/3 px-4  rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+          isInterested
+            ? 'bg-interested-active text-white'
+            : 'border border-interested-active text-interested-active',
+        ]"
+      >
+        <i class="fas fa-thumbs-up"></i>
+      </button>
+      <button
+        @click="toggleNotInterested"
+        :class="[
+          'w-1/3 px-4 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+          isNotInterested
+            ? 'bg-gray-custom text-white'
+            : 'border border-red-custom text-red-custom',
+        ]"
+      >
+        <i class="fas fa-thumbs-down"></i>
+      </button>
+      <button
+        @click="startChat"
+        class="w-1/3 px-4 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 text-white"
+      >
+        <i class="fas fa-comment"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -575,5 +609,24 @@ button:hover {
 
 .icon_custom_color {
   color: #1c592f;
+}
+
+/* New styles for fixed bottom navbar */
+.fixed-bottom-navbar {
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100; /* Increased z-index to ensure it appears above other elements */
+}
+
+.fixed-bottom-navbar button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 24px; /* Increase font size for icons */
+}
+
+.fixed-bottom-navbar button i {
+  font-size: 18px;
 }
 </style>
