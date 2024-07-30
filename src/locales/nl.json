@@ -8,6 +8,11 @@
         "register": "Nog geen account? Registreren",
         "noAccount": "Nog geen account?"
     },
+    "triangle":{
+        "joinGroupChat": "Deelnemen aan Groepschat",
+        "joinTriangleSwap": "Deelnemen aan Driehoeksruil",
+        "notInterested": "Niet Geïnteresseerd"
+    },
     "register": {
         "signUp": "Maak een account aan",
         "firstName": "Voornaam",
@@ -231,7 +236,9 @@
         "uploadImagesLabel": "Afbeeldingen uploaden:",
         "completeButton": "Voltooien",
         "descriptionRequired": "Beschrijving is vereist.",
-        "imagesRequired": "Er is minstens één afbeelding vereist."
+        "imagesRequired": "Er is minstens één afbeelding vereist.",
+            "successMessage": "Je hebt je profielinformatie succesvol voltooid",
+    "failureMessage": "Er is iets misgegaan, probeer het later opnieuw"
     },
     "forgotPassword": {
         "title": "Wachtwoord Vergeten",
@@ -248,7 +255,8 @@
         "completeProfile": "Voltooi Interesse!",
         "swapWithMe": "Ruil met mij",
         "myInterests": "Mijn interesses",
-        "myFavorites": "Mijn favorieten"
+        "myFavorites": "Mijn favorieten",
+        "myTriangleSwaps": "Mijn Driehoekswissels"
     },
     "chat": {
         "viewHouse": "Bekijk Huis"

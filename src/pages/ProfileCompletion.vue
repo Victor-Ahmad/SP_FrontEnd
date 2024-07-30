@@ -278,9 +278,10 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { useRoute } from "vue-router";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import Swal from "sweetalert2";
 import {
   updateDescriptionAndImages,
   getHouseTypes,
@@ -291,13 +292,26 @@ export default {
   name: "ProfileCompletion",
   setup() {
     const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
     const description = ref("");
     const images = ref([]);
-    const route = useRoute();
     const showDescription = ref(route.query.showDescription === "true");
     const showImages = ref(route.query.showImages === "true");
     const showWishes = ref(route.query.showWishes === "true");
     const isLoading = computed(() => store.getters.isLoading);
+
+    // Method to check flags and redirect if all are false
+    const checkFlagsAndRedirect = () => {
+      if (!showDescription.value && !showImages.value && !showWishes.value) {
+        router.push({ path: "/home" });
+      }
+    };
+
+    // Call checkFlagsAndRedirect on mount
+    onMounted(() => {
+      checkFlagsAndRedirect();
+    });
 
     // Validation state
     const validationErrors = ref({});
@@ -400,8 +414,26 @@ export default {
           formData.value.wish
         );
         console.log("Response:", response);
+
+        if (response.success == 1) {
+          Swal.fire({
+            icon: "success",
+            title: "Profile Compeleted Succesfully",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            router.push({ path: "/home" });
+          });
+        } else {
+          throw new Error(response.message || "Unknown error");
+        }
       } catch (error) {
         console.error("Error submitting form:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Failed to compelete profile data",
+          text: error.message || "Something went wrong, try again later",
+        });
       } finally {
         store.commit("setLoading", false); // Set loading state to false
       }
@@ -613,6 +645,11 @@ export default {
     const areaDropdown = ref(null);
     const featuresDropdown = ref(null);
 
+    // Watch for changes in the flags and call checkFlagsAndRedirect
+    watch([showDescription, showImages, showWishes], () => {
+      checkFlagsAndRedirect();
+    });
+
     return {
       description,
       images,
@@ -671,7 +708,7 @@ export default {
 }
 
 .complete-btn {
-  background-color: #5e1675;
+  background-color: #1c592f;
 }
 
 .image {

@@ -62,13 +62,13 @@
           <div class="flex justify-between lg:hidden">
             <button
               @click="openFilterDrawer"
-              class="w-2/3 p-4 border-r border-l border-t border-b border-[#1c592f] text-[#1c592f] flex items-center rounded-l-md justify-center"
+              class="w-2/3 p-4 border-r border-l border-t border-b bg-white border-[#1c592f] text-[#1c592f] flex items-center rounded-l-md justify-center"
             >
               <i class="fas fa-filter mr-2"></i> {{ $t("page.filters") }}
             </button>
             <button
               @click="clearFilters"
-              class="w-1/3 p-4 border-r border-t border-b text-gray-700 border-gray-700 flex items-center rounded-r-md justify-center"
+              class="w-1/3 p-4 border-r border-t border-b bg-white text-gray-700 border-gray-700 flex items-center rounded-r-md justify-center"
             >
               <i class="fas fa-times mr-2"></i> {{ $t("filters.clear") }}
             </button>
@@ -90,7 +90,7 @@
         </div>
         <div
           v-else-if="activeTab === 'triangles'"
-          class="col-span-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
+          class="col-span-full grid-cols-1 gap-6 px-4"
         >
           <TriangleSwapCard
             v-for="triangle in triangleSwapHouses"
@@ -256,8 +256,10 @@ export default {
 
     const setActiveTab = (tab) => {
       if (tab === "triangles") {
+        fetchTriangleSwapHouses();
         activeTab.value = "triangles";
       } else {
+        fetchFilteredHouses();
         activeTab.value = tab;
       }
     };

@@ -2,7 +2,7 @@
   <div
     class="profile-page flex flex-col items-center pb-20 lg:p-6 min-h-screen bg-white"
   >
-    <div v-if="profile" class="w-full max-w-7xl bg-white p-8">
+    <div v-if="profile" class="w-full max-w-7xl bg-white p-8 mb-36">
       <div class="flex flex-col md:flex-row justify-between items-center mb-8">
         <div class="profile-header flex flex-col md:flex-row items-center">
           <img
@@ -67,7 +67,7 @@
                 :readonly="true"
                 :class="inputClass"
                 v-model="profile.first_name"
-                class="input-editable w-full"
+                class="input-noneditable w-full"
               />
             </div>
             <div
@@ -80,7 +80,7 @@
                 :readonly="true"
                 :class="inputClass"
                 v-model="profile.last_name"
-                class="input-editable w-full"
+                class="input-noneditable w-full"
               />
             </div>
             <div
@@ -93,7 +93,7 @@
                 :readonly="true"
                 :class="inputClass"
                 v-model="profile.email"
-                class="input-editable w-full"
+                class="input-noneditable w-full"
               />
             </div>
             <div
@@ -106,7 +106,7 @@
                 :readonly="true"
                 :class="inputClass"
                 v-model="profile.number"
-                class="input-editable w-full"
+                class="input-noneditable w-full"
               />
             </div>
           </div>
@@ -127,7 +127,7 @@
               :readonly="true"
               :class="inputClass"
               v-model="profile.one_to_one_swap_house.house_type.type"
-              class="input-editable w-full"
+              class="input-noneditable w-full"
             />
           </div>
           <div
@@ -140,7 +140,7 @@
               :readonly="true"
               :class="inputClass"
               v-model="profile.one_to_one_swap_house.location"
-              class="input-editable w-full"
+              class="input-noneditable w-full"
             />
           </div>
           <div
@@ -150,25 +150,23 @@
               >{{ $t("profile.house.numberOfRooms") }}:</strong
             >
             <div class="w-full flex items-center">
-              <ul v-if="isEditable" class="flex w-full no-gap-list">
+              <ul class="flex w-full no-gap-list">
                 <li
                   v-for="number in numberOfRooms"
                   :key="number"
-                  @click="selectNumberOfRooms(number)"
-                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
-                  :class="
-                    roomClasses(
+                  @click="isEditable ? selectNumberOfRooms(number) : null"
+                  class="flex-1 p-2 border border-gray-300 rounded text-center room-item"
+                  :class="[
+                    getRoomClasses(
                       profile.one_to_one_swap_house.number_of_rooms,
                       number
-                    )
-                  "
+                    ),
+                    { 'cursor-pointer': isEditable },
+                  ]"
                 >
                   {{ number }}
                 </li>
               </ul>
-              <p v-else class="input-editable w-full">
-                {{ profile.one_to_one_swap_house.number_of_rooms }}
-              </p>
             </div>
           </div>
           <div
@@ -177,12 +175,25 @@
             <strong class="w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.floorNumber") }}:</strong
             >
-            <input
-              :readonly="!isEditable"
-              :class="inputClass"
-              v-model="profile.one_to_one_swap_house.floor_number"
-              class="input-editable w-full"
-            />
+            <div class="w-full flex items-center">
+              <ul class="flex w-full no-gap-list">
+                <li
+                  v-for="number in floorOptions"
+                  :key="number"
+                  :class="[
+                    'flex-1 p-2 border border-gray-300 rounded text-center room-item',
+                    getFloorClasses(
+                      profile.one_to_one_swap_house.floor_number,
+                      number
+                    ),
+                    { 'cursor-pointer': isEditable },
+                  ]"
+                  @click="isEditable ? selectFloorNumber(number) : null"
+                >
+                  {{ number === 0 ? "G" : number }}
+                </li>
+              </ul>
+            </div>
           </div>
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
@@ -210,19 +221,6 @@
               class="input-editable w-full"
             ></textarea>
           </div>
-          <!-- <div
-            class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
-          >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
-              >{{ $t("profile.house.swapReason") }}:</strong
-            >
-            <textarea
-              :readonly="!isEditable"
-              :class="inputClass"
-              v-model="profile.one_to_one_swap_house.swap_reason"
-              class="input-editable w-full"
-            ></textarea>
-          </div> -->
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
@@ -396,43 +394,59 @@
                 </div>
               </div>
             </div>
-
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
               <strong class="w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.numberOfRooms") }}:</strong
               >
-              <div v-if="!isEditable" class="input-editable w-full p-2">
-                {{ wish.number_of_rooms }}
-              </div>
-              <div v-else class="w-full">
+              <div class="w-full">
                 <ul class="flex w-full no-gap-list">
                   <li
-                    v-for="(number, index) in numberOfRooms"
-                    :key="index"
-                    @click="selectWishNumberOfRooms(wishIndex, number)"
-                    class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
-                    :class="roomClasses(wish.number_of_rooms, number)"
+                    v-for="number in numberOfRooms"
+                    :key="number"
+                    @click="
+                      isEditable
+                        ? selectWishNumberOfRooms(wishIndex, number)
+                        : null
+                    "
+                    class="flex-1 p-2 border border-gray-300 rounded text-center room-item"
+                    :class="[
+                      getRoomClasses(wish.number_of_rooms, number),
+                      { 'cursor-pointer': isEditable },
+                    ]"
                   >
                     {{ number }}
                   </li>
                 </ul>
               </div>
             </div>
-
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
               <strong class="w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.floorNumber") }}:</strong
               >
-              <input
-                :readonly="!isEditable"
-                :class="inputClass"
-                v-model="wish.floor_number"
-                class="input-editable w-full"
-              />
+              <div class="w-full flex items-center">
+                <ul class="flex w-full no-gap-list">
+                  <li
+                    v-for="number in floorOptions"
+                    :key="number"
+                    :class="[
+                      'flex-1 p-2 border border-gray-300 rounded text-center room-item',
+                      getFloorClasses(wish.floor_number, number),
+                      { 'cursor-pointer': isEditable },
+                    ]"
+                    @click="
+                      isEditable
+                        ? selectWishFloorNumber(wishIndex, number)
+                        : null
+                    "
+                  >
+                    {{ number === 0 ? "G" : number }}
+                  </li>
+                </ul>
+              </div>
             </div>
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
@@ -522,7 +536,7 @@ import {
   updateProfile,
   getHouseFeatures,
 } from "@/services/apiService";
-
+import Swal from "sweetalert2";
 import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
 
 export default {
@@ -546,9 +560,11 @@ export default {
       selectedImage: "",
       isPopupVisible: false,
       features: [],
+      delete_images: [],
       selectedFeatureNames: "",
       showFeaturesDropdown: false,
-      numberOfRooms: [1, 2, 3, 4, 5],
+      numberOfRooms: [1, 2, 3, 4, 5, 6], // Ensure this matches the form component
+      floorOptions: [0, 1, 2, 3, 4, 5, 6], // Ensure this matches the form component
     };
   },
   async created() {
@@ -586,9 +602,7 @@ export default {
   },
   computed: {
     inputClass() {
-      return this.isEditable
-        ? "border-2 border-blue-500 bg-blue-50 shadow-md py-2 px-3"
-        : "bg-transparent py-2 px-3";
+      return "bg-transparent py-2 px-3";
     },
   },
   methods: {
@@ -647,7 +661,12 @@ export default {
     toggleEdit() {
       if (this.isEditable) {
         const modifiedProfileData = this.getModifiedProfileData();
-
+        if (this.newImages.length > 0) {
+          modifiedProfileData.images = this.newImages;
+        }
+        if (this.removedImages.length > 0) {
+          modifiedProfileData.delete_images = this.removedImages;
+        }
         updateProfile(modifiedProfileData) // Save the profile data
           .then((response) => {
             if (response.success) {
@@ -663,6 +682,12 @@ export default {
                       this.profile.one_to_one_swap_house.images[0].image_path
                     )
                   : null;
+              Swal.fire({
+                icon: "success",
+                title: "Profile Updated Successfully",
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(() => {});
             } else {
               this.error = response.message;
             }
@@ -713,31 +738,50 @@ export default {
     removeWishLocation(wishIndex, locationIndex) {
       this.profile.wishes[wishIndex].wish_locations.splice(locationIndex, 1);
     },
-
-    // removeWishLocation(wishIndex, locationIndex) {
-    //   this.profile.wishes[wishIndex].wish_locations.splice(locationIndex, 1);
-    //   this.wishLocations[wishIndex].splice(locationIndex, 1);
-    // },
-
     selectNumberOfRooms(number) {
       this.profile.one_to_one_swap_house.number_of_rooms = number;
     },
     selectWishNumberOfRooms(wishIndex, number) {
       this.profile.wishes[wishIndex].number_of_rooms = number;
     },
-    roomClasses(selectedNumber, number) {
+    selectFloorNumber(number) {
+      if (this.isEditable) {
+        this.profile.one_to_one_swap_house.floor_number = number;
+      }
+    },
+    selectWishFloorNumber(wishIndex, number) {
+      if (this.isEditable) {
+        this.profile.wishes[wishIndex].floor_number = number;
+      }
+    },
+    getRoomClasses(selectedNumber, number) {
       return {
         "bg-white": selectedNumber === number,
         "text-[#1c592f]": selectedNumber === number,
-        "hover:bg-white": true,
-        "hover:shadow-[0_0_10px_#1c592f]": true,
-        "hover:text-[#1c592f]": true,
+        "hover:bg-white": this.isEditable,
+        "hover:shadow-[0_0_10px_#1c592f]": this.isEditable,
+        "hover:text-[#1c592f]": this.isEditable,
         "border-gray-300": true,
-        "hover:border-[#1c592f]": true,
+        "hover:border-[#1c592f]": this.isEditable,
         transition: true,
         "duration-300": true,
         "ease-in-out": true,
         "selected-room": selectedNumber === number,
+      };
+    },
+    getFloorClasses(selectedNumber, number) {
+      return {
+        "bg-white": selectedNumber == number,
+        "text-[#1c592f]": selectedNumber == number,
+        "hover:bg-white": this.isEditable,
+        "hover:shadow-[0_0_10px_#1c592f]": this.isEditable,
+        "hover:text-[#1c592f]": this.isEditable,
+        "border-gray-300": true,
+        "hover:border-[#1c592f]": this.isEditable,
+        transition: true,
+        "duration-300": true,
+        "ease-in-out": true,
+        "selected-room": selectedNumber == number,
       };
     },
 
@@ -868,6 +912,9 @@ export default {
       ) {
         modifiedData.one_to_one_swap_house.floor_number =
           this.profile.one_to_one_swap_house.floor_number;
+      } else {
+        modifiedData.one_to_one_swap_house.floor_number =
+          this.originalProfile.one_to_one_swap_house.floor_number;
       }
       if (
         this.profile.one_to_one_swap_house.price !==
@@ -915,6 +962,8 @@ export default {
         }
         if (wish.floor_number !== originalWish.floor_number) {
           modifiedWish.floor_number = wish.floor_number;
+        } else {
+          modifiedWish.floor_number = originalWish.floor_number;
         }
         if (wish.specific_properties !== originalWish.specific_properties) {
           modifiedWish.features = wish.specific_properties.map(
@@ -987,6 +1036,14 @@ export default {
 
 <style scoped>
 .input-field,
+.input-noneditable {
+  @apply w-full p-2 border border-gray-300 rounded border-none text-lg w-full transition duration-300 bg-transparent;
+}
+
+.input-noneditable:focus {
+  @apply outline-none;
+}
+
 .input-editable {
   @apply w-full p-2 border border-gray-300 rounded;
 }
@@ -1030,10 +1087,10 @@ export default {
 .room-item {
   transition: all 0.3s ease-in-out;
 }
-.room-item:hover {
+/* .room-item:hover {
   box-shadow: 0 0 10px #1c592f;
   border-color: #1c592f;
-}
+} */
 .selected-room {
   background-color: white !important;
   color: #1c592f !important;

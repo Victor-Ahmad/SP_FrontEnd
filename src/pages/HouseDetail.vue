@@ -434,22 +434,40 @@ export default {
     },
     async toggleNotInterested(event) {
       event.stopPropagation();
-      this.isNotInterested = !this.isNotInterested;
+      await this.handleNotInterested();
+    },
+    async handleNotInterested() {
       if (this.isNotInterested) {
-        this.isInterested = false;
-        try {
-          const response = await disinterest(this.house.id);
-          console.log("Not interested successfully:", response);
-        } catch (error) {
-          console.error("Error expressing disinterest:", error);
-        }
-      } else {
+        this.isNotInterested = false;
         try {
           const response = await removeNotInterest(this.house.id);
           console.log("Not interested removed successfully:", response);
         } catch (error) {
-          console.error("Error removing not interest:", error);
+          console.error("Error removing not interested:", error);
         }
+      } else {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "This card will be hidden, you can check the hidden cards using the filter",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.isNotInterested = true;
+            this.isInterested = false;
+            try {
+              const response = await disinterest(this.house.id);
+              this.$router.push({ path: "/home" });
+              console.log("Not interested successfully:", response);
+            } catch (error) {
+              console.error("Error expressing disinterest:", error);
+            }
+          }
+        });
       }
     },
     openImage(image) {

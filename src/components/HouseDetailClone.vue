@@ -155,6 +155,30 @@
         :visible="isPopupVisible"
         @close="isPopupVisible = false"
       />
+      <!-- Confirmation Popup -->
+      <div
+        v-if="showConfirmationPopup"
+        class="absolute inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
+        @click.stop
+      >
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <p class="mb-4">{{ $t("page.areYouSureNotInterested") }}</p>
+          <div class="flex justify-end space-x-2">
+            <button
+              @click="confirmNotInterested(true)"
+              class="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              {{ $t("page.yes") }}
+            </button>
+            <button
+              @click="confirmNotInterested(false)"
+              class="bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              {{ $t("page.no") }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -195,6 +219,7 @@ export default {
       isFavorite: false,
       isInterested: false,
       isNotInterested: false,
+      showConfirmationPopup: false, // State for confirmation popup
     };
   },
   methods: {
@@ -271,8 +296,17 @@ export default {
         }
       }
     },
-    async toggleNotInterested(event) {
+    toggleNotInterested(event) {
       event.stopPropagation();
+      this.showConfirmationPopup = true; // Show the confirmation popup
+    },
+    async confirmNotInterested(confirm) {
+      if (confirm) {
+        await this.handleNotInterested();
+      }
+      this.showConfirmationPopup = false; // Hide the confirmation popup
+    },
+    async handleNotInterested() {
       this.isNotInterested = !this.isNotInterested;
       if (this.isNotInterested) {
         this.isInterested = false;

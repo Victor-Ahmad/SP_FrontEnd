@@ -28,6 +28,15 @@ export const getSwapHouses = async (formData, page) => {
   }
 };
 
+export const getMyTriangleSwaps = async () => {
+  try {
+    const response = await axiosInstance.get("/top-perfect-swaps");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 //  Interested
@@ -299,77 +308,88 @@ export const sendMessage = async (message, receiverUserId) => {
 };
 
 export const updateProfile = async (data) => {
-  const form = new FormData();
-
-  // Append nested wish data if it exists
-  if (data.wishes) {
-    data.wishes.forEach((wish, wishIndex) => {
-      for (const key in wish) {
-        if (key === "locations" && wish[key].length > 0) {
-          wish[key].forEach((location, locationIndex) => {
-            form.append(`wish[locations][${locationIndex}]`, location);
-          });
-        } else if (key === "features" && wish[key].length > 0) {
-          wish[key].forEach((feature, featureIndex) => {
-            form.append(`wish[property_ids][${featureIndex}]`, feature);
-          });
-        } else {
-          form.append(`wish[${key}]`, wish[key]);
+  try {
+    const form = new FormData();
+    // Append nested wish data if it exists
+    if (data.wishes) {
+      data.wishes.forEach((wish, wishIndex) => {
+        for (const key in wish) {
+          if (key === "locations" && wish[key].length > 0) {
+            wish[key].forEach((location, locationIndex) => {
+              form.append(`wish[locations][${locationIndex}]`, location);
+            });
+          } else if (key === "features" && wish[key].length > 0) {
+            wish[key].forEach((feature, featureIndex) => {
+              form.append(`wish[property_ids][${featureIndex}]`, feature);
+            });
+          } else {
+            form.append(`wish[${key}]`, wish[key]);
+          }
         }
+      });
+    }
+    console.log(data.one_to_one_swap_house["description"]); // Append nested house data if it exists
+    if (data.one_to_one_swap_house) {
+      for (const key in data.one_to_one_swap_house) {
+        if (
+          Array.isArray(data.one_to_one_swap_house[key]) &&
+          data.one_to_one_swap_house[key].length > 0
+        ) {
+          if (key == "specific_properties") {
+            data.one_to_one_swap_house[key].forEach((item, index) => {
+              form.append(`house[property_ids][${index}]`, item);
+            });
+          } else {
+            data.one_to_one_swap_house[key].forEach((item, index) => {
+              form.append(`house[${key}]`, item);
+            });
+          }
+        } else if (key == "description") {
+          form.append(`house[${key}]`, data.one_to_one_swap_house[key]);
+        } else if (data.one_to_one_swap_house[key]) {
+          form.append(`house[${key}]`, data.one_to_one_swap_house[key]);
+        }
+      }
+    }
+
+    // Append other non-nested data
+    const nonNestedFields = [
+      "first_name",
+      "last_name",
+      "email",
+      "phone_number",
+      "agreed_privacy_policy",
+      "agreed_terms_of_use",
+    ];
+
+    nonNestedFields.forEach((field) => {
+      if (data[field] !== undefined) {
+        form.append(field, data[field]);
       }
     });
-  }
-
-  // Append nested house data if it exists
-  if (data.one_to_one_swap_house) {
-    for (const key in data.one_to_one_swap_house) {
-      if (
-        Array.isArray(data.one_to_one_swap_house[key]) &&
-        data.one_to_one_swap_house[key].length > 0
-      ) {
-        if (key === "specific_properties") {
-          data.one_to_one_swap_house[key].forEach((item, index) => {
-            form.append(`house[property_ids][${index}]`, item);
-          });
-        } else {
-          data.one_to_one_swap_house[key].forEach((item, index) => {
-            form.append(`house[${key}][${index}]`, item);
-          });
-        }
-      } else if (data.one_to_one_swap_house[key]) {
-        form.append(`house[${key}]`, data.one_to_one_swap_house[key]);
-      }
+    if (data.delete_images && data.delete_images.length > 0) {
+      data.delete_images.forEach((item, index) => {
+        form.append(`house[delete_images][${index}]`, item);
+      });
     }
-  }
-
-  // Append other non-nested data
-  const nonNestedFields = [
-    "first_name",
-    "last_name",
-    "email",
-    "phone_number",
-    "agreed_privacy_policy",
-    "agreed_terms_of_use",
-  ];
-
-  nonNestedFields.forEach((field) => {
-    if (data[field] !== undefined) {
-      form.append(field, data[field]);
+    for (let pair of form.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
     }
-  });
+    //   const form2 = new FormData();
+    // form.append("wish[floor_number]", 5);
+    // form.append("house[floor_number]", 3);
+    if (data.images && data.images.length > 0) {
+      data.images.forEach((file, index) => {
+        form.append(`house[images][${index}]`, file);
+      });
+    }
 
-  for (let pair of form.entries()) {
-    console.log(`${pair[0]}: ${pair[1]}`);
-  }
-  //   const form2 = new FormData();
-  form.append("wish[floor_number]", 5);
-  form.append("house[floor_number]", 3);
-  try {
     const response = await axiosInstance.post("/update_profile", form, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+
     return response.data;
   } catch (error) {
     console.error("Error updating profile:", error);

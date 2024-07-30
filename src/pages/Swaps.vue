@@ -41,6 +41,16 @@
               {{ $t("profileTabs.myFavorites") }} ({{ myFavoritesCount }})
             </button>
           </div>
+          <div class="mb-2 underlined-tabs">
+            <button
+              :class="{ 'active-tab': activeTab === 'my_triangles' }"
+              @click="setActiveTab('my_triangles')"
+            >
+              {{ $t("profileTabs.myTriangleSwaps") }} ({{
+                myTringleSwapsCount
+              }})
+            </button>
+          </div>
         </div>
       </div>
       <div class="w-full md:w-3/4 lg:pt-4 px-4 lg:py-4">
@@ -148,6 +158,37 @@
             </div>
           </template>
         </div>
+
+        <!-- My Triangle Swaps Tab -->
+        <div
+          v-else-if="activeTab === 'my_triangles'"
+          class="col-span-full grid-cols-1 gap-6 px-4"
+        >
+          <template v-if="my_triangles.length">
+            <TriangleSwapCard
+              v-for="triangle in triangleSwapHouses"
+              :key="triangle.house_a.id"
+              :triangle="triangle"
+              :myHouse="triangleSwapHousesMyHouse"
+            />
+            <div class="col-span-full">
+              <BasePagination
+                :currentPage="triangleCurrentPage"
+                :totalPages="triangleTotalPages"
+                @changePage="fetchTriangleSwapHouses"
+              />
+            </div>
+          </template>
+          <template v-else>
+            <div class="placeholder">
+              <img
+                src="@/assets/images/logo2.png"
+                alt="Placeholder"
+                class="grayscale"
+              />
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -157,6 +198,8 @@
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import HouseCardWithSwap from "@/components/HouseCardWithSwap.vue";
+import TriangleSwapCard from "@/components/TriangleSwapCard.vue";
+import BasePagination from "@/components/BasePagination.vue";
 import {
   getMyInterests,
   getMyFavorites,
@@ -168,6 +211,8 @@ export default {
   name: "Swaps",
   components: {
     HouseCardWithSwap,
+    TriangleSwapCard,
+    BasePagination,
   },
   setup() {
     const store = useStore();
@@ -175,6 +220,7 @@ export default {
     const error = computed(() => store.getters.error);
     const my_interests = ref([]);
     const my_favorites = ref([]);
+    const my_triangles = ref([]);
     const swap_with_me = ref([]);
     const complete_interest = ref([]);
     const my_disinterests = ref([]);
@@ -188,6 +234,16 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching interests:", error);
+      }
+    };
+    const fetchMyTriangleSwaps = async () => {
+      try {
+        const response = await getMyInterests();
+        if (response && response.success) {
+          my_triangles.value = response.result;
+        }
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
       }
     };
 
@@ -231,6 +287,7 @@ export default {
         await fetchMyFavorites();
         await fetchSwapWithMe();
         await fetchCompleteInterest();
+        await fetchMyTriangleSwaps();
       } finally {
         store.commit("setLoading", false); // Finish loading
       }
@@ -252,6 +309,8 @@ export default {
             break;
           case "my_favorites":
             await fetchMyFavorites();
+          case "my_triangles":
+            await fetchMyTriangleSwaps();
             break;
         }
       } catch (error) {
@@ -270,12 +329,14 @@ export default {
     const swapWithMeCount = computed(() => swap_with_me.value.length);
     const myInterestsCount = computed(() => my_interests.value.length);
     const myFavoritesCount = computed(() => my_favorites.value.length);
+    const myTringleSwapsCount = computed(() => my_triangles.value.length);
 
     return {
       isLoading,
       error,
       my_interests,
       my_favorites,
+      my_triangles,
       swap_with_me,
       complete_interest,
       my_disinterests,
@@ -286,6 +347,7 @@ export default {
       swapWithMeCount,
       myInterestsCount,
       myFavoritesCount,
+      myTringleSwapsCount,
     };
   },
 };

@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex justify-center mb-4 hover:scale-[1.02] duration-300 rounded overflow-hidden shadow-lg custom_hover"
-    @click="goToDetailPage"
+    class="flex justify-center mb-4 duration-300 rounded overflow-hidden shadow-lg hover:scale-[1.02] custom_hover"
+    @click="handleCardClick"
   >
     <div
-      class="flex flex-col w-full max-w-full bg-white cursor-pointer relative"
+      class="flex flex-col w-full max-w-full bg-white cursor-pointer relative min-h-full"
     >
       <!-- Swiper Component -->
       <div class="flex-shrink-0" style="width: 100%; height: 200px">
@@ -34,7 +34,7 @@
 
       <!-- House Details -->
       <div
-        class="px-2 py-2 flex flex-col justify-between w-full relative house-card-content"
+        class="px-2 py-2 flex flex-col justify-between w-full relative house-card-content min-h-[210px]"
       >
         <div class="flex justify-between items-start">
           <div>
@@ -69,12 +69,7 @@
                 <strong>Area: </strong> {{ house?.area || "" }} (m²)
               </div>
             </div>
-            <div
-              :class="{
-                'border-t border-gray-200 pt-2': validProperties.length,
-              }"
-              class="flex flex-wrap space-x-2"
-            >
+            <div class="flex flex-wrap space-x-2 border-t border-gray-200 pt-2">
               <span
                 v-for="property in validProperties"
                 :key="property.id"
@@ -91,6 +86,7 @@
 </template>
 
 <script>
+import { ref, computed } from "vue"; // Import computed here
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/swiper-bundle.css";
 
@@ -106,27 +102,40 @@ export default {
       required: true,
     },
   },
+  methods: {
+    handleCardClick() {
+      this.goToDetailPage();
+    },
+    goToDetailPage() {
+      this.$router.push({ name: "HouseDetail", params: { id: this.house.id } });
+    },
+  },
+  setup(props) {
+    const isInterested = ref(props.house.is_interested);
+    const isNotInterested = ref(props.house.is_not_interested);
+    const showConfirmationPopup = ref(false);
 
-  computed: {
-    validProperties() {
+    const validProperties = computed(() => {
       return (
-        this.house?.specific_properties?.filter(
+        props.house?.specific_properties?.filter(
           (property) =>
             property &&
             property.specific_property &&
             property.specific_property.name
         ) || []
       );
-    },
-  },
-  methods: {
-    getImageUrl(path) {
-      return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
-    },
+    });
 
-    goToDetailPage() {
-      this.$router.push({ name: "HouseDetail", params: { id: this.house.id } });
-    },
+    const getImageUrl = (path) => {
+      return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
+    };
+
+    return {
+      isInterested,
+      isNotInterested,
+      validProperties,
+      getImageUrl,
+    };
   },
 };
 </script>
@@ -235,7 +244,9 @@ button:hover {
   grid-template-columns: repeat(1, 1fr); /* One column for mobile */
   gap: 4px 16px;
 }
-
+.custom_hover:hover {
+  box-shadow: 0 0 10px #1c592f;
+}
 @media (min-width: 640px) {
   .house-details {
     grid-template-columns: repeat(2, 1fr); /* Two columns for larger screens */

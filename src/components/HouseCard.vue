@@ -66,12 +66,7 @@
                 {{ truncatedArea }} (m²)
               </div>
             </div>
-            <div
-              :class="{
-                'border-t border-gray-200 pt-2': validProperties.length,
-              }"
-              class="flex flex-wrap space-x-2"
-            >
+            <div class="flex flex-wrap space-x-2 border-t border-gray-200 pt-2">
               <span
                 v-for="property in validProperties"
                 :key="property.id"
@@ -113,7 +108,7 @@
               'w-1/3 lg:w-5/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 md:flex-2',
               isNotInterested
                 ? 'bg-gray-custom text-white '
-                : 'border border-red-custom text-red-custom',
+                : 'border border-gray-custom ',
             ]"
           >
             <i class="fas fa-thumbs-down mr-1"></i>
@@ -121,7 +116,7 @@
           </button>
           <button
             @click.stop="startChat($event)"
-            class="w-1/3 lg:w-3/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 text-white"
+            class="w-1/3 lg:w-3/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8]"
           >
             <i class="fas fa-comment mr-1"></i>
             <span class="hidden md:inline">{{ $t("page.chat") }}</span>
@@ -400,11 +395,10 @@ button:hover {
 .text-green-custom {
   color: #22893c;
 }
-.text-red-custom {
-  color: #8a8a8a;
-}
-.border-red-custom {
+
+.border-gray-custom {
   border: 1px solid #8a8a8a;
+  color: #8a8a8a;
 }
 .custom_hover:hover {
   box-shadow: 0 0 10px #1c592f;
@@ -421,9 +415,8 @@ button:hover {
   color: #fff;
 }
 .bg-chat-custom2 {
-  background-color: #154aa8;
+  /* background-color: #154aa8; */
   border: 1px solid #154aa8;
-  color: #fff;
 }
 
 .bg-gray-custom {
@@ -433,10 +426,9 @@ button:hover {
 
 .border-interested-active {
   border: 1px solid #1c592f;
-}
-.text-interested-active {
   color: #1c592f;
 }
+
 .bg-interested-active {
   background-color: #1c592f;
 }
@@ -468,5 +460,14 @@ button:hover {
 
 .pt-2 {
   padding-top: 0.5rem;
+}
+.border-interested-active:hover {
+  box-shadow: 0 0 5px #1c592f;
+}
+.border-gray-custom:hover {
+  box-shadow: 0 0 5px #8a8a8a;
+}
+.bg-chat-custom2:hover {
+  box-shadow: 0 0 5px #154aa8;
 }
 </style>

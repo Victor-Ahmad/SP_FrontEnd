@@ -8,6 +8,11 @@
         "register": "Don't have an account? Register",
         "noAccount": "No account yet?"
     },
+    "triangle":{
+        "joinGroupChat": "Join Group Chat",
+        "joinTriangleSwap": "Join Triangle Swap",
+        "notInterested": "Not Interested"
+    },
     "register": {
         "signUp": "Sign up for an account",
         "firstName": "First Name",
@@ -231,7 +236,9 @@
         "uploadImagesLabel": "Upload Images:",
         "completeButton": "Complete",
         "descriptionRequired": "Description is required.",
-        "imagesRequired": "At least one image is required."
+        "imagesRequired": "At least one image is required.",
+        "successMessage": "You have successfully completed your profile information",
+    "failureMessage": "Something went wrong, please try again later"
     },
     "forgotPassword": {
         "title": "Forgot Password",
@@ -247,9 +254,11 @@
         "completeProfile": "Complete Interest!",
         "swapWithMe": "Swap with me",
         "myInterests": "My Interests",
-        "myFavorites": "My Favorites"
+        "myFavorites": "My Favorites",
+        "myTriangleSwaps":"My Triangle Swaps"
     },
     "chat": {
         "viewHouse": "View House"
     }
+   
 }
