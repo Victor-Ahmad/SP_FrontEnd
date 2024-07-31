@@ -162,7 +162,10 @@
         <!-- My Triangle Swaps Tab -->
         <div
           v-else-if="activeTab === 'my_triangles'"
-          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
+          :class="[
+            'col-span-full  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4',
+            my_triangles.length ? 'grid' : '',
+          ]"
         >
           <template v-if="my_triangles.length">
             <TriangleSwapCard
