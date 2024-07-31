@@ -12,6 +12,20 @@
           :slides-per-view="1"
           class="swiper-container"
           style="height: 100%"
+          :modules="modules"
+          :pagination="{ clickable: true }"
+          :autoplay="{ delay: 5000, disableOnInteraction: false }"
+          :grabCursor="true"
+          :effect="'creative'"
+          :creativeEffect="{
+            prev: {
+              shadow: true,
+              translate: ['-20%', 0, -1],
+            },
+            next: {
+              translate: ['100%', 0, 0],
+            },
+          }"
         >
           <swiper-slide v-for="(image, index) in house.images" :key="index">
             <img
@@ -154,7 +168,15 @@
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  EffectFade,
+  EffectCreative,
+} from "swiper/modules";
 import "swiper/swiper-bundle.css";
+
 import anime from "animejs";
 import {
   expressInterest,
@@ -182,6 +204,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  setup(props) {
+    return {
+      modules: [Navigation, Pagination, Autoplay, EffectFade, EffectCreative],
+    };
   },
   data() {
     return {
