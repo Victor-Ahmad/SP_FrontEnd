@@ -405,6 +405,16 @@ export const isChatExisting = async (userId) => {
     throw error;
   }
 };
+export const isGroupChatExisting = async (user1_id, user2_id) => {
+  try {
+    const response = await axiosInstance.get(
+      `/is_chat_existing/${user1_id}/${user2_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const registerUser = async (formData) => {
   const form = new FormData();

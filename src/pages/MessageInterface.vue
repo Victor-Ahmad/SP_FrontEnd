@@ -1,52 +1,64 @@
 <template>
-  <div class="flex flex-col h-full">
+  <div
+    :class="[
+      'flex flex-col h-full',
+      localSelectedChat?.second_person ? 'pt-32 lg:pt-0' : 'pt-10 lg:pt-0',
+    ]"
+  >
     <div
-      v-if="localSelectedChat && localSelectedChat.other_persons?.length > 0"
-      class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center"
+      class="fixed z-50 lg:z-0 lg:static top-0 w-full flex flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
     >
-      <div>
-        <div class="font-bold text-lg">
-          {{ localSelectedChat.other_persons[0].first_name }}
-          {{ localSelectedChat.other_persons[0].last_name }}
-        </div>
-        <div class="text-sm text-gray-600">
-          {{ localSelectedChat.other_persons[0].email }}
-        </div>
-        <div class="text-xs text-gray-500">
-          {{ localSelectedChat.other_persons[0].street }},
-          {{ localSelectedChat.other_persons[0].location }}
-        </div>
-      </div>
-      <button
-        @click="goToDetailPage"
-        class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+      <div
+        v-if="localSelectedChat && localSelectedChat.first_person"
+        :class="[
+          'p-4 flex justify-between items-center w-full ',
+          localSelectedChat.second_person ? 'md:w-5/12' : 'md:px-10',
+        ]"
       >
-        {{ $t("chat.viewHouse") }}
-      </button>
-    </div>
-    <div
-      v-else-if="localSelectedChat && localSelectedChat.other_person"
-      class="p-4 bg-white shadow-lg mb-1 flex justify-between items-center"
-    >
-      <div>
-        <div class="font-bold text-lg">
-          {{ localSelectedChat.other_person.first_name }}
-          {{ localSelectedChat.other_person.last_name }}
+        <div>
+          <div class="font-bold text-lg">
+            {{ localSelectedChat.first_person.first_name }}
+            {{ localSelectedChat.first_person.last_name }}
+          </div>
+          <div class="text-sm text-gray-600">
+            {{ localSelectedChat.first_person.email }}
+          </div>
+          <div class="text-xs text-gray-500">
+            {{ localSelectedChat.first_person.street }},
+            {{ localSelectedChat.first_person.location }}
+          </div>
         </div>
-        <div class="text-sm text-gray-600">
-          {{ localSelectedChat.other_person.email }}
-        </div>
-        <div class="text-xs text-gray-500">
-          {{ localSelectedChat.other_person.street }},
-          {{ localSelectedChat.other_person.location }}
-        </div>
+        <button
+          @click="goToDetailPage(localSelectedChat.first_person.house_id)"
+          class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+        >
+          {{ $t("chat.viewHouse") }}
+        </button>
       </div>
-      <button
-        @click="goToDetailPage"
-        class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+      <div
+        v-if="localSelectedChat && localSelectedChat.second_person"
+        class="p-4 flex justify-between items-center w-full md:w-5/12"
       >
-        {{ $t("chat.viewHouse") }}
-      </button>
+        <div>
+          <div class="font-bold text-lg">
+            {{ localSelectedChat.second_person.first_name }}
+            {{ localSelectedChat.second_person.last_name }}
+          </div>
+          <div class="text-sm text-gray-600">
+            {{ localSelectedChat.second_person.email }}
+          </div>
+          <div class="text-xs text-gray-500">
+            {{ localSelectedChat.second_person.street }},
+            {{ localSelectedChat.second_person.location }}
+          </div>
+        </div>
+        <button
+          @click="goToDetailPage(localSelectedChat.second_person.house_id)"
+          class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+        >
+          {{ $t("chat.viewHouse") }}
+        </button>
+      </div>
     </div>
     <div
       ref="messageList"
@@ -66,6 +78,14 @@
             }"
             class="p-4 rounded-lg shadow-md max-w-xs relative"
           >
+            <div
+              v-if="
+                localSelectedChat.second_person && message.type == 'receiver'
+              "
+              class="mb-2"
+            >
+              {{ message.sender_name }}:
+            </div>
             <div class="message-content mb-2">{{ message.message }}</div>
             <div class="text-xs text-gray-500 flex justify-end items-center">
               <span class="message-timestamp">{{
@@ -116,18 +136,6 @@
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
-    <!-- Mobile View House Button -->
-    <div
-      v-if="localSelectedChat && localSelectedChat.house"
-      class="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg lg:hidden"
-    >
-      <button
-        @click="goToDetailPage"
-        class="w-full p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
-      >
-        View House
-      </button>
-    </div>
   </div>
 </template>
 
@@ -147,7 +155,7 @@ export default {
       newMessage: "",
       chatId: null,
       localSelectedChat: this.selectedChat, // Create a local copy of selectedChat
-      otherPersonHouseId: null, // Add otherPersonHouseId data property
+
       isSending: false,
     };
   },
@@ -155,7 +163,6 @@ export default {
     selectedChat(newChat) {
       if (newChat && newChat.id) {
         this.fetchMessages(newChat.id);
-        this.otherPersonHouseId = newChat.houseId; // Set otherPersonHouseId when selectedChat changes
       }
     },
   },
@@ -167,9 +174,8 @@ export default {
           this.localSelectedChat = {
             id: chatId,
             messages: response.result.messages,
-            other_persons: response.result.chat.first_person
-              ? [response.result.chat.first_person]
-              : [],
+            first_person: response.result?.chat?.first_person ?? null,
+            second_person: response.result?.chat?.second_person ?? null,
           };
           this.messages = response.result.messages.reverse();
           this.chatId = chatId;
@@ -215,13 +221,11 @@ export default {
         }
       });
     },
-    goToDetailPage() {
-      if (this.otherPersonHouseId) {
-        this.$router.push({
-          name: "HouseDetail",
-          params: { id: this.otherPersonHouseId },
-        });
-      }
+    goToDetailPage(id) {
+      this.$router.push({
+        name: "HouseDetail",
+        params: { id: id },
+      });
     },
     formatTime(timestamp) {
       const date = new Date(timestamp);
@@ -234,23 +238,14 @@ export default {
   },
   mounted() {
     const chatId = this.$route.params.chatId || this.$route.query.chatId;
-    const otherPersonHouseId =
-      this.$route.params.otherPersonHouseId ||
-      this.$route.query.otherPersonHouseId;
 
     console.log(this.$route);
 
-    if (this.selectedChat) {
-      otherPersonHouseId = otherPersonHouseId || this.selectedChat.houseId;
-    }
-
     if (chatId) {
       this.chatId = chatId;
-      this.otherPersonHouseId = otherPersonHouseId; // Set otherPersonHouseId
       this.fetchMessages(chatId);
     } else if (this.selectedChat && this.selectedChat.id) {
       this.chatId = this.selectedChat.id;
-      this.otherPersonHouseId = otherPersonHouseId; // Set otherPersonHouseId
       this.fetchMessages(this.selectedChat.id);
     }
   },

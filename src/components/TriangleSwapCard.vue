@@ -133,6 +133,7 @@ import {
   removeInterest,
   disinterest,
   removeNotInterest,
+  isGroupChatExisting,
 } from "@/services/apiService"; // Import necessary services
 
 export default {
@@ -162,11 +163,6 @@ export default {
         name: "TriangleSwapDetails",
         query: { triangle: JSON.stringify(props.triangle) },
       });
-    };
-
-    const joinGroupChat = () => {
-      console.log("Join Group Chat button clicked");
-      // Add logic to join group chat
     };
 
     const handleTriangleSwapClick = async (event) => {
@@ -243,13 +239,53 @@ export default {
 
     return {
       redirectToDetails,
-      joinGroupChat,
       handleTriangleSwapClick, // Bind new function
       toggleNotInterested,
       isInterested, // Track interest state
       isNotInterested, // Track not interested state
       isHiddenAfterInterest, // Track card visibility after interest
     };
+  },
+  methods: {
+    async joinGroupChat(event) {
+      event.stopPropagation();
+      try {
+        const response = await isGroupChatExisting(
+          this.triangle.house_b.user.id,
+          this.triangle.house_a.user.id
+        );
+
+        let chatId;
+        if (response.success) {
+          if (response.result && response.result.chat) {
+            chatId = response.result?.chat?.id;
+          } else {
+            chatId = response.result.id;
+          }
+
+          if (chatId) {
+            if (window.innerWidth <= 768) {
+              this.$router.push({
+                name: "MessageInterfacePage",
+                params: { chatId: chatId },
+                query: { otherPersonHouseId: this.house.id },
+              });
+            } else {
+              this.$router.push({
+                path: "/chatPage",
+                query: { chatId },
+              });
+            }
+          } else {
+            console.error("Chat ID not found in the response:", response);
+          }
+        } else {
+          console.error("Failed to check chat existence:", response.message);
+        }
+      } catch (error) {
+        console.error("Failed to start chat:", error);
+      }
+    },
   },
 };
 </script>

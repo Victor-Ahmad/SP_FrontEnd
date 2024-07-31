@@ -3,7 +3,31 @@
     <h2 class="text-xl font-bold mb-4 text-[#1c592f]">
       {{ $t("filters.title") }}
     </h2>
-
+    <div class="mb-4">
+      <h3 class="font-semibold mb-2 text-[#1c592f]">
+        {{ $t("profile.house.location") }}
+      </h3>
+      <input
+        type="text"
+        id="areasAutocompleteInput"
+        :placeholder="$t('filters.areasPlaceholder')"
+        class="input-field w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f]"
+      />
+      <div class="tags-container flex flex-wrap mt-2">
+        <span
+          v-for="(area, index) in selectedAreas"
+          :key="index"
+          class="tag bg-gray-200 p-2 rounded-sm mr-2 mb-2"
+        >
+          {{ area }}
+          <span
+            @click="removeArea(area)"
+            class="cursor-pointer text-red-500 ml-1"
+            >&times;</span
+          >
+        </span>
+      </div>
+    </div>
     <div class="mb-4">
       <h3 class="font-semibold mb-2 text-[#1c592f]">
         {{ $t("filters.amenities") }}
@@ -105,31 +129,6 @@
           {{ number }}
         </li>
       </ul>
-    </div>
-    <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
-        {{ $t("profile.house.location") }}
-      </h3>
-      <input
-        type="text"
-        id="areasAutocompleteInput"
-        :placeholder="$t('filters.areasPlaceholder')"
-        class="input-field w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f]"
-      />
-      <div class="tags-container flex flex-wrap mt-2">
-        <span
-          v-for="(area, index) in selectedAreas"
-          :key="index"
-          class="tag bg-gray-200 p-2 rounded-sm mr-2 mb-2"
-        >
-          {{ area }}
-          <span
-            @click="removeArea(area)"
-            class="cursor-pointer text-red-500 ml-1"
-            >&times;</span
-          >
-        </span>
-      </div>
     </div>
 
     <button

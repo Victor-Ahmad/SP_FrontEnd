@@ -292,7 +292,6 @@
 <script>
 import {
   getHouseById,
-  sendMessage,
   expressInterest,
   addToFavorites,
   removeInterest,
