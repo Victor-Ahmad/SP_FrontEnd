@@ -163,7 +163,7 @@
         <div
           v-else-if="activeTab === 'my_triangles'"
           :class="[
-            'col-span-full  grid-cols-1 gap-6 px-4',
+            'col-span-full  grid-cols-1 gap-6 ',
             my_triangles.length ? 'grid' : '',
           ]"
         >
