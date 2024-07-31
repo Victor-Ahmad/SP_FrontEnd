@@ -47,7 +47,7 @@
               @click="setActiveTab('my_triangles')"
             >
               {{ $t("profileTabs.myTriangleSwaps") }} ({{
-                myTringleSwapsCount
+                myTriangleSwapsCount
               }})
             </button>
           </div>
@@ -162,22 +162,15 @@
         <!-- My Triangle Swaps Tab -->
         <div
           v-else-if="activeTab === 'my_triangles'"
-          class="col-span-full grid-cols-1 gap-6 px-4"
+          class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
         >
           <template v-if="my_triangles.length">
             <TriangleSwapCard
-              v-for="triangle in triangleSwapHouses"
+              v-for="triangle in my_triangles"
               :key="triangle.house_a.id"
               :triangle="triangle"
               :myHouse="triangleSwapHousesMyHouse"
             />
-            <div class="col-span-full">
-              <BasePagination
-                :currentPage="triangleCurrentPage"
-                :totalPages="triangleTotalPages"
-                @changePage="fetchTriangleSwapHouses"
-              />
-            </div>
           </template>
           <template v-else>
             <div class="placeholder">
@@ -188,6 +181,13 @@
               />
             </div>
           </template>
+          <div class="col-span-full">
+            <BasePagination
+              :currentPage="trianglePagination.current_page"
+              :totalPages="trianglePagination.last_page"
+              @changePage="fetchMyTriangleSwaps"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -205,6 +205,7 @@ import {
   getMyFavorites,
   getSwapWithMe,
   getCompleteInterest,
+  getMyTriangleSwaps, // Assuming this function exists
 } from "@/services/apiService";
 
 export default {
@@ -220,11 +221,14 @@ export default {
     const error = computed(() => store.getters.error);
     const my_interests = ref([]);
     const my_favorites = ref([]);
-    const my_triangles = ref([]);
     const swap_with_me = ref([]);
     const complete_interest = ref([]);
-    const my_disinterests = ref([]);
+    const my_triangles = ref([]);
     const activeTab = ref("my_interests");
+    const trianglePagination = ref({
+      current_page: 1,
+      last_page: 1,
+    });
 
     const fetchMyInterests = async () => {
       try {
@@ -234,16 +238,6 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching interests:", error);
-      }
-    };
-    const fetchMyTriangleSwaps = async () => {
-      try {
-        const response = await getMyInterests();
-        if (response && response.success) {
-          my_triangles.value = response.result;
-        }
-      } catch (error) {
-        console.error("Error fetching favorites:", error);
       }
     };
 
@@ -280,6 +274,21 @@ export default {
       }
     };
 
+    const fetchMyTriangleSwaps = async (page = 1) => {
+      try {
+        const response = await getMyTriangleSwaps(page);
+        if (response && response.success) {
+          my_triangles.value = response.result.data;
+          trianglePagination.value = {
+            current_page: response.result.current_page,
+            last_page: response.result.last_page,
+          };
+        }
+      } catch (error) {
+        console.error("Error fetching triangle swaps:", error);
+      }
+    };
+
     const fetchAllData = async () => {
       store.commit("setLoading", true); // Start loading
       try {
@@ -309,6 +318,7 @@ export default {
             break;
           case "my_favorites":
             await fetchMyFavorites();
+            break;
           case "my_triangles":
             await fetchMyTriangleSwaps();
             break;
@@ -329,17 +339,16 @@ export default {
     const swapWithMeCount = computed(() => swap_with_me.value.length);
     const myInterestsCount = computed(() => my_interests.value.length);
     const myFavoritesCount = computed(() => my_favorites.value.length);
-    const myTringleSwapsCount = computed(() => my_triangles.value.length);
+    const myTriangleSwapsCount = computed(() => my_triangles.value.length);
 
     return {
       isLoading,
       error,
       my_interests,
       my_favorites,
-      my_triangles,
       swap_with_me,
       complete_interest,
-      my_disinterests,
+      my_triangles,
       activeTab,
       setActiveTab,
       fetchAllData,
@@ -347,7 +356,9 @@ export default {
       swapWithMeCount,
       myInterestsCount,
       myFavoritesCount,
-      myTringleSwapsCount,
+      myTriangleSwapsCount,
+      fetchMyTriangleSwaps,
+      trianglePagination,
     };
   },
 };

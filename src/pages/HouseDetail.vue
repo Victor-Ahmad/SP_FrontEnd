@@ -34,7 +34,7 @@
         <button
           v-if="house.images.length"
           @click="openGallery"
-          class="text-[#1c592f] py-2 px-4 rounded-lg mb-4"
+          class="bg-[#1c592f] text-white w-full lg:w-1/6 py-2 px-4 rounded-lg mb-4"
         >
           {{ $t("page.viewAllImages") }}
         </button>
