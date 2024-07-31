@@ -624,6 +624,35 @@ export default {
         });
       }
     },
+    initWishAutocomplete(wishIndex) {
+      this.$nextTick(() => {
+        const inputId = `wishAutocompleteInput${wishIndex}`;
+        const input = document.getElementById(inputId);
+        if (input) {
+          const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ["(cities)"],
+            componentRestrictions: { country: "NL" },
+          });
+
+          autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            if (place && place.address_components) {
+              const city = place.address_components[0].long_name;
+              if (
+                !this.profile.wishes[wishIndex].wish_locations.some(
+                  (location) => location.location === city
+                )
+              ) {
+                this.profile.wishes[wishIndex].wish_locations.push({
+                  location: city,
+                });
+                input.value = "";
+              }
+            }
+          });
+        }
+      });
+    },
     getImageUrl(path) {
       // Do not add base URL for local images
       return path.startsWith("data:image")
@@ -706,35 +735,35 @@ export default {
       this.isEditable = !this.isEditable;
     },
 
-    initWishAutocomplete(wishIndex) {
-      this.$nextTick(() => {
-        const inputId = `wishAutocompleteInput${wishIndex}`;
-        const input = document.getElementById(inputId);
-        if (input) {
-          const autocomplete = new google.maps.places.Autocomplete(input, {
-            types: ["(cities)"],
-            componentRestrictions: { country: "NL" },
-          });
+    // initWishAutocomplete(wishIndex) {
+    //   this.$nextTick(() => {
+    //     const inputId = `wishAutocompleteInput${wishIndex}`;
+    //     const input = document.getElementById(inputId);
+    //     if (input) {
+    //       const autocomplete = new google.maps.places.Autocomplete(input, {
+    //         types: ["(cities)"],
+    //         componentRestrictions: { country: "NL" },
+    //       });
 
-          autocomplete.addListener("place_changed", () => {
-            const place = autocomplete.getPlace();
-            if (place && place.address_components) {
-              const city = place.address_components[0].long_name;
-              if (
-                !this.profile.wishes[wishIndex].wish_locations.some(
-                  (location) => location.location === city
-                )
-              ) {
-                this.profile.wishes[wishIndex].wish_locations.push({
-                  location: city,
-                });
-                input.value = "";
-              }
-            }
-          });
-        }
-      });
-    },
+    //       autocomplete.addListener("place_changed", () => {
+    //         const place = autocomplete.getPlace();
+    //         if (place && place.address_components) {
+    //           const city = place.address_components[0].long_name;
+    //           if (
+    //             !this.profile.wishes[wishIndex].wish_locations.some(
+    //               (location) => location.location === city
+    //             )
+    //           ) {
+    //             this.profile.wishes[wishIndex].wish_locations.push({
+    //               location: city,
+    //             });
+    //             input.value = "";
+    //           }
+    //         }
+    //       });
+    //     }
+    //   });
+    // },
     removeWishLocation(wishIndex, locationIndex) {
       this.profile.wishes[wishIndex].wish_locations.splice(locationIndex, 1);
     },
