@@ -163,7 +163,7 @@
         <div
           v-else-if="activeTab === 'my_triangles'"
           :class="[
-            'col-span-full  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4',
+            'col-span-full  grid-cols-1 gap-6 px-4',
             my_triangles.length ? 'grid' : '',
           ]"
         >
@@ -172,7 +172,7 @@
               v-for="triangle in my_triangles"
               :key="triangle.house_a.id"
               :triangle="triangle"
-              :myHouse="triangleSwapHousesMyHouse"
+              :myHouse="triangle.my_house"
             />
           </template>
           <template v-else>
@@ -184,7 +184,7 @@
               />
             </div>
           </template>
-          <div class="col-span-full">
+          <div v-if="my_triangles.length" class="col-span-full">
             <BasePagination
               :currentPage="trianglePagination.current_page"
               :totalPages="trianglePagination.last_page"
@@ -281,7 +281,12 @@ export default {
       try {
         const response = await getMyTriangleSwaps(page);
         if (response && response.success) {
-          my_triangles.value = response.result.data;
+          my_triangles.value = response.result.paginatedItems.data;
+          my_triangles.value = my_triangles.value.map((triangle) => ({
+            ...triangle,
+            my_house: response.result.my_house,
+          }));
+          console.log(my_triangles.my_house);
           trianglePagination.value = {
             current_page: response.result.current_page,
             last_page: response.result.last_page,
@@ -352,6 +357,7 @@ export default {
       swap_with_me,
       complete_interest,
       my_triangles,
+
       activeTab,
       setActiveTab,
       fetchAllData,

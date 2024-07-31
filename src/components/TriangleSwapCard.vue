@@ -19,7 +19,7 @@
               @click.stop="handleTriangleSwapClick"
               :class="[
                 'w-4/12 px-4 py-2 rounded-full border duration-300',
-                'text-interested-active',
+                isInterested ? 'text-interested-active' : 'text-interested',
               ]"
             >
               <i class="fas fa-thumbs-up mr-1"></i>
@@ -167,32 +167,53 @@ export default {
 
     const handleTriangleSwapClick = async (event) => {
       event.stopPropagation();
-      isInterested.value = !isInterested.value;
-      if (isInterested.value) {
-        try {
-          const response = await expressInterest(props.triangle.house_a.id);
-          if (response.success) {
-            console.log("Interest expressed successfully:", response);
-            Swal.fire({
-              icon: "success",
-              title: "You have successfully joined the triangle swap",
-              text: "Check this card in the swaps page",
-              showConfirmButton: true,
-            }).then(() => {
-              isHiddenAfterInterest.value = true; // Hide the card after expressing interest
+      if (props.triangle.is_c_interested_in_a) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Do you want to proceed?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const response = await removeInterest(
+              props.triangle.house_a.id
+            ).then(() => {
+              isHiddenAfterInterest.value = true;
             });
-          } else {
-            console.error("Error expressing interest:", response.message);
           }
-        } catch (error) {
-          console.error("Error expressing interest:", error);
-        }
+        });
       } else {
-        try {
-          const response = await removeInterest(props.triangle.house_a.id);
-          console.log("Interest removed successfully:", response);
-        } catch (error) {
-          console.error("Error removing interest:", error);
+        isInterested.value = !isInterested.value;
+        if (isInterested.value) {
+          try {
+            const response = await expressInterest(props.triangle.house_a.id);
+            if (response.success) {
+              console.log("Interest expressed successfully:", response);
+              Swal.fire({
+                icon: "success",
+                title: "You have successfully joined the triangle swap",
+                text: "Check this card in the swaps page",
+                showConfirmButton: true,
+              }).then(() => {
+                isHiddenAfterInterest.value = true; // Hide the card after expressing interest
+              });
+            } else {
+              console.error("Error expressing interest:", response.message);
+            }
+          } catch (error) {
+            console.error("Error expressing interest:", error);
+          }
+        } else {
+          try {
+            const response = await removeInterest(props.triangle.house_a.id);
+            console.log("Interest removed successfully:", response);
+          } catch (error) {
+            console.error("Error removing interest:", error);
+          }
         }
       }
     };
@@ -341,8 +362,15 @@ export default {
 
 .text-interested-active {
   border: 1px solid #1c592f;
+  color: white;
+  background-color: #1c592f;
+}
+
+.text-interested {
+  border: 1px solid #1c592f;
   color: #1c592f;
 }
+
 .bg-chat-custom2 {
   /* background-color: #154aa8; */
   border: 1px solid #154aa8;

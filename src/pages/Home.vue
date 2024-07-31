@@ -98,7 +98,7 @@
             :triangle="triangle"
             :myHouse="triangleSwapHousesMyHouse"
           />
-          <div class="col-span-full">
+          <div class="col-span-full" v-if="triangleSwapHouses.length">
             <BasePagination
               :currentPage="triangleCurrentPage"
               :totalPages="triangleTotalPages"
