@@ -344,9 +344,9 @@ export default {
     const validateFields = () => {
       validationErrors.value = {};
 
-      if (showDescription.value && !description.value.trim()) {
-        validationErrors.value.description = true;
-      }
+      // if (showDescription.value && !description.value.trim()) {
+      //   validationErrors.value.description = true;
+      // }
 
       if (showWishes.value) {
         if (!selectedCities.value.length) validationErrors.value.city = true;
@@ -362,9 +362,9 @@ export default {
           validationErrors.value.features = true;
       }
 
-      if (showImages.value && !images.value.length) {
-        validationErrors.value.images = true;
-      }
+      // if (showImages.value && !images.value.length) {
+      //   validationErrors.value.images = true;
+      // }
 
       return Object.keys(validationErrors.value).length === 0;
     };
