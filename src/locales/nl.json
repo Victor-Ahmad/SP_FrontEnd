@@ -222,7 +222,7 @@
             "locationPlaceholder": "Voer een locatie van belang in",
             "numberOfRooms": "Aantal Kamers",
             "floorNumber": "Verdieping",
-            "price": "Prijs",
+            "price": "Max Huurprijs (€)",
             "specificProperties": "Specifieke Eigenschappen",
             "addProperties": "Voeg specifieke eigenschappen toe"
         },

@@ -222,7 +222,7 @@
             "locationPlaceholder": "Enter a location of interest",
             "numberOfRooms": "Number of Rooms",
             "floorNumber": "Floor Number",
-            "price": "Price",
+            "price": "Max Rent Price (€)",
             "specificProperties": "Specific Properties",
             "addProperties": "Add specific properties"
         },

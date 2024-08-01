@@ -62,7 +62,8 @@
               <div
                 class="text-purple-custom text-base font-semibold flex items-center"
               >
-                <i class="fas fa-euro-sign mr-2"></i> {{ house.price || "" }} /
+                <i class="fas fa-euro-sign mr-2"></i>
+                {{ Math.floor(house.price) || "" }} /
                 {{ $t("page.month") }}
               </div>
               <div class="text-gray-700 text-sm flex items-center">

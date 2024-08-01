@@ -64,7 +64,7 @@
               {{ house.street }}, {{ house.location }}
             </div>
             <div class="text-lg text-[#1c592f] font-bold mt-2 md:mt-0">
-              {{ house.price }} / {{ $t("page.month") }}
+              {{ Math.floor(house.price) }} / {{ $t("page.month") }}
             </div>
           </div>
           <div class="house-detail-info mt-5">
