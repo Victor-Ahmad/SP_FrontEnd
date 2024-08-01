@@ -289,7 +289,7 @@ export default {
               this.$router.push({
                 name: "MessageInterfacePage",
                 params: { chatId: chatId },
-                query: { otherPersonHouseId: this.house.id },
+                query: { otherPersonHouseId: this.myHouse.id },
               });
             } else {
               this.$router.push({
