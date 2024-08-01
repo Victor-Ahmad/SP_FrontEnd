@@ -279,7 +279,7 @@
           {{ $t("profile.house.gallery.title") }}
         </h3>
         <div>
-          <div class="mb-8">
+          <!-- <div class="mb-8">
             <h4 class="text-xl md:text-2xl font-semibold text-[#1c592f] mb-2">
               {{ $t("profile.house.gallery.leadingImage") }}
             </h4>
@@ -312,7 +312,7 @@
                 accept="image/*"
               />
             </div>
-          </div>
+          </div> -->
           <div v-if="profile.one_to_one_swap_house.images.length > 0">
             <h4 class="text-xl md:text-2xl font-semibold text-[#1c592f] mb-2">
               {{ $t("profile.house.gallery.otherImages") }}

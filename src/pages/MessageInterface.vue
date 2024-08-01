@@ -17,15 +17,13 @@
       >
         <div>
           <div class="font-bold text-lg">
-            {{ localSelectedChat.first_person.first_name }}
-            {{ localSelectedChat.first_person.last_name }}
-          </div>
-          <div class="text-sm text-gray-600">
-            {{ localSelectedChat.first_person.email }}
-          </div>
-          <div class="text-xs text-gray-500">
             {{ localSelectedChat.first_person.street }},
             {{ localSelectedChat.first_person.location }}
+          </div>
+
+          <div class="text-xs text-gray-500">
+            {{ localSelectedChat.first_person.first_name }}
+            {{ localSelectedChat.first_person.last_name }}
           </div>
         </div>
         <button
@@ -41,15 +39,13 @@
       >
         <div>
           <div class="font-bold text-lg">
-            {{ localSelectedChat.second_person.first_name }}
-            {{ localSelectedChat.second_person.last_name }}
-          </div>
-          <div class="text-sm text-gray-600">
-            {{ localSelectedChat.second_person.email }}
-          </div>
-          <div class="text-xs text-gray-500">
             {{ localSelectedChat.second_person.street }},
             {{ localSelectedChat.second_person.location }}
+          </div>
+
+          <div class="text-xs text-gray-500">
+            {{ localSelectedChat.second_person.first_name }}
+            {{ localSelectedChat.second_person.last_name }}
           </div>
         </div>
         <button
