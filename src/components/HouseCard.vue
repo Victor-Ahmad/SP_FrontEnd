@@ -106,7 +106,7 @@
           class="flex justify-between items-center mt-2 space-x-2 border-t border-gray-200 pt-2"
         >
           <button
-            @click.stop="handleInterestedClick($event)"
+            @click.stop="toggleInterested($event)"
             :class="[
               'w-1/3 lg:w-4/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
               isInterested
@@ -120,7 +120,7 @@
           <button
             @click.stop="toggleNotInterested($event)"
             :class="[
-              'w-1/3 lg:w-5/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 md:flex-2',
+              'w-1/3 lg:w-5/12 px-2 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 md:flex-2',
               isNotInterested
                 ? 'bg-gray-custom text-white '
                 : 'border border-gray-custom ',
@@ -131,7 +131,7 @@
           </button>
           <button
             @click.stop="startChat($event)"
-            class="w-1/3 lg:w-3/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8]"
+            class="w-1/3 lg:w-3/12 px-3 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8]"
           >
             <i class="fas fa-comment mr-1"></i>
             <span class="hidden md:inline">{{ $t("page.chat") }}</span>
@@ -156,6 +156,29 @@
             </button>
             <button
               @click="confirmNotInterested(false)"
+              class="bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              {{ $t("page.no") }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        v-if="showConfirmationPopupUnClickInterested"
+        class="absolute inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
+        @click.stop
+      >
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <p class="mb-4">{{ $t("page.areYouSureUnclickInterested") }}</p>
+          <div class="flex justify-end space-x-2">
+            <button
+              @click="confirmUnclickInterested(true)"
+              class="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              {{ $t("page.yes") }}
+            </button>
+            <button
+              @click="confirmUnclickInterested(false)"
               class="bg-gray-500 text-white px-4 py-2 rounded"
             >
               {{ $t("page.no") }}
@@ -205,6 +228,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    hideWhenUnclickInterested: {
+      type: Boolean,
+      default: false,
+    },
+    updateCounts: {
+      type: Function,
+      required: true,
+    },
   },
   setup(props) {
     return {
@@ -217,6 +248,7 @@ export default {
       isInterested: false,
       isNotInterested: false,
       showConfirmationPopup: false,
+      showConfirmationPopupUnClickInterested: false,
     };
   },
   created() {
@@ -257,13 +289,34 @@ export default {
         try {
           const response = await removeFavorite(this.house.id);
           console.log("Deleted from favorites successfully:", response);
+          this.$emit("confirmUnfavorite", true);
         } catch (error) {
           console.error("Error deleting from favorites:", error);
         }
       }
+      this.updateCounts();
+    },
+
+    async toggleInterested(event) {
+      event.stopPropagation();
+      if (!this.isInterested) {
+        await this.handleInterestedClick(event);
+      } else {
+        this.showConfirmationPopupUnClickInterested = true;
+      }
+    },
+    async confirmUnclickInterested(confirm) {
+      this.showConfirmationPopupUnClickInterested = false;
+      if (confirm) {
+        if (this.hideWhenUnclickInterested) {
+          this.$emit("uninterested", this.house.id);
+        }
+        await this.handleInterestedClick();
+        this.$emit("confirmUnclickInterested", confirm); // Emit event to HouseCardWithSwap
+      }
+      this.updateCounts();
     },
     async handleInterestedClick(event) {
-      event.stopPropagation();
       this.isInterested = !this.isInterested;
       if (this.isInterested) {
         this.isNotInterested = false;
@@ -271,7 +324,9 @@ export default {
           const response = await expressInterest(this.house.id);
           console.log("Interest expressed successfully:", response);
           // Trigger the exploding button effect
-          this.triggerExplodingButton(event.target);
+          if (event) {
+            this.triggerExplodingButton(event.target);
+          }
         } catch (error) {
           console.error("Error expressing interest:", error);
         }
@@ -283,7 +338,9 @@ export default {
           console.error("Error removing interest:", error);
         }
       }
+      this.updateCounts();
     },
+
     async toggleNotInterested(event) {
       event.stopPropagation();
       if (this.isNotInterested) {
@@ -293,10 +350,11 @@ export default {
       }
     },
     async confirmNotInterested(confirm) {
+      this.showConfirmationPopup = false;
       if (confirm) {
         await this.handleNotInterested();
       }
-      this.showConfirmationPopup = false;
+      this.updateCounts();
     },
     async handleNotInterested() {
       if (this.isNotInterested) {
@@ -319,6 +377,7 @@ export default {
           console.error("Error expressing disinterest:", error);
         }
       }
+      this.updateCounts();
     },
     async startChat(event) {
       event.stopPropagation();

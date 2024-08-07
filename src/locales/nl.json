@@ -240,12 +240,15 @@
             "successMessage": "Je hebt je profielinformatie succesvol voltooid",
     "failureMessage": "Er is iets misgegaan, probeer het later opnieuw"
     },
-    "forgotPassword": {
+    "forgetPassword": {
         "title": "Wachtwoord Vergeten",
+        "instruction": "Vul uw geregistreerde e-mailadres in om uw wachtwoord opnieuw in te stellen.",
         "emailLabel": "E-mail",
         "emailPlaceholder": "E-mail",
         "submitButton": "Indienen",
-        "backgroundAlt": "Achtergrond"
+        "backgroundAlt": "Achtergrond",
+        "loginLink": "Inloggen",
+        "registerLink": "Heb je geen account? Registreren"
     },
     
     "common": {
@@ -260,7 +263,13 @@
     },
     "chat": {
         "viewHouse": "Bekijk Huis"
-    }
+    },
+    "otp": {
+    "title": "Verifieer OTP",
+    "instruction": "We hebben je een e-mail gestuurd met een eenmalig wachtwoord (OTP). Controleer je e-mail en voer de code hier in.",
+    "verify_button": "Verifiëren",
+    "error": "Ongeldige OTP. Probeer het opnieuw."
+  }
 
     
 }

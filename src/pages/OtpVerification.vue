@@ -5,8 +5,11 @@
     <div class="flex justify-center p-4 md:p-8 w-full md:w-1/2">
       <div class="max-w-md w-full bg-white p-8 space-y-6">
         <div class="text-center border-gray-300 py-2 mb-10">
-          <h2 class="text-4xl font-bold text-[#1c592f]">Verify OTP</h2>
+          <h2 class="text-4xl font-bold text-[#1c592f]">
+            {{ $t("otp.title") }}
+          </h2>
         </div>
+        <p class="text-center mb-6">{{ $t("otp.instruction") }}</p>
         <form class="mt-8 space-y-6" @submit.prevent="handleVerifyOtp">
           <div class="form-group mb-4 flex justify-center">
             <div class="otp-container flex justify-between">
@@ -27,7 +30,7 @@
               type="submit"
               class="px-4 py-2 bg-[#1c592f] text-white w-full rounded-full transition duration-300 hover:bg-[#065e58] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1c592f]"
             >
-              Verify
+              {{ $t("otp.verify_button") }}
             </button>
           </div>
           <div v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
@@ -67,7 +70,7 @@ export default {
           });
         });
       } catch (err) {
-        error.value = "Invalid OTP. Please try again.";
+        error.value = this.$t("otp.error");
       }
     };
 

@@ -67,6 +67,7 @@
         "rooms": "Rooms",
         "placeholder": "Placeholder",
         "areYouSureNotInterested": "Are you sure? This card will be hidden.",
+        "areYouSureUnclickInterested": "Are you sure?",
         "yes": "Yes",
         "no": "No",
         "viewAllImages": "View All Images",
@@ -240,12 +241,15 @@
         "successMessage": "You have successfully completed your profile information",
     "failureMessage": "Something went wrong, please try again later"
     },
-    "forgotPassword": {
-        "title": "Forgot Password",
+    "forgetPassword": {
+        "title": "Forget Password",
+        "instruction": "Please enter your registered email address to reset your password.",
         "emailLabel": "Email",
         "emailPlaceholder": "Email",
         "submitButton": "Submit",
-        "backgroundAlt": "Background"
+        "backgroundAlt": "Background",
+        "loginLink": "LogIn",
+        "registerLink": "Don't have an account? Register"
     },
     "common": {
         "loading": "Loading..."
@@ -259,6 +263,12 @@
     },
     "chat": {
         "viewHouse": "View House"
-    }
+    },
+    "otp": {
+        "title": "Verify OTP",
+        "instruction": "We've sent you an email with a one-time password (OTP). Please check your email and enter the code here.",
+        "verify_button": "Verify",
+        "error": "Invalid OTP. Please try again."
+      }
    
 }

@@ -69,9 +69,9 @@
             </div>
             <div class="text-sm">
               <router-link
-                to="/forgot-password"
+                to="/forget-password"
                 class="font-medium text-[#1c592f] hover:text-[#065e58]"
-                >Forgot Password?</router-link
+                >Forget Password?</router-link
               >
             </div>
           </div>

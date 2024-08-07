@@ -18,7 +18,7 @@
             <button
               @click.stop="handleTriangleSwapClick"
               :class="[
-                'w-4/12 px-4 py-2 rounded-full border duration-300',
+                'w-4/12 px-2 py-2 rounded-full border duration-300',
                 isInterested ? 'text-interested-active' : 'text-interested',
               ]"
             >
@@ -30,7 +30,7 @@
             <button
               @click.stop="toggleNotInterested"
               :class="[
-                ' w-4/12 px-4 py-2 rounded-full border duration-300 mx-2',
+                ' w-4/12 px-2 py-2 rounded-full border duration-300 mx-2',
                 isNotInterested ? 'bg-gray-custom text-white' : 'gray-custom',
               ]"
             >
@@ -41,7 +41,7 @@
             </button>
             <button
               @click.stop="joinGroupChat"
-              class="w-4/12 px-4 py-2 rounded-full bg-chat-custom2 bg-white text-[#154aa8] duration-300"
+              class="w-4/12 px-2 py-2 rounded-full bg-chat-custom2 bg-white text-[#154aa8] duration-300"
             >
               <i class="fas fa-comment mr-1"></i>
               <span class="button-text">{{
@@ -179,11 +179,9 @@ export default {
           cancelButtonText: "No",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const response = await removeInterest(
-              props.triangle.house_a.id
-            ).then(() => {
-              isHiddenAfterInterest.value = true;
-            });
+            const response = await removeInterest(props.triangle.house_a.id);
+            props.triangle.is_c_interested_in_a = false;
+            isInterested.value = !isInterested.value;
           }
         });
       } else {
@@ -193,13 +191,12 @@ export default {
             const response = await expressInterest(props.triangle.house_a.id);
             if (response.success) {
               console.log("Interest expressed successfully:", response);
+              props.triangle.is_c_interested_in_a = true;
               Swal.fire({
                 icon: "success",
                 title: "You have successfully joined the triangle swap",
                 text: "Check this card in the swaps page",
                 showConfirmButton: true,
-              }).then(() => {
-                isHiddenAfterInterest.value = true; // Hide the card after expressing interest
               });
             } else {
               console.error("Error expressing interest:", response.message);
@@ -345,7 +342,8 @@ export default {
 }
 
 .gray-arrow {
-  filter: grayscale(100%) brightness(60%);
+  filter: grayscale(100%);
+  opacity: 0.3;
 }
 
 /* Button styles */

@@ -13,10 +13,11 @@ import Profile from "@/pages/profile.vue";
 import WizardForm from "@/components/WizardForm.vue";
 import ChatListPage from "@/pages/ChatList.vue";
 import MessageInterfacePage from "@/pages/MessageInterface.vue";
-import ForgotPassword from "@/pages/ForgotPassword.vue";
+import ForgetPassword from "@/pages/ForgetPassword.vue";
 import OtpVerification from "@/pages/OtpVerification.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import TriangleSwapDetails from "@/pages/TriangleSwapDetails.vue";
+import LandingPage from "@/views/LandingPage.vue";
 
 const routes = [
   {
@@ -25,9 +26,14 @@ const routes = [
     children: [
       {
         path: "/",
-        component: Home,
-        meta: { requiresAuth: true },
+        name: "LandingPage",
+        component: LandingPage,
       },
+      // {
+      //   path: "/",
+      //   component: Home,
+      //   meta: { requiresAuth: true },
+      // },
       {
         path: "home",
         component: Home,
@@ -97,8 +103,8 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "forgot-password",
-        component: ForgotPassword,
+        path: "forget-password",
+        component: ForgetPassword,
       },
       {
         path: "otp-verification",

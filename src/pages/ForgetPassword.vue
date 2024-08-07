@@ -6,24 +6,27 @@
       <div class="max-w-md w-full bg-white p-8 space-y-6">
         <div class="text-center border-gray-300 py-2 mb-10">
           <h2 class="text-4xl font-bold text-[#1c592f]">
-            {{ $t("forgotPassword.title") }}
+            {{ $t("forgetPassword.title") }}
           </h2>
         </div>
-        <form class="mt-8 space-y-6" @submit.prevent="handleForgotPassword">
+
+        <form class="mt-8 space-y-6" @submit.prevent="handleForgetPassword">
           <div class="form-group mb-4">
+            <p class="mb-6">{{ $t("forgetPassword.instruction") }}</p>
             <label
               for="email"
               class="block text-lg font-semibold text-[#1c592f] mb-2"
             >
-              {{ $t("forgotPassword.emailLabel") }}
+              {{ $t("forgetPassword.emailLabel") }}
             </label>
+
             <input
               id="email"
               name="email"
               type="email"
               required
               class="input-field w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
-              :placeholder="$t('forgotPassword.emailPlaceholder')"
+              :placeholder="$t('forgetPassword.emailPlaceholder')"
             />
           </div>
           <div class="form-group mb-4">
@@ -31,10 +34,24 @@
               type="submit"
               class="px-4 py-2 bg-[#1c592f] text-white w-full rounded-full transition duration-300 hover:bg-[#065e58] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1c592f]"
             >
-              {{ $t("forgotPassword.submitButton") }}
+              {{ $t("forgetPassword.submitButton") }}
             </button>
           </div>
           <div v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
+          <div class="flex items-center justify-between mt-4">
+            <router-link
+              to="/register"
+              class="text-sm font-medium text-[#1c592f] hover:text-[#065e58]"
+            >
+              {{ $t("forgetPassword.registerLink") }}
+            </router-link>
+            <router-link
+              to="/login"
+              class="text-sm font-medium text-[#1c592f] hover:text-[#065e58]"
+            >
+              {{ $t("forgetPassword.loginLink") }}
+            </router-link>
+          </div>
         </form>
       </div>
     </div>
@@ -42,7 +59,7 @@
       <img
         class="w-8/12 h-auto rounded"
         src="@/assets/images/forget.jpg"
-        :alt="$t('forgotPassword.backgroundAlt')"
+        :alt="$t('forgetPassword.backgroundAlt')"
       />
     </div>
   </div>
@@ -54,12 +71,12 @@ import { ref } from "vue";
 import Swal from "sweetalert2";
 
 export default {
-  name: "ForgotPassword",
+  name: "ForgetPassword",
   setup() {
     const router = useRouter();
     const error = ref("");
 
-    const handleForgotPassword = async () => {
+    const handleForgetPassword = async () => {
       const email = document.getElementById("email").value;
       try {
         // Dummy function to simulate sending OTP
@@ -88,7 +105,7 @@ export default {
 
     return {
       error,
-      handleForgotPassword,
+      handleForgetPassword,
     };
   },
 };

@@ -3,6 +3,10 @@
     <HouseCard
       :house="house.one_to_one_swap_house"
       :hideWhenNotInterested="hideWhenNotInterested"
+      :hideWhenUnclickInterested="hideWhenUnclickInterested"
+      @confirmUnclickInterested="confirmUnclickInterested"
+      @confirmUnfavorite="confirmUnfavorite"
+      :updateCounts="updateCounts"
     />
   </div>
 </template>
@@ -23,6 +27,30 @@ export default {
     hideWhenNotInterested: {
       type: Boolean,
       default: false,
+    },
+    hideWhenUnclickInterested: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    async confirmUnclickInterested(confirm) {
+      if (confirm) {
+        if (this.hideWhenUnclickInterested) {
+          this.$emit("uninterested", this.house.id);
+        }
+        await this.handleInterestedClick();
+        this.$emit("updateCounts"); // Emit updateCounts after confirming
+      }
+    },
+    async confirmUnfavorite(confirm) {
+      if (confirm) {
+        this.$emit("unfavorite", this.house.id);
+        this.$emit("updateCounts"); // Emit updateCounts after unfavorite
+      }
+    },
+    updateCounts() {
+      this.$emit("updateCounts");
     },
   },
 };

@@ -3,10 +3,18 @@
     <div v-if="isLoading" class="text-center">{{ $t("common.loading") }}</div>
     <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
     <div v-else class="flex flex-col md:flex-row">
-      <div class="w-full md:w-1/4">
+      <div class="w-full md:w-1/5">
         <div
           class="grid grid-cols-2 gap-2 lg:p-4 md:mr-6 md:grid-cols-1 md:flex md:flex-col"
         >
+          <div class="mb-2 underlined-tabs">
+            <button
+              :class="{ 'active-tab': activeTab === 'my_interests' }"
+              @click="setActiveTab('my_interests')"
+            >
+              {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
+            </button>
+          </div>
           <div class="mb-2 underlined-tabs">
             <button
               :class="{ 'active-tab': activeTab === 'complete_profile' }"
@@ -23,14 +31,6 @@
               @click="setActiveTab('swap_with_me')"
             >
               {{ $t("profileTabs.swapWithMe") }} ({{ swapWithMeCount }})
-            </button>
-          </div>
-          <div class="mb-2 underlined-tabs">
-            <button
-              :class="{ 'active-tab': activeTab === 'my_interests' }"
-              @click="setActiveTab('my_interests')"
-            >
-              {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
             </button>
           </div>
           <div class="mb-2 underlined-tabs">
@@ -53,10 +53,41 @@
           </div>
         </div>
       </div>
-      <div class="w-full md:w-3/4 lg:pt-4 px-4 lg:py-4">
+      <div class="w-full md:w-4/5 lg:pt-4 px-4 lg:py-4">
+        <!-- My Interests Tab -->
+        <div
+          v-if="activeTab === 'my_interests'"
+          :class="{
+            'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
+              my_interests.length,
+          }"
+        >
+          <template v-if="my_interests.length">
+            <HouseCardWithSwap
+              v-for="house in my_interests"
+              :key="house.id"
+              :house="house"
+              :hideWhenNotInterested="true"
+              :confirmUninterested="true"
+              :hideWhenUnclickInterested="true"
+              @uninterested="handleUninterested"
+              @updateCounts="updateSwapsCount"
+            />
+          </template>
+          <template v-else>
+            <div class="placeholder">
+              <img
+                src="@/assets/images/logo2.png"
+                alt="Placeholder"
+                class="grayscale"
+              />
+            </div>
+          </template>
+        </div>
+
         <!-- Complete Profile Tab -->
         <div
-          v-if="activeTab === 'complete_profile'"
+          v-else-if="activeTab === 'complete_profile'"
           :class="{
             'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
               complete_interest.length,
@@ -67,6 +98,7 @@
               v-for="house in complete_interest"
               :key="house.id"
               :house="house"
+              @updateCounts="updateSwapsCount"
             />
           </template>
           <template v-else>
@@ -93,33 +125,7 @@
               v-for="house in swap_with_me"
               :key="house.id"
               :house="house"
-            />
-          </template>
-          <template v-else>
-            <div class="placeholder">
-              <img
-                src="@/assets/images/logo2.png"
-                alt="Placeholder"
-                class="grayscale"
-              />
-            </div>
-          </template>
-        </div>
-
-        <!-- My Interests Tab -->
-        <div
-          v-else-if="activeTab === 'my_interests'"
-          :class="{
-            'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
-              my_interests.length,
-          }"
-        >
-          <template v-if="my_interests.length">
-            <HouseCardWithSwap
-              v-for="house in my_interests"
-              :key="house.id"
-              :house="house"
-              :hideWhenNotInterested="true"
+              @updateCounts="updateSwapsCount"
             />
           </template>
           <template v-else>
@@ -146,6 +152,8 @@
               v-for="house in my_favorites"
               :key="house.id"
               :house="house"
+              @unfavorite="handleUnfavorite"
+              @updateCounts="updateSwapsCount"
             />
           </template>
           <template v-else>
@@ -208,7 +216,8 @@ import {
   getMyFavorites,
   getSwapWithMe,
   getCompleteInterest,
-  getMyTriangleSwaps, // Assuming this function exists
+  getMyTriangleSwaps,
+  getSwapsCounts,
 } from "@/services/apiService";
 
 export default {
@@ -233,6 +242,13 @@ export default {
       last_page: 1,
     });
 
+    // Reactive references for item counts
+    const completeProfileCount = ref(0);
+    const swapWithMeCount = ref(0);
+    const myInterestsCount = ref(0);
+    const myFavoritesCount = ref(0);
+    const myTriangleSwapsCount = ref(0);
+
     const fetchMyInterests = async () => {
       try {
         const response = await getMyInterests();
@@ -252,6 +268,21 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching favorites:", error);
+      }
+    };
+
+    const updateSwapsCount = async () => {
+      try {
+        const response = await getSwapsCounts();
+        if (response && response.success) {
+          myInterestsCount.value = response.result.interest_count;
+          completeProfileCount.value = response.result.complete_interest_count;
+          swapWithMeCount.value = response.result.swap_with_me_count;
+          myFavoritesCount.value = response.result.favorite_count;
+          myTriangleSwapsCount.value = response.result.top_perfect_swaps_count;
+        }
+      } catch (error) {
+        console.error("Error fetching swaps count:", error);
       }
     };
 
@@ -277,6 +308,36 @@ export default {
       }
     };
 
+    const removeFromInterestedHouses = async (houseId) => {
+      const index = my_interests.value.findIndex(
+        (house) => house.id === houseId
+      );
+      if (index !== -1) {
+        my_interests.value.splice(index, 1);
+        await updateSwapsCount();
+      }
+    };
+
+    const handleUninterested = async (houseId) => {
+      await removeFromInterestedHouses(houseId);
+      await updateSwapsCount(); // Ensure counts are updated
+    };
+
+    const removeFromFavorites = async (houseId) => {
+      const index = my_favorites.value.findIndex(
+        (house) => house.id === houseId
+      );
+      if (index !== -1) {
+        my_favorites.value.splice(index, 1);
+        await updateSwapsCount();
+      }
+    };
+
+    const handleUnfavorite = async (houseId) => {
+      await removeFromFavorites(houseId);
+      await updateSwapsCount(); // Ensure counts are updated
+    };
+
     const fetchMyTriangleSwaps = async (page = 1) => {
       try {
         const response = await getMyTriangleSwaps(page);
@@ -286,7 +347,6 @@ export default {
             ...triangle,
             my_house: response.result.my_house,
           }));
-          console.log(my_triangles.my_house);
           trianglePagination.value = {
             current_page: response.result.current_page,
             last_page: response.result.last_page,
@@ -301,10 +361,11 @@ export default {
       store.commit("setLoading", true); // Start loading
       try {
         await fetchMyInterests();
-        await fetchMyFavorites();
-        await fetchSwapWithMe();
-        await fetchCompleteInterest();
-        await fetchMyTriangleSwaps();
+        await updateSwapsCount();
+        // await fetchMyFavorites();
+        // await fetchSwapWithMe();
+        // await fetchCompleteInterest();
+        // await fetchMyTriangleSwaps();
       } finally {
         store.commit("setLoading", false); // Finish loading
       }
@@ -317,18 +378,23 @@ export default {
         switch (tab) {
           case "complete_profile":
             await fetchCompleteInterest();
+            await updateSwapsCount();
             break;
           case "swap_with_me":
             await fetchSwapWithMe();
+            await updateSwapsCount();
             break;
           case "my_interests":
             await fetchMyInterests();
+            await updateSwapsCount();
             break;
           case "my_favorites":
             await fetchMyFavorites();
+            await updateSwapsCount();
             break;
           case "my_triangles":
             await fetchMyTriangleSwaps();
+            await updateSwapsCount();
             break;
         }
       } catch (error) {
@@ -342,13 +408,6 @@ export default {
       fetchAllData();
     });
 
-    // Computed properties for item counts
-    const completeProfileCount = computed(() => complete_interest.value.length);
-    const swapWithMeCount = computed(() => swap_with_me.value.length);
-    const myInterestsCount = computed(() => my_interests.value.length);
-    const myFavoritesCount = computed(() => my_favorites.value.length);
-    const myTriangleSwapsCount = computed(() => my_triangles.value.length);
-
     return {
       isLoading,
       error,
@@ -357,7 +416,7 @@ export default {
       swap_with_me,
       complete_interest,
       my_triangles,
-
+      removeFromInterestedHouses,
       activeTab,
       setActiveTab,
       fetchAllData,
@@ -368,6 +427,9 @@ export default {
       myTriangleSwapsCount,
       fetchMyTriangleSwaps,
       trianglePagination,
+      handleUninterested,
+      handleUnfavorite,
+      updateSwapsCount,
     };
   },
 };

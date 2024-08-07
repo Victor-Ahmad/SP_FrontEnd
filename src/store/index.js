@@ -29,7 +29,7 @@ const store = createStore({
       per_page: 5,
       total: 0,
     },
-    currentLanguage: "nl", // Add current language state
+    currentLanguage: localStorage.getItem("language") || "nl",
   },
   mutations: {
     setLoading(state, status) {
@@ -79,6 +79,7 @@ const store = createStore({
     setCurrentLanguage(state, language) {
       // Add mutation to set current language
       state.currentLanguage = language;
+      localStorage.setItem("language", language);
     },
   },
   actions: {
@@ -189,7 +190,6 @@ const store = createStore({
       commit("clearAuthData");
     },
     setCurrentLanguage({ commit }, language) {
-      // Add action to set current language
       commit("setCurrentLanguage", language);
     },
   },

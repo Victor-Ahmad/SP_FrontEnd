@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen pb-20 md:py-8 lg:p-8 bg-gray-100 lg:bg-white">
     <div class="flex flex-col lg:flex-row">
-      <div v-if="!isMobile" class="hidden lg:block w-full lg:w-1/4">
+      <div v-if="!isMobile" class="hidden lg:block w-full lg:w-1/5">
         <FilterBar :filters="filters" @applyFilters="applyFilters" />
       </div>
       <div
-        class="w-full lg:w-3/4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 pt-8 lg:p-0"
+        class="w-full lg:w-4/5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 pt-8 lg:p-0"
       >
         <div
           v-if="progress < 100"

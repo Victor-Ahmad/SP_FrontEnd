@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen">
+  <div class="flex flex-col min-h-screen relative">
     <Header />
     <main class="flex-grow md:pt-20 lg:pt-20">
       <router-view></router-view>
@@ -7,6 +7,7 @@
     <Footer />
     <BottomNavBar @toggle-sidebar="toggleSidebar" v-if="isMobile && token" />
     <Sidebar :isVisible="isSidebarVisible" @close-sidebar="toggleSidebar" />
+    <div v-if="isSidebarVisible" class="overlay" @click="toggleSidebar"></div>
   </div>
 </template>
 
@@ -37,22 +38,13 @@ export default {
       isMobile.value = window.innerWidth <= 768;
     };
 
-    const handleClickOutside = (event) => {
-      if (isSidebarVisible.value && !event.target.closest(".sidebar")) {
-        isSidebarVisible.value = false;
-        console.log(event.target);
-      }
-    };
-
     onMounted(() => {
       checkScreenSize();
       window.addEventListener("resize", checkScreenSize);
-      document.addEventListener("click", handleClickOutside);
     });
 
     onUnmounted(() => {
       window.removeEventListener("resize", checkScreenSize);
-      document.removeEventListener("click", handleClickOutside);
     });
 
     const toggleSidebar = () => {
@@ -71,4 +63,13 @@ export default {
 
 <style scoped>
 /* Add your scoped styles here if needed */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 40; /* Ensure it's below the sidebar but above other content */
+}
 </style>

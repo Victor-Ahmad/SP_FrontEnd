@@ -519,3 +519,12 @@ export const getTriangleSwapHouses = async () => {
     throw error;
   }
 };
+
+export const getSwapsCounts = async () => {
+  try {
+    const response = await axiosInstance.get("/user/counts");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
