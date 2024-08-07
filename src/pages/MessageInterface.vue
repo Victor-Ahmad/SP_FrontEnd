@@ -1,12 +1,12 @@
 <template>
   <div
     :class="[
-      'flex flex-col h-full',
-      localSelectedChat?.second_person ? 'pt-32 lg:pt-0' : 'pt-10 lg:pt-0',
+      'flex flex-col h-full mt-14',
+      localSelectedChat?.second_person ? ' lg:pt-0' : ' lg:pt-0',
     ]"
   >
     <div
-      class="fixed z-50 lg:z-0 lg:static top-0 w-full flex flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
+      class="fixed z-50 lg:z-0 lg:static top-0 w-full hidden md:flex lg:flex flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
     >
       <div
         v-if="localSelectedChat && localSelectedChat.first_person"
@@ -20,7 +20,6 @@
             {{ localSelectedChat.first_person.street }},
             {{ localSelectedChat.first_person.location }}
           </div>
-
           <div class="text-xs text-gray-500">
             {{ localSelectedChat.first_person.first_name }}
             {{ localSelectedChat.first_person.last_name }}
@@ -42,7 +41,6 @@
             {{ localSelectedChat.second_person.street }},
             {{ localSelectedChat.second_person.location }}
           </div>
-
           <div class="text-xs text-gray-500">
             {{ localSelectedChat.second_person.first_name }}
             {{ localSelectedChat.second_person.last_name }}
@@ -54,6 +52,54 @@
         >
           {{ $t("chat.viewHouse") }}
         </button>
+      </div>
+    </div>
+    <div
+      class="mobile_dropdown fixed z-50 lg:z-0 lg:static top-0 w-full flex md:hidden lg:hidden flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
+    >
+      <div class="relative w-full">
+        <div
+          class="flex justify-between items-center cursor-pointer p-4"
+          @click="toggleDropdown"
+        >
+          <span>Houses Dropdown Menu</span>
+          <i
+            :class="dropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+          ></i>
+        </div>
+        <ul
+          v-show="dropdownOpen"
+          class="absolute w-full bg-white shadow-lg z-10"
+        >
+          <li
+            v-if="localSelectedChat && localSelectedChat.first_person"
+            @click="goToDetailPage(localSelectedChat.first_person.house_id)"
+            class="p-4 hover:bg-gray-100 cursor-pointer"
+          >
+            <div class="font-bold text-lg">
+              {{ localSelectedChat.first_person.street }},
+              {{ localSelectedChat.first_person.location }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ localSelectedChat.first_person.first_name }}
+              {{ localSelectedChat.first_person.last_name }}
+            </div>
+          </li>
+          <li
+            v-if="localSelectedChat && localSelectedChat.second_person"
+            @click="goToDetailPage(localSelectedChat.second_person.house_id)"
+            class="p-4 hover:bg-gray-100 cursor-pointer"
+          >
+            <div class="font-bold text-lg">
+              {{ localSelectedChat.second_person.street }},
+              {{ localSelectedChat.second_person.location }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ localSelectedChat.second_person.first_name }}
+              {{ localSelectedChat.second_person.last_name }}
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
     <div
@@ -153,6 +199,7 @@ export default {
       localSelectedChat: this.selectedChat, // Create a local copy of selectedChat
 
       isSending: false,
+      dropdownOpen: false, // State to track dropdown visibility
     };
   },
   watch: {
@@ -208,7 +255,6 @@ export default {
         }
       }
     },
-    //
     scrollToBottom() {
       this.$nextTick(() => {
         const lastMessage = this.$refs.lastMessage;
@@ -231,12 +277,12 @@ export default {
         hour12: true,
       });
     },
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    },
   },
   mounted() {
     const chatId = this.$route.params.chatId || this.$route.query.chatId;
-
-    console.log(this.$route);
-
     if (chatId) {
       this.chatId = chatId;
       this.fetchMessages(chatId);
@@ -278,5 +324,8 @@ export default {
   .messageList-container {
     margin-bottom: 130px;
   }
+}
+.mobile_dropdown .relative {
+  position: relative;
 }
 </style>

@@ -8,7 +8,8 @@
 <script>
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { storeFcmTokenOnServer } from "@/services/apiService";
 
 export default {
   name: "App",
@@ -27,12 +28,13 @@ const firebaseConfig = {
   measurementId: "G-ZB2PQERS5W",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Get registration token. Initially this makes a network call, once retrieved
-// subsequent calls to getToken will return from cache.
 const messaging = getMessaging();
+
+onMessage(messaging, (payload) => {
+  console.log("Message received. ", payload);
+});
+
 getToken(messaging, {
   vapidKey:
     "BK2jDUAUj5G9pjfehRYRHJV7PA0Lv23hqVALEierhj9Ym4ZGUofPjISzPFSmwi7bO8uYHkmEfn6pkfYAwNR47p0",
@@ -40,17 +42,22 @@ getToken(messaging, {
   .then((currentToken) => {
     if (currentToken) {
       alert(currentToken);
+      storeFcmTokenOnServer(currentToken)
+        .then((response) => {
+          console.log("Token stored successfully:", response);
+        })
+        .catch((error) => {
+          console.error("Error storing token:", error);
+        });
     } else {
-      // Show permission request UI
+      alert("No token available.");
       console.log(
         "No registration token available. Request permission to generate one."
       );
-      // ...
     }
   })
   .catch((err) => {
     console.log("An error occurred while retrieving token. ", err);
-    // ...
   });
 </script>
 

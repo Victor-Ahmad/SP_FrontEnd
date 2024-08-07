@@ -1,5 +1,5 @@
 <template>
-  <header :class="headerClasses">
+  <header v-if="shouldShowHeader" :class="headerClasses">
     <div class="flex items-center space-x-4">
       <router-link to="/" class="flex items-center">
         <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
@@ -62,7 +62,7 @@
 <script>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import LanguageDropdown from "@/components/LanguageDropdown.vue";
 import NotificationDropdown from "@/components/NotificationDropdown.vue";
 
@@ -75,6 +75,7 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
     const isMobile = ref(false);
 
     const checkScreenSize = () => {
@@ -104,11 +105,21 @@ export default {
         : "fixed top-0 left-0 w-full bg-white text-black p-4 flex justify-between items-center shadow-md z-50";
     });
 
+    const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"]; // List of routes where header should be hidden on mobile
+
+    const shouldShowHeader = computed(() => {
+      const isHiddenRoute = hiddenRoutesOnMobile.includes(route.path);
+      const isSpecificChatPage =
+        route.path.startsWith("/chats/") && route.query.otherPersonHouseId;
+      return !(isMobile.value && (isHiddenRoute || isSpecificChatPage));
+    });
+
     return {
       isMobile,
       token,
       handleLogout,
       headerClasses,
+      shouldShowHeader,
     };
   },
 };

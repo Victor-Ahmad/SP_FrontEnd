@@ -539,3 +539,13 @@ export const verifyOtpRegister = async (otp) => {
     throw error;
   }
 };
+export const storeFcmTokenOnServer = async (firebase_token) => {
+  try {
+    const response = await axiosInstance.post("/save-fcm-token", {
+      firebase_token,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
