@@ -56,6 +56,15 @@ export default {
       return this.images[this.currentIndex];
     },
   },
+  watch: {
+    visible(newValue) {
+      if (newValue) {
+        document.body.classList.add("overflow-hidden");
+      } else {
+        document.body.classList.remove("overflow-hidden");
+      }
+    },
+  },
   methods: {
     close() {
       this.$emit("close");
