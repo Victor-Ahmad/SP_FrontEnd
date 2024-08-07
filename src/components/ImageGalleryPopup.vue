@@ -7,11 +7,15 @@
     <div
       class="relative max-w-screen max-h-screen bg-transparent flex justify-center items-center"
     >
-      <img
-        :src="currentImage"
-        alt="Full Size"
-        class="max-w-full max-h-full rounded-lg"
-      />
+      <div class="relative">
+        <img
+          :src="currentImage"
+          alt="Full Size"
+          :class="shouldBlur ? 'blur-no-opacity pointer-events-none' : ''"
+          class="max-w-full max-h-full rounded-lg"
+        />
+        <LockOverlay v-if="shouldBlur" />
+      </div>
       <button
         @click="prevImage"
         class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-50 text-3xl px-2 py-1 rounded-full"
@@ -35,6 +39,8 @@
 </template>
 
 <script>
+import LockOverlay from "@/components/LockOverlay.vue"; // Adjust the import path as necessary
+
 export default {
   props: {
     images: {
@@ -54,6 +60,12 @@ export default {
   computed: {
     currentImage() {
       return this.images[this.currentIndex];
+    },
+    shouldBlur() {
+      return (
+        this.$store.getters.hasMoreThanTwoImages === false &&
+        this.currentIndex > 0
+      );
     },
   },
   watch: {
@@ -79,6 +91,9 @@ export default {
         this.currentIndex++;
       }
     },
+  },
+  components: {
+    LockOverlay, // Register the LockOverlay component
   },
 };
 </script>
@@ -128,5 +143,36 @@ export default {
 }
 .rounded-full {
   border-radius: 9999px;
+}
+
+/* Styles for blur and overlay */
+.blur-no-opacity {
+  filter: blur(20px);
+  opacity: 1 !important;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.lock-overlay i {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.lock-overlay p {
+  font-size: 12px;
+  margin: 0;
 }
 </style>

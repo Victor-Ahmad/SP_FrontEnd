@@ -30,6 +30,7 @@ const store = createStore({
       total: 0,
     },
     currentLanguage: localStorage.getItem("language") || "nl",
+    hasMoreThanTwoImages: false,
   },
   mutations: {
     setLoading(state, status) {
@@ -77,9 +78,11 @@ const store = createStore({
       state.loading = false;
     },
     setCurrentLanguage(state, language) {
-      // Add mutation to set current language
       state.currentLanguage = language;
       localStorage.setItem("language", language);
+    },
+    setHasMoreThanTwoImages(state, value) {
+      state.hasMoreThanTwoImages = value;
     },
   },
   actions: {
@@ -148,6 +151,10 @@ const store = createStore({
             per_page: response.result.filtered_houses.per_page,
             total: response.result.filtered_houses.total,
           });
+          commit(
+            "setHasMoreThanTwoImages",
+            response.result.has_more_than_two_images
+          );
         } else {
           commit("setError", response.message);
         }
@@ -203,7 +210,8 @@ const store = createStore({
     triangleSwapHouses: (state) => state.triangleSwapHouses,
     trianglePagination: (state) => state.trianglePagination,
     triangleSwapHousesMyHouse: (state) => state.triangleSwapHousesMyHouse,
-    currentLanguage: (state) => state.currentLanguage, // Add getter for current language
+    currentLanguage: (state) => state.currentLanguage,
+    hasMoreThanTwoImages: (state) => state.hasMoreThanTwoImages,
   },
 });
 

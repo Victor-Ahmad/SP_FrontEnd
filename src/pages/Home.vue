@@ -161,7 +161,9 @@ export default {
     );
     const pagination = computed(() => store.getters.pagination);
     const trianglePagination = computed(() => store.getters.trianglePagination);
-
+    const hasMoreThanTwoImages = computed(
+      () => store.getters.hasMoreThanTwoImages
+    ); // New getter
     const filters = ref({
       search: "",
       minSize: 1,
@@ -339,6 +341,7 @@ export default {
       handleApplyFilters,
       removeFromFilteredHouses,
       clearFilters,
+      hasMoreThanTwoImages,
     };
   },
 };

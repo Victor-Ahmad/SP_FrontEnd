@@ -29,11 +29,6 @@ const routes = [
         name: "LandingPage",
         component: LandingPage,
       },
-      // {
-      //   path: "/",
-      //   component: Home,
-      //   meta: { requiresAuth: true },
-      // },
       {
         path: "home",
         component: Home,

@@ -25,10 +25,14 @@
           >
             <img
               :src="getImageUrl(image.image_path)"
+              :class="[
+                shouldBlur(index) ? 'blur-no-opacity pointer-events-none' : '',
+              ]"
               class="absolute top-0 left-0 w-full h-full object-cover cursor-pointer"
               :alt="$t('page.houseImage')"
               @click="openImage(getImageUrl(image.image_path))"
             />
+            <LockOverlay v-if="shouldBlur(index)" />
           </div>
         </div>
         <button
@@ -57,6 +61,28 @@
         <div
           class="house-detail-info-container bg-white lg:p-4 md:p-5 w-full md:w-[74%] mb-4 md:mb-0"
         >
+          <!-- Progress Bar Section -->
+          <div
+            v-if="progress < 100"
+            class="progress-background col-span-full w-full rounded-full shadow-lg h-min"
+          >
+            <div class="progress-container">
+              <div class="progress-circle">
+                <svg viewBox="0 0 100 100">
+                  <circle class="background" cx="50" cy="50" r="45"></circle>
+                  <circle class="foreground" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="progress-text">{{ progress }}%</div>
+              </div>
+              <div class="missing-steps">
+                <p>{{ $t("page.completeAccount") }}</p>
+                <router-link :to="profileCompletionLink">{{
+                  $t("page.goToProfile")
+                }}</router-link>
+              </div>
+            </div>
+          </div>
+          <!-- End of Progress Bar Section -->
           <div
             class="house-detail-header flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-300 pb-2"
           >
@@ -302,14 +328,17 @@ import {
 } from "@/services/apiService";
 import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
 import ImageGalleryPopup from "@/components/ImageGalleryPopup.vue"; // Import the new component
+import LockOverlay from "@/components/LockOverlay.vue"; // Import the LockOverlay component
 import anime from "animejs"; // Import animejs
 import Swal from "sweetalert2"; // Import SweetAlert2
+import { getProfileProgress } from "@/services/apiService"; // Import the progress API
 
 export default {
   name: "HouseDetail",
   components: {
     ImagePopup,
     ImageGalleryPopup,
+    LockOverlay, // Register the LockOverlay component
   },
   data() {
     return {
@@ -324,6 +353,11 @@ export default {
       isLoading: true,
       error: null,
       showCopyMessage: false,
+      // Progress related data
+      progress: 60,
+      showDescription: false,
+      showImages: false,
+      showWishes: false,
     };
   },
   async created() {
@@ -344,9 +378,9 @@ export default {
       this.error = "API call failed: " + error.message;
     } finally {
       this.isLoading = false;
+      this.fetchProfileProgress(); // Fetch profile progress when the component is created
     }
   },
-
   methods: {
     getImageUrl(path) {
       return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
@@ -507,60 +541,319 @@ export default {
         });
       }
     },
+    // Progress related methods
+    async fetchProfileProgress() {
+      try {
+        const response = await getProfileProgress();
+        if (response.success) {
+          const progressPercentage = parseInt(response.result.progress);
+          this.progress = progressPercentage;
+          this.updateProgress(progressPercentage);
+          this.processMissingSteps(response.result.missing_steps);
+        }
+      } catch (error) {
+        console.error("Error fetching profile progress:", error);
+      }
+    },
+    processMissingSteps(missingSteps) {
+      this.showDescription = missingSteps.some((step) =>
+        step.toLowerCase().includes("description")
+      );
+      this.showImages = missingSteps.some((step) =>
+        step.toLowerCase().includes("image")
+      );
+      this.showWishes = missingSteps.some((step) =>
+        step.toLowerCase().includes("wish")
+      );
+    },
+    updateProgress() {
+      const progressValue = this.progress;
+      const circumference = 2 * Math.PI * 45;
+      const offset = circumference - (progressValue / 100) * circumference;
+      const foregroundCircle = document.querySelector(
+        ".progress-circle .foreground"
+      );
+      if (foregroundCircle) {
+        foregroundCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+        foregroundCircle.style.strokeDashoffset = offset;
+      }
+    },
+    shouldBlur(index) {
+      return this.$store.getters.hasMoreThanTwoImages === false && index >= 0;
+    },
+  },
+  computed: {
+    profileCompletionLink() {
+      return {
+        name: "ProfileCompletion",
+        query: {
+          showDescription: this.showDescription,
+          showImages: this.showImages,
+          showWishes: this.showWishes,
+        },
+      };
+    },
+  },
+  mounted() {
+    this.updateProgress();
+  },
+  watch: {
+    progress: "updateProgress",
   },
 };
 </script>
 
 <style scoped>
-.leading-image img,
-.secondary-image img {
-  object-fit: cover;
-  cursor: pointer;
+/* Ensure fixed height for the swiper */
+.swiper-container {
+  height: 100%;
+}
+
+button i.fas.fa-heart,
+button i.far.fa-heart {
+  transition: color 0.3s;
+  font-size: 24px;
+  /* Increase font size for larger icon */
+}
+
+button i.fas,
+button i.far {
+  font-size: 16px;
+  /* Decrease icon size for smaller buttons */
+}
+
+.house-card {
+  transition: border 0.3s ease;
+}
+
+button.absolute {
+  padding: 8px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+button.absolute i {
+  font-size: 24px;
+}
+
+/* Button hover effects */
+button:hover {
+  transform: none;
+}
+
+.bg-light-orange {
+  width: 500px;
+  background-color: rgba(255, 166, 0, 0.2);
+}
+
+.bg-blue-custom {
+  background-color: #fc3025;
+}
+
+.text-blue-custom {
+  color: #154aa8;
+}
+
+.text-purple-custom {
+  color: #1c592f;
+}
+
+.text-green-custom {
+  color: #22893c;
+}
+
+.text-orange-custom {
+  color: #ff6500;
+}
+
+.custom_hover:hover {
+  border-color: #ff6500;
+}
+
+.bg-green-custom {
+  background-color: #22893c;
 }
 
 .bg-purple-custom {
-  background-color: #e8fdf6;
-  color: #000;
+  background-color: #1c592f;
 }
 
-.bg-purple-custom2 {
+.bg-red-custom {
+  background-color: #5e1675;
+}
+
+.bg-blue-custom {
+  background-color: #154aa8;
+}
+
+.bg-orange-custom {
+  background-color: #ff6500;
+}
+
+/* Additional CSS for the grid layout */
+
+/* Background for the progress section */
+.progress-background {
+  padding: 20px;
+  margin-bottom: 40px !important;
+  display: flex;
+  align-items: center;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+}
+
+.progress-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.progress-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-circle circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.progress-circle .background {
+  stroke: #e4eee6;
+}
+
+.progress-circle .foreground {
+  stroke: #1c592f;
+  stroke-linecap: round;
+  stroke-dasharray: 0 100;
+  transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
+  transition-delay: 0.3s;
+}
+
+.progress-circle .progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1em;
+  font-weight: bold;
+  color: #000000;
+}
+
+.missing-steps {
+  margin-left: 20px;
+}
+
+.missing-steps p {
+  font-size: 0.9em;
+  color: #000000;
+}
+
+.missing-steps a {
+  display: block;
+  color: #1c592f;
+  text-decoration: none;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.missing-steps a:hover {
+  text-decoration: underline;
+  color: #1c592f;
+}
+
+/* Underlined Tabs Styling */
+.underlined-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #ccc;
+}
+
+.underlined-tabs button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 3px solid transparent;
+  margin: 0;
+}
+
+.underlined-tabs button:hover {
+  background-color: #ebebeb;
+}
+
+.underlined-tabs .active-tab {
+  border-bottom: 3px solid #1c592f;
+  font-weight: 700;
+  background-color: #e4eee6;
+}
+
+/* Pagination Styles */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.pagination-container button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-container button.active {
   background-color: #1c592f;
   color: #fff;
 }
 
-.bg-red-custom {
-  background-color: #ff0000;
-  border: solid #ff0000;
+.pagination-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.border-interested-active {
-  border-color: #1c592f;
+/* Transition for the filter drawer */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.slide-fade-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-fade-enter-to {
+  transform: translateX(0%);
+  opacity: 1;
 }
 
-.text-interested-active {
-  color: #1c592f;
+/* Filter Drawer Styling */
+.filter-drawer {
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+  padding-bottom: 80px; /* Ensure space for close button */
 }
 
-.bg-interested-active {
-  background-color: #1c592f;
-}
-
-.text-red-custom {
-  color: #ff0000;
-}
-
-.border-red-custom {
-  border: solid #ff0000;
-}
-
-.custom_hover:hover {
-  border-color: #1c592f;
-}
-
-.loading-spinner {
-  font-size: 1.5rem;
-  color: #1c592f;
-  margin-top: 20px;
+/* Ensure fixed height for the swiper */
+.swiper-container {
+  height: 100%;
 }
 
 button i.fas.fa-heart,
@@ -594,77 +887,157 @@ button:hover {
   background-color: rgba(255, 166, 0, 0.2);
 }
 
+.bg-blue-custom {
+  background-color: #fc3025;
+}
+
+.text-blue-custom {
+  color: #154aa8;
+}
+
 .text-purple-custom {
   color: #1c592f;
 }
+
 .text-green-custom {
   color: #22893c;
 }
-.text-red-custom {
-  color: #8a8a8a;
+
+.text-orange-custom {
+  color: #ff6500;
 }
-.border-red-custom {
-  border: 1px solid #8a8a8a;
-}
+
 .custom_hover:hover {
-  box-shadow: 0 0 10px #1c592f;
+  border-color: #ff6500;
 }
+
 .bg-green-custom {
   background-color: #22893c;
 }
+
 .bg-purple-custom {
-  background-color: #e4eee6;
-  color: #000;
-}
-.bg-purple-custom2 {
   background-color: #1c592f;
-  color: #fff;
 }
-.bg-chat-custom2 {
+
+.bg-red-custom {
+  background-color: #5e1675;
+}
+
+.bg-blue-custom {
   background-color: #154aa8;
-  border: 1px solid #154aa8;
-  color: #fff;
 }
 
-.bg-gray-custom {
-  background-color: #8a8a8a;
-  border: 1px solid #8a8a8a;
+.bg-orange-custom {
+  background-color: #ff6500;
 }
 
-.border-interested-active {
-  border: 1px solid #1c592f;
-}
-.text-interested-active {
-  color: #1c592f;
-}
-.bg-interested-active {
-  background-color: #1c592f;
-}
+/* Additional CSS for the grid layout */
 
-.user-icon i {
-  color: #1c592f;
-}
-
-.icon_custom_color {
-  color: #1c592f;
-}
-
-/* New styles for fixed bottom navbar */
-.fixed-bottom-navbar {
-  background-color: white;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 100; /* Increased z-index to ensure it appears above other elements */
-}
-
-.fixed-bottom-navbar button {
+/* Background for the progress section */
+.progress-background {
+  padding: 20px;
+  margin-bottom: 20px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 10px;
-  font-size: 24px; /* Increase font size for icons */
 }
 
-.fixed-bottom-navbar button i {
-  font-size: 18px;
+.progress-container {
+  display: flex;
+  align-items: center;
+}
+
+.progress-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.progress-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-circle circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.progress-circle .background {
+  stroke: #e4eee6;
+}
+
+.progress-circle .foreground {
+  stroke: #1c592f;
+  stroke-linecap: round;
+  stroke-dasharray: 0 100;
+  transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
+  transition-delay: 0.3s;
+}
+
+.progress-circle .progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1em;
+  font-weight: bold;
+  color: #000000;
+}
+
+.missing-steps {
+  margin-left: 20px;
+}
+
+.missing-steps p {
+  font-size: 0.9em;
+  color: #000000;
+}
+
+.missing-steps a {
+  display: block;
+  color: #1c592f;
+  text-decoration: none;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.missing-steps a:hover {
+  text-decoration: underline;
+  color: #1c592f;
+}
+
+/* Styles for blur and overlay */
+.blur-no-opacity {
+  filter: blur(10px);
+  opacity: 1 !important;
+  transform: scale(1.5);
+  transition: transform 0.3s ease;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.lock-overlay i {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.lock-overlay p {
+  font-size: 12px;
+  margin: 0;
 }
 </style>

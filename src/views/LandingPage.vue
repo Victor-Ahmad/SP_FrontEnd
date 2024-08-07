@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Navbar />
     <Header />
     <main id="main-content" class="py-12">
       <div class="container mx-auto">

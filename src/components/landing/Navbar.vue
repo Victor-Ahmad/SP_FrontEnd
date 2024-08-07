@@ -1,12 +1,24 @@
 <template>
   <nav class="bg-white shadow-md py-4 fixed w-full z-50" data-aos="fade-down">
     <div class="container mx-auto flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold">Snelwoningruil</a>
+      <router-link to="/" class="text-2xl font-bold"
+        >Snelwoningruil</router-link
+      >
       <ul class="flex space-x-6">
         <li v-for="link in links" :key="link.text">
-          <a :href="link.href" class="nav-link hover:text-blue-500">{{
-            link.text
-          }}</a>
+          <router-link :to="link.href" class="nav-link hover:text-blue-500">
+            {{ link.text }}
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/register" class="nav-link hover:text-blue-500">
+            Sign Up
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/login" class="nav-link hover:text-blue-500">
+            Login
+          </router-link>
         </li>
       </ul>
     </div>
@@ -19,10 +31,9 @@ export default {
   data() {
     return {
       links: [
-        { text: "About Us", href: "#about" },
-        { text: "FAQ", href: "#faq" },
-        { text: "Contact", href: "#contact" },
-        { text: "Sign Up", href: "#signup" },
+        { text: "About Us", href: "/about" },
+        { text: "FAQ", href: "/faq" },
+        { text: "Contact", href: "/contact" },
       ],
     };
   },

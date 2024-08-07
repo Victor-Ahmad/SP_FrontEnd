@@ -28,10 +28,14 @@
           }"
         >
           <swiper-slide v-for="(image, index) in house.images" :key="index">
-            <img
-              :src="getImageUrl(image.image_path)"
-              class="w-full h-full object-cover"
-            />
+            <div class="relative w-full h-full">
+              <img
+                :src="getImageUrl(image.image_path)"
+                :class="shouldBlur(index) ? 'blur-no-opacity' : ''"
+                class="w-full h-full object-cover"
+              />
+              <LockOverlay v-if="shouldBlur(index)" />
+            </div>
           </swiper-slide>
           <swiper-slide v-if="house.images.length === 0">
             <img
@@ -200,8 +204,8 @@ import {
   EffectCreative,
 } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-
 import anime from "animejs";
+import LockOverlay from "@/components/LockOverlay.vue";
 import {
   expressInterest,
   removeInterest,
@@ -212,12 +216,14 @@ import {
   isChatExisting,
 } from "@/services/apiService";
 import { useRouter } from "vue-router";
+import { mapGetters } from "vuex";
 
 export default {
   name: "HouseCard",
   components: {
     Swiper,
     SwiperSlide,
+    LockOverlay,
   },
   props: {
     house: {
@@ -257,6 +263,7 @@ export default {
     this.isNotInterested = this.house.is_not_interested;
   },
   computed: {
+    ...mapGetters(["hasMoreThanTwoImages"]),
     validProperties() {
       return (
         this.house.specific_properties?.filter(
@@ -274,6 +281,9 @@ export default {
   methods: {
     getImageUrl(path) {
       return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
+    },
+    shouldBlur(index) {
+      return this.hasMoreThanTwoImages === false && index > 0;
     },
     async handleFavoriteClick(event) {
       event.stopPropagation();
@@ -556,5 +566,37 @@ button:hover {
 }
 .bg-chat-custom2:hover {
   box-shadow: 0 0 5px #154aa8;
+}
+
+.blur-no-opacity {
+  filter: blur(10px);
+  opacity: 1 !important;
+  transform: scale(1.5);
+  transition: transform 0.3s ease;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.lock-overlay i {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.lock-overlay p {
+  font-size: 12px;
+  margin: 0;
 }
 </style>
