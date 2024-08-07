@@ -35,6 +35,8 @@
         :formData="formData"
         :image="steps[currentStep].image"
         :errors="errors"
+        :showOtp="showOtp"
+        :otp="otp"
         :key="currentStep"
         v-bind="getStepProps()"
       ></component>
@@ -52,13 +54,14 @@
       <button
         v-if="currentStep < steps.length - 1"
         @click="nextStep"
+        :disabled="isLoading"
         class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
         {{ $t("stepper.next") }}
       </button>
       <button
         v-if="currentStep === steps.length - 1"
-        @click="submitForm"
+        @click="goToHome"
         class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
         {{ $t("stepper.submit") }}
@@ -77,7 +80,10 @@ import Step1 from "./Step1.vue";
 import Step2 from "./Step2.vue";
 import Step3 from "./Step3.vue";
 import Step4 from "./Step4.vue";
-import { validateEmailAndPhone } from "@/services/apiService";
+import {
+  validateEmailAndPhone,
+  verifyOtpRegister,
+} from "@/services/apiService";
 import step1Image from "@/assets/images/step1.png";
 import step2Image from "@/assets/images/step2.png";
 import step3Image from "@/assets/images/step3.png";
@@ -132,6 +138,8 @@ export default {
       phoneErrorMessage: "",
       showPrivacyPolicyError: false,
       isLoading: false,
+      showOtp: false,
+      otp: ["", "", "", ""],
       steps: [
         {
           name: "Step 1",
@@ -175,36 +183,73 @@ export default {
     },
     async nextStep() {
       if (this.currentStep === 2) {
-        // Email and phone validation step
-        if (this.formData.email && this.formData.phone_number) {
-          this.isLoading = true;
-          try {
-            const response = await validateEmailAndPhone(
-              this.formData.email,
-              this.formData.phone_number
-            );
-            this.isLoading = false;
-            if (response.success === 1) {
-              this.emailError = false;
-              this.phoneError = false;
-              this.currentStep++;
-              this.scrollToTop(); // Scroll to top after navigating to the next step
-            } else {
-              this.handleValidationErrors(response.message);
+        if (!this.showOtp) {
+          // Email and phone validation step
+          if (this.formData.email && this.formData.phone_number) {
+            this.isLoading = true;
+            try {
+              const response = await validateEmailAndPhone(
+                this.formData.email,
+                this.formData.phone_number
+              );
+              this.isLoading = false;
+              if (response.success === 1) {
+                this.emailError = false;
+                this.phoneError = false;
+
+                await this.submitForm();
+                // Scroll to top after navigating to the next step
+              } else {
+                this.handleValidationErrors(response.message);
+              }
+            } catch (error) {
+              console.error("Validation error:", error);
+              this.isLoading = false;
+              alert("Error validating email and phone number");
             }
-          } catch (error) {
-            console.error("Validation error:", error);
-            this.isLoading = false;
-            alert("Error validating email and phone number");
+          } else {
+            alert("Please enter both email and phone number");
           }
         } else {
-          alert("Please enter both email and phone number");
+          await this.verifyOtp();
         }
       } else {
         if (this.currentStep < this.steps.length - 1) {
           this.currentStep++;
-          this.scrollToTop(); // Scroll to top after navigating to the next step
+          this.scrollToTop();
         }
+      }
+    },
+    async verifyOtp(otpValue) {
+      this.isLoading = true;
+      try {
+        const response = await verifyOtpRegister(otpValue);
+        this.isLoading = false;
+        if (response.success) {
+          Swal.fire({
+            icon: "success",
+            title: "OTP verified",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            this.showOtp = false;
+            this.currentStep++;
+            this.scrollToTop();
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "OTP verification failed",
+            text: response.message,
+          });
+        }
+      } catch (error) {
+        this.isLoading = false;
+        Swal.fire({
+          icon: "error",
+          title: "OTP verification failed",
+          text: error.message,
+        });
       }
     },
     handleValidationErrors(message) {
@@ -233,6 +278,7 @@ export default {
           phoneError: this.phoneError,
           phoneErrorMessage: this.phoneErrorMessage,
           showPrivacyPolicyError: this.showPrivacyPolicyError,
+          disabled: this.isLoading || this.showOtp,
         };
       }
       return {};
@@ -242,6 +288,9 @@ export default {
         this.currentStep--;
         this.scrollToTop(); // Scroll to top after navigating to the previous step
       }
+    },
+    goToHome() {
+      this.router.push("/home");
     },
     async submitForm() {
       if (
@@ -263,7 +312,9 @@ export default {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          this.router.push("/home");
+          this.showOtp = true;
+          this.scrollToTop();
+          // this.router.push("/home");
         });
       } catch (error) {
         this.isLoading = false;

@@ -18,6 +18,7 @@
                 type="text"
                 v-model="formData.first_name"
                 :placeholder="$t('myInfo.firstNamePlaceholder')"
+                :disabled="disabled"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -33,6 +34,7 @@
                 type="text"
                 v-model="formData.last_name"
                 :placeholder="$t('myInfo.lastNamePlaceholder')"
+                :disabled="disabled"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -53,6 +55,7 @@
                 type="email"
                 v-model="formData.email"
                 :placeholder="$t('myInfo.emailPlaceholder')"
+                :disabled="disabled"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -68,6 +71,7 @@
                 type="tel"
                 v-model="formData.phone_number"
                 :placeholder="$t('myInfo.phoneNumberPlaceholder')"
+                :disabled="disabled"
                 class="input-field w-full p-2 border rounded"
                 required
               />
@@ -88,6 +92,7 @@
                 type="password"
                 v-model="formData.password"
                 :placeholder="$t('myInfo.passwordPlaceholder')"
+                :disabled="disabled"
                 class="input-field w-full p-2 border rounded"
                 required
                 @blur="validatePassword"
@@ -104,6 +109,7 @@
                 type="password"
                 v-model="formData.password_confirmation"
                 :placeholder="$t('myInfo.confirmPasswordPlaceholder')"
+                :disabled="disabled"
                 class="input-field w-full p-2 border rounded"
                 required
                 @blur="validatePassword"
@@ -120,6 +126,7 @@
                   <input
                     type="checkbox"
                     v-model="privacyPolicyAndTerms"
+                    :disabled="disabled"
                     class="checkbox required"
                     required
                   />
@@ -143,8 +150,33 @@
             </div>
           </div>
         </div>
+
+        <div v-if="showOtp" class="form-group mb-4 p-4 custom_border">
+          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+            {{ $t("otp.title") }}
+          </h3>
+          <p class="mb-4">{{ $t("otp.instruction") }}</p>
+          <div class="form-group mb-4 flex justify-center">
+            <div class="otp-container flex justify-between">
+              <input
+                v-for="(digit, index) in otp"
+                :key="index"
+                type="text"
+                maxlength="1"
+                class="otp-input w-16 p-2 border border-gray-300 rounded text-center text-lg focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+                v-model="otp[index]"
+                @input="onInput(index, $event)"
+                @keydown.backspace="onBackspace(index, $event)"
+              />
+            </div>
+          </div>
+          <div v-if="errors.otp" class="text-red-600 text-sm mt-2">
+            {{ errors.otp }}
+          </div>
+        </div>
       </div>
     </div>
+
     <div
       class="w-full md:w-2/5 hidden lg:flex items-center justify-center md:pl-6"
     >
@@ -167,6 +199,9 @@ export default {
     "phoneError",
     "phoneErrorMessage",
     "showPrivacyPolicyError",
+    "showOtp",
+    "otp",
+    "disabled",
   ],
   data() {
     return {
@@ -220,11 +255,31 @@ export default {
     validateForm() {
       this.showPrivacyPolicyError = !this.privacyPolicyAndTerms;
     },
+    onInput(index, event) {
+      const value = event.target.value;
+      if (!/^[0-9]$/.test(value)) {
+        this.otp[index] = "";
+        return;
+      }
+      if (index < 3 && value) {
+        this.otp[index] = value;
+        event.target.nextElementSibling.focus();
+      }
+    },
+    onBackspace(index, event) {
+      if (!this.otp[index] && index > 0) {
+        event.target.previousElementSibling.focus();
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+.custom_border {
+  box-shadow: 0 0 10px #1c592f;
+}
+
 .input-field {
   @apply w-full p-2 border border-gray-300 rounded;
 }
@@ -235,5 +290,13 @@ export default {
 }
 .invalid-feedback {
   @apply text-red-600 text-sm;
+}
+.otp-container {
+  display: flex;
+  gap: 10px;
+}
+.otp-input {
+  width: 4rem;
+  text-align: center;
 }
 </style>

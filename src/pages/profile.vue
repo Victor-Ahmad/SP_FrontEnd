@@ -313,7 +313,9 @@
               />
             </div>
           </div> -->
-          <div v-if="profile.one_to_one_swap_house.images.length > 0">
+          <div
+            v-if="profile.one_to_one_swap_house.images.length > 0 || isEditable"
+          >
             <div
               class="images-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
             >

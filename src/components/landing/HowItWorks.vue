@@ -1,14 +1,18 @@
 <template>
-  <section id="how-it-works" class="py-12 bg-white" data-aos="fade-up">
+  <section
+    id="how-it-works"
+    class="py-12 bg-white text-center"
+    data-aos="fade-up"
+  >
     <div class="container mx-auto">
       <h2 class="text-4xl font-bold mb-6">How Does It Work?</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <img
           src="@/assets/images/landing_2.jpg"
           alt="How it works"
-          class="w-full h-auto rounded-lg shadow-lg"
+          class="w-full h-auto rounded-lg shadow-lg animate__animated animate__fadeInLeft"
         />
-        <div class="space-y-6 text-lg">
+        <div class="space-y-6 text-lg animate__animated animate__fadeInRight">
           <p v-for="(text, index) in texts" :key="index">{{ text }}</p>
         </div>
       </div>
@@ -35,5 +39,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
+section {
+  background-color: #f9f9f9;
+}
 </style>

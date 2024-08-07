@@ -528,3 +528,14 @@ export const getSwapsCounts = async () => {
     throw error;
   }
 };
+
+export const verifyOtpRegister = async (otp) => {
+  try {
+    const response = await axiosInstance.post("/verifyOtpForRegister", {
+      otp,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

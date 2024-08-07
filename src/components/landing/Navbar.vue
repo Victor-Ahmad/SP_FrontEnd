@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white shadow-md py-4 fixed w-full z-50" data-aos="fade-down">
+  <nav class="bg-white shadow-md py-4 fixed w-full z-50">
     <div class="container mx-auto flex justify-between items-center">
       <router-link to="/" class="text-2xl font-bold"
         >Snelwoningruil</router-link
@@ -47,7 +47,6 @@ export default {
   overflow: hidden;
   transition: color 0.3s;
 }
-
 .nav-link::after {
   content: "";
   position: absolute;
@@ -58,7 +57,6 @@ export default {
   left: -100%;
   transition: left 0.3s;
 }
-
 .nav-link:hover::after {
   left: 0;
 }
