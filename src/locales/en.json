@@ -269,6 +269,12 @@
         "instruction": "We've sent you an email with a one-time password (OTP). Please check your email and enter the code here.",
         "verify_button": "Verify",
         "error": "Invalid OTP. Please try again."
-      }
+    },
+    "bottomNav": {
+    "home": "Home",
+    "swaps": "Swaps",
+    "chats": "Chats",
+    "menu": "Menu"
+    }
    
 }

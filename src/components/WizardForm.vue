@@ -61,7 +61,7 @@
       </button>
       <button
         v-if="currentStep === steps.length - 1"
-        @click="goToHome"
+        @click="handleFinalStep"
         class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
         {{ $t("stepper.submit") }}
@@ -83,11 +83,13 @@ import Step4 from "./Step4.vue";
 import {
   validateEmailAndPhone,
   verifyOtpRegister,
+  updateDescriptionAndImages,
 } from "@/services/apiService";
 import step1Image from "@/assets/images/step1.png";
 import step2Image from "@/assets/images/step2.png";
 import step3Image from "@/assets/images/step3.png";
 import step4Image from "@/assets/images/step4.png";
+
 export default {
   components: {
     Step1: markRaw(Step1),
@@ -211,7 +213,8 @@ export default {
             alert("Please enter both email and phone number");
           }
         } else {
-          await this.verifyOtp();
+          const otpValue = this.otp.join("");
+          await this.verifyOtp(otpValue);
         }
       } else {
         if (this.currentStep < this.steps.length - 1) {
@@ -287,6 +290,42 @@ export default {
       if (this.currentStep > 0) {
         this.currentStep--;
         this.scrollToTop(); // Scroll to top after navigating to the previous step
+      }
+    },
+    async handleFinalStep() {
+      const description = this.formData.house_description;
+      const images = this.formData.gallery;
+      const hasDescription = description && description.trim() !== "";
+      const hasImages = images && images.length > 0;
+
+      if (hasDescription || hasImages) {
+        try {
+          this.isLoading = true;
+          const response = await updateDescriptionAndImages(
+            description,
+            images,
+            null
+          );
+          this.isLoading = false;
+          Swal.fire({
+            icon: "success",
+            title: "Update successful",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            this.goToHome();
+          });
+        } catch (error) {
+          console.log(error);
+          this.isLoading = false;
+          Swal.fire({
+            icon: "error",
+            title: "Update failed",
+            text: error.message,
+          });
+        }
+      } else {
+        this.goToHome();
       }
     },
     goToHome() {

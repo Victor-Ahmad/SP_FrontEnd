@@ -1,19 +1,32 @@
 <template>
-  <section
-    id="how-it-works"
-    class="py-12 bg-white text-center"
-    data-aos="fade-up"
-  >
-    <div class="container mx-auto">
-      <h2 class="text-4xl font-bold mb-6">How Does It Work?</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <img
-          src="@/assets/images/landing_2.jpg"
-          alt="How it works"
-          class="w-full h-auto rounded-lg shadow-lg animate__animated animate__fadeInLeft"
-        />
-        <div class="space-y-6 text-lg animate__animated animate__fadeInRight">
-          <p v-for="(text, index) in texts" :key="index">{{ text }}</p>
+  <section id="how-it-works" class="how-it-works-section">
+    <div class="container mx-auto text-center">
+      <h2 class="section-title">Hoe werkt het?</h2>
+      <div class="steps-map">
+        <svg
+          class="steps-path"
+          viewBox="0 0 1000 400"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            id="curve"
+            d="M 50 350 C 150 150, 350 150, 450 350 S 750 550, 950 350"
+            stroke="#3b82f6"
+            stroke-width="4"
+            fill="transparent"
+          />
+        </svg>
+        <div
+          v-for="(step, index) in steps"
+          :key="index"
+          :class="`step step-${index + 1}`"
+          :style="getStepStyle(index)"
+        >
+          <div class="step-number">{{ index + 1 }}</div>
+          <div class="step-content">
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-text">{{ step.text }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -25,21 +38,116 @@ export default {
   name: "HowItWorks",
   data() {
     return {
-      texts: [
-        "Where do you want to go and what are you looking for? Provide details about the house you are looking for. Be clear and give complete information so that the site’s system can help you find a suitable house.",
-        "Fill in information about your home, such as rent price, number of rooms, type of house, etc. Ensure that it is clear and contains all necessary details.",
-        "Then, fill in your personal information. This information will not be displayed and is only used for creating the account. Our website guarantees your privacy.",
-        "Add clear photos of your home. You can then view all homes on the site. If you like one of the houses, express your interest by giving a like and contact the other party through the chat.",
-        "Do you want to swap with each other? Start arranging the documents. If you need help, email us at info@snelwoningruil.nl",
-        "The process is successfully completed. The site helps you find a house that meets your expectations and saves you time and effort. We also offer consultations regarding all necessary paperwork. Customer satisfaction is our main goal.",
+      steps: [
+        {
+          title: "Waar wil je naartoe en wat zoek je?",
+          text: "Geef details over het huis dat je zoekt. Wees duidelijk en geef volledige informatie zodat het systeem van de site je kan helpen een geschikt huis te vinden.",
+        },
+        {
+          title: "Jouw woninginformatie",
+          text: "Vul de informatie over je huis in, zoals huurprijs, aantal kamers, type huis, enz. Zorg dat het duidelijk is en alle nodige details bevat.",
+        },
+        {
+          title: "Het account",
+          text: "Vul vervolgens je persoonlijke informatie in. Deze informatie wordt niet weergegeven en wordt alleen gebruikt voor het aanmaken van het account. Onze website garandeert je privacy.",
+        },
+        {
+          title: "Foto’s en beschrijving",
+          text: "Voeg duidelijke foto's van je huis toe.",
+        },
+        {
+          title: "Blader door beschikbare woningen",
+          text: "Je kunt vervolgens alle woningen op de site bekijken. Als je een van de huizen leuk vindt, laat je interesse weten door een like te geven en neem contact op met de andere partij via de chat.",
+        },
+        {
+          title: "De documenten",
+          text: "Willen jullie met elkaar ruilen? Begin met het regelen van de documenten. Als je hulp nodig hebt, stuur ons een mail op info@snelwoningruil.nl",
+        },
+        {
+          title: "Genieten van een geslaagde ruil!",
+          text: "Het proces is succesvol afgerond. De site helpt je een huis vinden dat aan je verwachtingen voldoet en bespaart je tijd en moeite. We bieden je ook consultaties aan met betrekking tot alle nodige papieren. Klanttevredenheid is ons belangrijkste doel.",
+        },
       ],
     };
+  },
+  methods: {
+    getStepStyle(index) {
+      const positions = [
+        { top: "300px", left: "50px" },
+        { top: "100px", left: "200px" },
+        { top: "300px", left: "350px" },
+        { top: "100px", left: "500px" },
+        { top: "300px", left: "650px" },
+        { top: "100px", left: "800px" },
+        { top: "300px", left: "950px" },
+      ];
+      return positions[index];
+    },
   },
 };
 </script>
 
 <style scoped>
-section {
+.how-it-works-section {
+  padding: 4rem 1rem;
   background-color: #f9f9f9;
+  position: relative;
+}
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+.steps-map {
+  position: relative;
+  height: 400px;
+}
+.steps-path {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.step {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  text-align: left;
+  position: absolute;
+  z-index: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.step-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+.step-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.step-text {
+  font-size: 1rem;
+}
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  .step {
+    width: 150px;
+  }
+  .steps-map {
+    height: 600px;
+  }
 }
 </style>

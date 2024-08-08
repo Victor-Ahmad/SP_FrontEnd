@@ -1,85 +1,82 @@
 <template>
-  <section id="tips" class="py-12 bg-white" data-aos="fade-up">
-    <div class="container mx-auto">
-      <h2 class="text-4xl font-bold mb-6">Tips for a Successful Exchange</h2>
+  <section id="tips" class="tips-section">
+    <div class="container mx-auto text-center">
+      <h2 class="section-title">Tips voor een succesvolle ruil</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <ul class="list-disc pl-6 space-y-4 text-lg">
+        <ul class="tips-list">
           <li>
-            <strong>Add Photos:</strong> Make sure to add clear and bright
-            photos of your home. Listings with photos have a higher success
-            rate.
+            <strong>Foto’s toevoegen:</strong> Zorg ervoor dat je duidelijke en
+            heldere foto’s van je huis toevoegt. Advertenties met foto’s hebben
+            een grotere kans van slagen.
           </li>
           <li>
-            <strong>Home Description:</strong> These details help the site’s
-            system find options that truly match you.
+            <strong>Omschrijving woning:</strong> Deze details helpen het
+            systeem van de site om opties te vinden die echt bij jou passen.
           </li>
           <li>
-            <strong>Communicate Clearly:</strong> Discuss all your wishes and
-            needs with your exchange partner. Clear communication helps avoid
-            misunderstandings.
+            <strong>Communiceer duidelijk:</strong> Bespreek al je wensen en
+            behoeftes met je ruilpartner. Duidelijke communicatie helpt
+            misverstanden te voorkomen.
           </li>
           <li>
-            <strong>Realistic Expectations:</strong> Everyone is looking for
-            their ideal home. It’s natural that houses are allocated based on
-            income situation and household size. Look forTo create a highly
-            engaging and visually appealing landing page, we'll integrate
-            several modern design elements and features inspired by top landing
-            page examples and trends. Here are the enhanced components and new
-            features based on the research: ### Key Enhancements and Features:
-            1. **Bold Headlines and Subheadlines**: Catch attention with clear,
-            concise, and bold headlines. 2. **Visual Hierarchy and Ample White
-            Space**: Guide the user's eye through the content effectively. 3.
-            **High-Quality Imagery and Custom Graphics**: Enhance visual appeal
-            with professional images and custom graphics. 4. **Animated Visuals
-            and Micro-Interactions**: Engage users with smooth animations and
-            interactive elements. 5. **Clear and Strong CTAs**: Use visually
-            appealing buttons with compelling text. 6. **Social Proof and
-            Testimonials**: Build trust with customer quotes, reviews, and
-            ratings. 7. **Live Chat Support**: Provide immediate assistance to
-            visitors with live chat. ### Implementation: #### 1. Enhanced Navbar
-            Component:
+            <strong>Realistische verwachtingen:</strong> Iedereen zoekt naar
+            diens ideale huis. Het is natuurlijk zo dat huizen worden toegewezen
+            op een manier dat deze gepast is voor zowel de inkomenssituatie en
+            de grote van het huishouden. Zoek naar je droomhuis, maar wees ook
+            realistisch.
+          </li>
+          <li>
+            <strong>Dagelijks inloggen:</strong> Hoe meer je inlogt, hoe groter
+            de kans op slagen. Ons systeem past aan op basis van jou gegeven
+            interesses.
           </li>
         </ul>
+        <img
+          src="@/assets/images/landing_4.jpg"
+          alt="Tips"
+          class="tips-image"
+        />
       </div>
     </div>
   </section>
 </template>
+
 <script>
 export default {
-  name: "Navbar",
-  data() {
-    return {
-      links: [
-        { text: "About Us", href: "#about" },
-        { text: "FAQ", href: "#faq" },
-        { text: "Contact", href: "#contact" },
-        { text: "Sign Up", href: "#signup" },
-      ],
-    };
-  },
+  name: "Tips",
 };
 </script>
 
 <style scoped>
-.nav-link {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  transition: color 0.3s;
+.tips-section {
+  padding: 4rem 1rem;
+  background-color: white;
 }
-
-.nav-link::after {
-  content: "";
-  position: absolute;
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+.tips-list {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+}
+.tips-list li {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.tips-image {
   width: 100%;
-  height: 2px;
-  background: #3b82f6;
-  bottom: 0;
-  left: -100%;
-  transition: left 0.3s;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.nav-link:hover::after {
-  left: 0;
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  .tips-list li {
+    font-size: 1rem;
+  }
 }
 </style>

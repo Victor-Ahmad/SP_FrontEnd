@@ -269,7 +269,13 @@
     "instruction": "We hebben je een e-mail gestuurd met een eenmalig wachtwoord (OTP). Controleer je e-mail en voer de code hier in.",
     "verify_button": "Verifiëren",
     "error": "Ongeldige OTP. Probeer het opnieuw."
-  }
+    },
+    "bottomNav": {
+        "home": "Thuis",
+        "swaps": "Wissels",
+        "chats": "Chats",
+        "menu": "Menu"
+    }
 
     
 }

@@ -531,9 +531,19 @@ export const getSwapsCounts = async () => {
 
 export const verifyOtpRegister = async (otp) => {
   try {
-    const response = await axiosInstance.post("/verifyOtpForRegister", {
-      otp,
-    });
+    const formData = new FormData();
+    formData.append("otp", otp);
+
+    const response = await axiosInstance.post(
+      "/verifyOtpForRegister",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
     return response.data;
   } catch (error) {
     throw error;

@@ -5,9 +5,9 @@
     <div v-else class="flex flex-col md:flex-row">
       <div class="w-full md:w-1/5">
         <div
-          class="grid grid-cols-2 gap-2 lg:p-4 md:mr-6 md:grid-cols-1 md:flex md:flex-col"
+          class="tabs-container lg:p-4 md:mr-6 md:grid-cols-1 md:flex md:flex-col"
         >
-          <div class="mb-2 underlined-tabs">
+          <div class="tab-item">
             <button
               :class="{ 'active-tab': activeTab === 'my_interests' }"
               @click="setActiveTab('my_interests')"
@@ -15,7 +15,7 @@
               {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
             </button>
           </div>
-          <div class="mb-2 underlined-tabs">
+          <div class="tab-item">
             <button
               :class="{ 'active-tab': activeTab === 'complete_profile' }"
               @click="setActiveTab('complete_profile')"
@@ -25,7 +25,7 @@
               }})
             </button>
           </div>
-          <div class="mb-2 underlined-tabs">
+          <div class="tab-item">
             <button
               :class="{ 'active-tab': activeTab === 'swap_with_me' }"
               @click="setActiveTab('swap_with_me')"
@@ -33,7 +33,7 @@
               {{ $t("profileTabs.swapWithMe") }} ({{ swapWithMeCount }})
             </button>
           </div>
-          <div class="mb-2 underlined-tabs">
+          <div class="tab-item">
             <button
               :class="{ 'active-tab': activeTab === 'my_favorites' }"
               @click="setActiveTab('my_favorites')"
@@ -41,7 +41,7 @@
               {{ $t("profileTabs.myFavorites") }} ({{ myFavoritesCount }})
             </button>
           </div>
-          <div class="mb-2 underlined-tabs">
+          <div class="tab-item">
             <button
               :class="{ 'active-tab': activeTab === 'my_triangles' }"
               @click="setActiveTab('my_triangles')"
@@ -436,15 +436,17 @@ export default {
 </script>
 
 <style scoped>
-.underlined-tabs {
+.tabs-container {
   display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #ccc;
+  flex-direction: column;
 }
 
-.underlined-tabs button {
-  flex: 1;
+.tab-item {
+  margin-bottom: 10px;
+}
+
+.tab-item button {
+  width: 100%;
   padding: 10px;
   border: none;
   background: transparent;
@@ -457,11 +459,11 @@ export default {
   border-bottom: 3px solid transparent;
 }
 
-.underlined-tabs button:hover {
+.tab-item button:hover {
   background-color: #e4eee6;
 }
 
-.underlined-tabs .active-tab {
+.tab-item .active-tab {
   border-bottom: 3px solid #1c592f;
   font-weight: 700;
   background-color: #e4eee6;
@@ -479,5 +481,32 @@ export default {
   max-width: 200px;
   max-height: 200px;
   filter: grayscale(100%) opacity(50%);
+}
+
+@media (max-width: 767px) {
+  .tabs-container {
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tabs-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for WebKit browsers */
+  }
+
+  .tab-item {
+    flex: 0 0 auto;
+    margin-right: 10px;
+    border-bottom: 2px solid #ccc;
+  }
+
+  .tab-item:last-child {
+    margin-right: 0;
+  }
+
+  .tab-item button {
+    flex: 1;
+  }
 }
 </style>

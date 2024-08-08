@@ -28,6 +28,7 @@ const routes = [
         path: "/",
         name: "LandingPage",
         component: LandingPage,
+        meta: { requiresGuest: true },
       },
       {
         path: "home",
@@ -37,6 +38,7 @@ const routes = [
       {
         path: "wizardForm",
         component: WizardForm,
+        meta: { requiresGuest: true },
       },
       {
         path: "about",
@@ -139,7 +141,7 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.matched.some((record) => record.meta.requiresGuest)) {
     if (isAuthenticated) {
-      next({ path: "/" });
+      next({ path: "/home" });
     } else {
       next();
     }

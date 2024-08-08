@@ -119,7 +119,7 @@
             ]"
           >
             <i class="fas fa-thumbs-up mr-1"></i>
-            <span class="hidden md:inline">{{ $t("page.interested") }}</span>
+            <span class="hidden custom_lg">{{ $t("page.interested") }}</span>
           </button>
           <button
             @click.stop="toggleNotInterested($event)"
@@ -131,14 +131,14 @@
             ]"
           >
             <i class="fas fa-thumbs-down mr-1"></i>
-            <span class="hidden md:inline">{{ $t("page.notInterested") }}</span>
+            <span class="hidden custom_lg">{{ $t("page.notInterested") }}</span>
           </button>
           <button
             @click.stop="startChat($event)"
             class="w-1/3 lg:w-3/12 px-3 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8]"
           >
             <i class="fas fa-comment mr-1"></i>
-            <span class="hidden md:inline">{{ $t("page.chat") }}</span>
+            <span class="hidden custom_lg">{{ $t("page.chat") }}</span>
           </button>
         </div>
       </div>
@@ -598,5 +598,10 @@ button:hover {
 .lock-overlay p {
   font-size: 12px;
   margin: 0;
+}
+@media (min-width: 1600px) {
+  .custom_lg {
+    display: inline;
+  }
 }
 </style>
