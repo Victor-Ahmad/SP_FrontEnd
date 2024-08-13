@@ -5,12 +5,12 @@
       <div class="steps-map">
         <svg
           class="steps-path"
-          viewBox="0 0 1000 400"
+          viewBox="0 0 1000 700"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
             id="curve"
-            d="M 50 350 C 150 150, 350 150, 450 350 S 750 550, 950 350"
+            d="M 50 600 C 150 100, 350 100, 450 600 S 750 1100, 950 600"
             stroke="#3b82f6"
             stroke-width="4"
             fill="transparent"
@@ -73,13 +73,13 @@ export default {
   methods: {
     getStepStyle(index) {
       const positions = [
-        { top: "300px", left: "50px" },
+        { top: "550px", left: "60px" },
         { top: "100px", left: "200px" },
-        { top: "300px", left: "350px" },
-        { top: "100px", left: "500px" },
-        { top: "300px", left: "650px" },
-        { top: "100px", left: "800px" },
-        { top: "300px", left: "950px" },
+        { top: "550px", left: "400px" },
+        { top: "100px", left: "600px" },
+        { top: "550px", left: "800px" },
+        { top: "100px", left: "1000px" },
+        { top: "550px", left: "1200px" },
       ];
       return positions[index];
     },
@@ -100,7 +100,7 @@ export default {
 }
 .steps-map {
   position: relative;
-  height: 400px;
+  height: 700px;
 }
 .steps-path {
   position: absolute;
@@ -147,7 +147,7 @@ export default {
     width: 150px;
   }
   .steps-map {
-    height: 600px;
+    height: 900px;
   }
 }
 </style>

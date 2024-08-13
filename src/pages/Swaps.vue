@@ -90,10 +90,10 @@
           v-else-if="activeTab === 'complete_profile'"
           :class="{
             'col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6':
-              complete_interest.length,
+              complete_interest && complete_interest.length,
           }"
         >
-          <template v-if="complete_interest.length">
+          <template v-if="complete_interest && complete_interest.length">
             <HouseCardWithSwap
               v-for="house in complete_interest"
               :key="house.id"

@@ -152,6 +152,14 @@
             class="grayscale"
           />
         </div>
+        <div class="flex justify-center">
+          <router-link
+            to="/home"
+            class="px-4 py-2 bg-[#154aa8] text-white rounded transition"
+          >
+            Home
+          </router-link>
+        </div>
       </div>
     </div>
     <div
@@ -317,7 +325,7 @@ export default {
 @media (max-width: 768px) {
   .message-input-container {
     position: fixed;
-    bottom: 60px;
+    bottom: 80px;
     left: 0;
     right: 0;
   }

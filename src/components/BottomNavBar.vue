@@ -2,13 +2,23 @@
   <nav
     class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center py-2 z-50"
   >
-    <router-link to="/home" class="nav-item" active-class="active">
+    <router-link
+      to="/home"
+      class="nav-item"
+      active-class="active"
+      @click.native="handleNavItemClick('/home')"
+    >
       <div class="icon-text">
         <i class="fas fa-home"></i>
         <span>{{ $t("bottomNav.home") }}</span>
       </div>
     </router-link>
-    <router-link to="/swaps" class="nav-item" active-class="active">
+    <router-link
+      to="/swaps"
+      class="nav-item"
+      active-class="active"
+      @click.native="handleNavItemClick('/swaps')"
+    >
       <div class="icon-text">
         <i class="fas fa-exchange-alt"></i>
         <span>{{ $t("bottomNav.swaps") }}</span>
@@ -18,13 +28,14 @@
       :to="isMobile ? '/chatslist' : '/chatPage'"
       class="nav-item"
       active-class="active"
+      @click.native="handleNavItemClick(isMobile ? '/chatslist' : '/chatPage')"
     >
       <div class="icon-text">
         <i class="fas fa-comments"></i>
         <span>{{ $t("bottomNav.chats") }}</span>
       </div>
     </router-link>
-    <button @click="toggleSidebar" class="nav-item sidebar">
+    <button @click="handleMenuClick" class="nav-item sidebar">
       <div class="icon-text">
         <i class="fas fa-bars"></i>
         <span>{{ $t("bottomNav.menu") }}</span>
@@ -36,6 +47,12 @@
 <script>
 export default {
   name: "BottomNavBar",
+  props: {
+    isSidebarVisible: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       isMobile: window.innerWidth <= 768,
@@ -47,6 +64,17 @@ export default {
     },
     checkScreenSize() {
       this.isMobile = window.innerWidth <= 768;
+    },
+    handleNavItemClick(route) {
+      // If sidebar is visible, only close it instead of navigating
+      if (this.isSidebarVisible) {
+        this.toggleSidebar();
+      } else {
+        this.$router.push(route);
+      }
+    },
+    handleMenuClick() {
+      this.toggleSidebar();
     },
   },
   mounted() {

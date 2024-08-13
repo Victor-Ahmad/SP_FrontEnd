@@ -680,7 +680,7 @@ button:hover {
 }
 
 .bg-red-custom {
-  background-color: #5e1675;
+  background-color: #8a8a8a;
 }
 
 .bg-blue-custom {
@@ -920,7 +920,7 @@ button:hover {
 }
 
 .bg-red-custom {
-  background-color: #5e1675;
+  background-color: #8a8a8a;
 }
 
 .bg-blue-custom {
@@ -1039,5 +1039,20 @@ button:hover {
 .lock-overlay p {
   font-size: 12px;
   margin: 0;
+}
+.bg-interested-active {
+  background-color: #1c592f;
+}
+.border-interested-active {
+  border: 1px solid #1c592f;
+}
+.text-interested-active {
+  color: #1c592f;
+}
+.border-red-custom {
+  border: 1px solid #8a8a8a;
+}
+.text-red-custom {
+  color: #8a8a8a;
 }
 </style>

@@ -23,6 +23,9 @@
                 :placeholder="$t('form.cityPlaceholder')"
                 class="input-field w-full p-2 border rounded"
               />
+              <p class="text-sm text-gray-600 mt-2">
+                {{ $t("form.locationHint") }}
+              </p>
             </div>
 
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">

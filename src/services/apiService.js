@@ -523,6 +523,37 @@ export const getTriangleSwapHouses = async () => {
 export const getSwapsCounts = async () => {
   try {
     const response = await axiosInstance.get("/user/counts");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getNotifications = async () => {
+  try {
+    const response = await axiosInstance.get("/notifications");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const markAllNotificationAsRead = async () => {
+  try {
+    const response = await axiosInstance.get("/mark_all_as_read");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const markNotificationAsRead = async (notificationId) => {
+  try {
+    const response = await axiosInstance.post(
+      `/mark_as_read/${notificationId}`
+    );
     return response.data;
   } catch (error) {
     throw error;

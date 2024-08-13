@@ -424,7 +424,7 @@ button:hover {
 }
 
 .bg-red-custom {
-  background-color: #5e1675;
+  background-color: #8a8a8a;
 }
 
 .bg-blue-custom {

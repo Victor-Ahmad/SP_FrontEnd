@@ -97,7 +97,8 @@
         "floorRequired": "Floor number is required.",
         "areaRequired": "Area is required.",
         "featuresRequired": "At least one feature is required.",
-        "locationsRequired": "At least one location is required."
+        "locationsRequired": "At least one location is required.",
+        "locationHint": "The more locations you add, the higher your chances of finding your desired swap deal."
     },
     "myHouse": {
         "title": "My House",

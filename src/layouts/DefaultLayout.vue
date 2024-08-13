@@ -4,8 +4,12 @@
     <main class="flex-grow md:pt-20 lg:pt-20">
       <router-view></router-view>
     </main>
-    <Footer />
-    <BottomNavBar @toggle-sidebar="toggleSidebar" v-if="isMobile && token" />
+    <BottomNavBar
+      :isSidebarVisible="isSidebarVisible"
+      @toggle-sidebar="toggleSidebar"
+      v-if="isMobile && token"
+    />
+
     <Sidebar :isVisible="isSidebarVisible" @close-sidebar="toggleSidebar" />
     <div v-if="isSidebarVisible" class="overlay" @click="toggleSidebar"></div>
   </div>

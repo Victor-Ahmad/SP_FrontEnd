@@ -96,7 +96,8 @@
         "floorRequired": "Verdieping is vereist.",
         "areaRequired": "Oppervlakte is vereist.",
         "featuresRequired": "Er is minstens één kenmerk vereist.",
-        "locationsRequired": "Er is minstens één locatie vereist."
+        "locationsRequired": "Er is minstens één locatie vereist.",
+        "locationHint": "Hoe meer locaties u toevoegt, hoe groter de kans dat u uw gewenste ruil vindt."
     },
     "myHouse": {
         "title": "Mijn Huis",
@@ -271,8 +272,8 @@
     "error": "Ongeldige OTP. Probeer het opnieuw."
     },
     "bottomNav": {
-        "home": "Thuis",
-        "swaps": "Wissels",
+        "home": "Home",
+        "swaps": "Ruilen",
         "chats": "Chats",
         "menu": "Menu"
     }

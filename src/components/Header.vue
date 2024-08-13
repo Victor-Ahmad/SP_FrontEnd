@@ -1,6 +1,15 @@
 <template>
   <header v-if="shouldShowHeader" :class="headerClasses">
     <div class="flex items-center space-x-4">
+      <!-- Back Button (Visible only on mobile and not on certain routes) -->
+      <button
+        v-if="shouldShowBackButton"
+        @click="goBack"
+        class="p-2"
+        aria-label="Go back"
+      >
+        <i class="fas fa-arrow-left text-lg text-black"></i>
+      </button>
       <router-link to="/" class="flex items-center">
         <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
       </router-link>
@@ -106,6 +115,7 @@ export default {
     });
 
     const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"]; // List of routes where header should be hidden on mobile
+    const noBackButtonRoutes = ["/home", "/swaps"]; // Routes where the back button should not appear
 
     const shouldShowHeader = computed(() => {
       const isHiddenRoute = hiddenRoutesOnMobile.includes(route.path);
@@ -114,12 +124,23 @@ export default {
       return !(isMobile.value && (isHiddenRoute || isSpecificChatPage));
     });
 
+    const shouldShowBackButton = computed(() => {
+      const isNoBackButtonRoute = noBackButtonRoutes.includes(route.path);
+      return isMobile.value && !isNoBackButtonRoute;
+    });
+
+    const goBack = () => {
+      router.back();
+    };
+
     return {
       isMobile,
       token,
       handleLogout,
       headerClasses,
       shouldShowHeader,
+      shouldShowBackButton,
+      goBack,
     };
   },
 };
