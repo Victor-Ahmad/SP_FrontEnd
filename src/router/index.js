@@ -22,14 +22,14 @@ import LandingPage from "@/views/LandingPage.vue";
 const routes = [
   {
     path: "/",
+    name: "LandingPage",
+    component: LandingPage,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/",
     component: DefaultLayout,
     children: [
-      {
-        path: "/",
-        name: "LandingPage",
-        component: LandingPage,
-        meta: { requiresGuest: true },
-      },
       {
         path: "home",
         component: Home,
@@ -104,10 +104,10 @@ const routes = [
         component: ForgetPassword,
       },
       {
-        path: "otp-verification",
+        path: "/otp-verification", // Ensure the path starts with a slash
         name: "OtpVerification",
         component: OtpVerification,
-        props: true,
+        props: true, // Pass route parameters as props
       },
       {
         path: "reset-password",

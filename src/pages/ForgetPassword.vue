@@ -69,6 +69,7 @@
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import Swal from "sweetalert2";
+import { getOtp } from "@/services/apiService"; // Import the getOtp function
 
 export default {
   name: "ForgetPassword",
@@ -79,28 +80,22 @@ export default {
     const handleForgetPassword = async () => {
       const email = document.getElementById("email").value;
       try {
-        // Dummy function to simulate sending OTP
-        await sendOtp(email);
+        // Call the API to send the OTP
+        await getOtp(email);
         Swal.fire({
           icon: "success",
           title: "OTP sent to email",
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          router.push({ name: "OtpVerification", params: { email } });
+          router.push({
+            name: "OtpVerification",
+            query: { email }, // Pass the email as a query parameter
+          });
         });
       } catch (err) {
         error.value = "Failed to send OTP. Please try again.";
       }
-    };
-
-    const sendOtp = (email) => {
-      // Dummy function to be replaced with actual API call
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 1000);
-      });
     };
 
     return {

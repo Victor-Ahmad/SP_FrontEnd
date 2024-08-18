@@ -590,3 +590,33 @@ export const storeFcmTokenOnServer = async (firebase_token) => {
     throw error;
   }
 };
+
+export const getOtp = async (email, process_type = "forget_password") => {
+  try {
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("process_type", process_type);
+    const response = await axiosInstance.post("/sendMailOtp", formData);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const verifyOtpForForgetPassword = async (email, otp) => {
+  try {
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("otp", otp);
+    const response = await axiosInstance.post(
+      "/verifyOtpForForgetPassword",
+      formData
+    );
+    console.log(response.data);
+    alert("verify Otp success");
+    return response.data;
+  } catch (error) {
+    alert("verify Otp failed");
+    throw error;
+  }
+};

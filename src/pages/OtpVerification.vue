@@ -34,6 +34,22 @@
             </button>
           </div>
           <div v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
+          <div
+            v-if="timeLeft > 0"
+            class="text-center text-sm mt-4 text-gray-500"
+          >
+            {{ $t("otp.resend_wait") }} {{ timeLeft }}s
+          </div>
+          <div class="text-center mt-4">
+            <button
+              type="button"
+              :disabled="isResendDisabled"
+              @click="resendOtp"
+              class="px-4 py-2 bg-gray-300 text-[#1c592f] w-full rounded-full transition duration-300 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              {{ $t("otp.resend_button") }}
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -44,20 +60,30 @@
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import Swal from "sweetalert2";
+import { verifyOtpForForgetPassword, getOtp } from "@/services/apiService"; // Import the API functions
 
 export default {
   name: "OtpVerification",
   setup() {
-    const router = useRouter();
     const route = useRoute();
+    const email = route.query.email; // Access the email from query parameters
+
+    const router = useRouter();
     const error = ref("");
     const otp = ref(["", "", "", ""]);
+    const isResendDisabled = ref(false);
+    const timeLeft = ref(0);
+    let timer;
+    if (!email) {
+      console.error("Email is undefined. Make sure it's passed correctly.");
+      alert("Email is undefined. Make sure it's passed correctly.");
+    }
 
     const handleVerifyOtp = async () => {
       const otpValue = otp.value.join("");
       try {
-        // Dummy function to simulate OTP verification
-        await verifyOtp(route.params.email, otpValue);
+        // Verify OTP using the API
+        await verifyOtpForForgetPassword(email, otpValue);
         Swal.fire({
           icon: "success",
           title: "OTP verified",
@@ -66,7 +92,7 @@ export default {
         }).then(() => {
           router.push({
             name: "ResetPassword",
-            params: { email: route.params.email },
+            query: { email }, // Pass email correctly to the next page
           });
         });
       } catch (err) {
@@ -74,13 +100,32 @@ export default {
       }
     };
 
-    const verifyOtp = (email, otp) => {
-      // Dummy function to be replaced with actual API call
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          otp === "1234" ? resolve(true) : reject(false);
-        }, 1000);
-      });
+    const resendOtp = async () => {
+      try {
+        await getOtp(email);
+        Swal.fire({
+          icon: "success",
+          title: "OTP resent",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        startTimer();
+      } catch (err) {
+        error.value = this.$t("otp.resend_error");
+      }
+    };
+
+    const startTimer = () => {
+      isResendDisabled.value = true;
+      timeLeft.value = 120; // 2 minutes
+
+      timer = setInterval(() => {
+        timeLeft.value -= 1;
+        if (timeLeft.value <= 0) {
+          clearInterval(timer);
+          isResendDisabled.value = false;
+        }
+      }, 1000);
     };
 
     const onInput = (index, event) => {
@@ -104,9 +149,13 @@ export default {
     return {
       otp,
       error,
+      isResendDisabled,
+      timeLeft,
       handleVerifyOtp,
+      resendOtp,
       onInput,
       onBackspace,
+      email,
     };
   },
 };
