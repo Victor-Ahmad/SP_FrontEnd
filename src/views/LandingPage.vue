@@ -26,9 +26,11 @@
           </p>
         </section>
         <HowItWorks />
+        <AboutUs />
         <UserExperiences />
         <Tips />
         <FAQ />
+        <ContactUs />
       </div>
     </main>
   </div>
@@ -41,15 +43,18 @@ import HowItWorks from "@/components/landing/HowItWorks.vue";
 import UserExperiences from "@/components/landing/UserExperiences.vue";
 import Tips from "@/components/landing/Tips.vue";
 import FAQ from "@/components/landing/FAQ.vue";
-
+import AboutUs from "@/components/landing/AboutUs.vue";
+import ContactUs from "@/components/landing/ContactUs.vue";
 export default {
   components: {
     Navbar,
     Header,
     HowItWorks,
+    AboutUs,
     UserExperiences,
     Tips,
     FAQ,
+    ContactUs,
   },
 };
 </script>

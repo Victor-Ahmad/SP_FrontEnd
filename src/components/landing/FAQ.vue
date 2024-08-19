@@ -1,7 +1,7 @@
 <template>
   <section id="faq" class="faq-section">
     <div class="container mx-auto">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Veelgestelde Vragen (FAQ)</h2>
       <div class="faq-list">
         <div v-for="(faq, index) in faqs" :key="index" class="faq-item">
           <button @click="toggleFaq(index)" class="faq-question">
@@ -9,10 +9,15 @@
             <span
               :class="faq.open ? 'rotate-180' : 'rotate-0'"
               class="transform transition-transform duration-300"
-              >▼</span
             >
+              <i class="fas fa-chevron-down"></i>
+            </span>
           </button>
-          <div v-if="faq.open" class="faq-answer">{{ faq.answer }}</div>
+          <transition name="faq-toggle">
+            <div v-if="faq.open" class="faq-answer">
+              {{ faq.answer }}
+            </div>
+          </transition>
         </div>
       </div>
     </div>
@@ -34,7 +39,7 @@ export default {
         {
           question: "Hoe werkt het woningruilproces?",
           answer:
-            "Het proces is simpel: 1. Vind een geschikte ruilpartner(s) 2. Maak een afspraak voor bezichting 3. Regel de documenten 4. Lever alles in bij de woningcorporaties 5. Onderteken je nieuwe contract 6. Geslaagde woningruil!",
+            "Het proces is simpel: 1. Vind een geschikte ruilpartner(s) 2. Maak een afspraak voor bezichtiging 3. Regel de documenten 4. Lever alles in bij de woningcorporaties 5. Onderteken je nieuwe contract 6. Geslaagde woningruil!",
           open: false,
         },
         {
@@ -123,47 +128,80 @@ export default {
 
 <style scoped>
 .faq-section {
-  padding: 4rem 1rem;
-  background-color: #f9f9f9;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #e2e8f0, #f7fafc);
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
 .section-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #1a202c;
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
+
 .faq-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
+
 .faq-item {
   background: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
 }
+
+.faq-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
 .faq-question {
   width: 100%;
   text-align: left;
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight: 600;
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0;
   transition: color 0.3s ease;
+  color: #2d3748;
 }
+
 .faq-question:hover {
-  color: #3b82f6;
+  color: #3182ce;
 }
+
 .faq-answer {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   font-size: 1rem;
-  color: #666;
+  color: #4a5568;
+  line-height: 1.6;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
+
+/* Animation classes */
+.faq-toggle-enter-active,
+.faq-toggle-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.faq-toggle-enter, 
+.faq-toggle-leave-to /* .faq-toggle-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
 @media (max-width: 768px) {
   .section-title {
     font-size: 2rem;

@@ -1,25 +1,37 @@
 <template>
-  <nav class="navbar" :class="{ scrolled: isScrolled }">
-    <div class="container mx-auto flex justify-between items-center">
-      <router-link to="/" class="brand-logo">Snelwoningruil</router-link>
-      <ul class="nav-links flex space-x-6 hidden md:flex">
-        <li v-for="link in links" :key="link.text">
-          <a :href="link.href" class="nav-link" @click="smoothScroll">{{
-            link.text
-          }}</a>
-        </li>
-      </ul>
-      <button @click="toggleMenu" class="md:hidden text-2xl">
-        <i class="fas" :class="menuOpen ? 'fa-times' : 'fa-bars'"></i>
+  <nav class="navbar fixed w-full top-0 z-50 bg-white shadow-md px-4">
+    <div class="container mx-auto flex justify-between items-center py-4">
+      <!-- Logo -->
+      <router-link to="/" class="brand-logo">
+        <img
+          src="@/assets/images/logo.png"
+          alt="Snelwoningruil Logo"
+          class="h-10 md:h-12"
+        />
+      </router-link>
+
+      <!-- Mobile Menu Button -->
+      <button @click="toggleMenu" class="mobile-menu-button md:hidden text-2xl">
+        <i :class="menuOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
+
+      <!-- Navigation Links -->
       <ul
-        v-if="menuOpen"
-        class="mobile-nav-links absolute left-0 top-full w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4"
+        :class="[
+          'nav-links',
+          menuOpen ? 'block' : 'hidden',
+          'md:flex md:space-x-6',
+        ]"
       >
-        <li v-for="link in links" :key="link.text">
-          <a :href="link.href" class="nav-link" @click="smoothScroll">{{
-            link.text
-          }}</a>
+        <li>
+          <a href="#about-us" class="nav-link" @click="closeMenu">Over ons</a>
+        </li>
+        <li><a href="#faq" class="nav-link" @click="closeMenu">FAQ</a></li>
+        <li>
+          <a href="#contact-us" class="nav-link" @click="closeMenu">Contact</a>
+        </li>
+        <li>
+          <a href="#signup" class="nav-link" @click="closeMenu">Aanmelden</a>
         </li>
       </ul>
     </div>
@@ -31,95 +43,98 @@ export default {
   name: "Navbar",
   data() {
     return {
-      isScrolled: false,
-      menuOpen: false,
-      links: [
-        { text: "Over ons", href: "#about" },
-        { text: "FAQ", href: "#faq" },
-        { text: "Contact", href: "#contact" },
-        { text: "Aanmelden", href: "#signup" },
-      ],
+      menuOpen: false, // State to track if the mobile menu is open
     };
   },
   methods: {
-    smoothScroll(event) {
-      event.preventDefault();
-      const targetId = event.target.getAttribute("href").substring(1);
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        window.scrollTo({
-          top: targetElement.offsetTop - 80, // adjust offset for sticky navbar
-          behavior: "smooth",
-        });
-        this.menuOpen = false; // Close the menu on link click
-      }
-    },
-    handleScroll() {
-      this.isScrolled = window.scrollY > 50;
-    },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
     },
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.handleScroll);
+    closeMenu() {
+      this.menuOpen = false; // Close the menu after clicking a link
+    },
   },
 };
 </script>
 
 <style scoped>
 .navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding: 1rem 0;
-  transition: background 0.3s ease-in-out;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease-in-out;
 }
-.navbar.scrolled {
-  background: rgba(255, 255, 255, 0.9);
+
+.brand-logo img {
+  height: 40px;
+  transition: height 0.3s ease-in-out;
 }
-.brand-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
+
 .nav-links {
-  display: flex;
-  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
+
+.nav-links li {
+  margin: 0;
+}
+
 .nav-link {
-  position: relative;
   font-size: 1rem;
   color: #333;
+  text-decoration: none;
   transition: color 0.3s ease;
 }
-.nav-link::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: #3b82f6;
-  bottom: -4px;
-  left: 0;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
+
+.nav-link:hover {
+  color: #3b82f6;
 }
-.nav-link:hover::after {
-  transform: scaleX(1);
+
+.mobile-menu-button {
+  display: inline-block;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
-.mobile-nav-links {
-  display: none;
-}
+
+/* Mobile dropdown styles */
 @media (max-width: 768px) {
-  .mobile-nav-links {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 60px; /* Adjust for navbar height */
+    left: 0;
+    width: 100%;
+    padding: 1rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  .nav-links.block {
     display: flex;
+  }
+
+  .nav-link {
+    color: white;
+    padding: 0.75rem 0;
+    display: block;
+  }
+
+  .nav-link:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+
+  .mobile-menu-button {
+    display: none;
   }
 }
 </style>
