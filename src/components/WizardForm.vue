@@ -67,7 +67,7 @@
         {{ $t("stepper.submit") }}
       </button>
     </div>
-    <div class="text-sm text-center">
+    <div class="text-sm text-center lg:hidden">
       <router-link
         to="/login"
         class="font-medium text-[#1c592f] hover:text-secondary-dark"
