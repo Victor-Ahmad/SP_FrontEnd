@@ -4,6 +4,7 @@
     <Header />
     <main id="main-content" class="py-12">
       <div class="container mx-auto">
+        <LandingSwaps />
         <HowItWorks />
         <CallToActionButton />
         <HowCanWeHelp />
@@ -26,7 +27,7 @@ import FAQ from "@/components/landing/FAQ.vue";
 import HowCanWeHelp from "@/components/landing/HowCanWeHelp.vue";
 import ContactUs from "@/components/landing/ContactUs.vue";
 import CallToActionButton from "@/components/landing/CallToActionButton.vue"; // Import the CTA Button
-
+import LandingSwaps from "@/components/landing/LandingSwaps.vue";
 export default {
   components: {
     Navbar,
@@ -37,7 +38,8 @@ export default {
     Tips,
     FAQ,
     ContactUs,
-    CallToActionButton, // Register the CTA Button
+    CallToActionButton,
+    LandingSwaps,
   },
 };
 </script>

@@ -620,3 +620,13 @@ export const verifyOtpForForgetPassword = async (email, otp) => {
     throw error;
   }
 };
+
+export const getLandingSwaps = async () => {
+  try {
+    const response = await axiosInstance.get("/landing_page_houses");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
