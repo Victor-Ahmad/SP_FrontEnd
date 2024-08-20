@@ -1,9 +1,15 @@
 <template>
   <section id="how-it-works" class="how-it-works-section">
     <div class="container mx-auto">
-      <h2 class="section-title text-center mb-10">Hoe werkt het?</h2>
+      <h2 class="section-title text-center mb-10 animate-hidden">
+        Hoe werkt het?
+      </h2>
       <div class="timeline">
-        <div v-for="(step, index) in steps" :key="index" class="timeline-item">
+        <div
+          v-for="(step, index) in steps"
+          :key="index"
+          class="timeline-item animate-hidden"
+        >
           <div
             :class="[
               'milestone',
@@ -28,11 +34,16 @@
             <p class="timeline-description">{{ step.description }}</p>
           </div>
         </div>
+        <!-- Vertical Line -->
+        <div class="timeline-line"></div>
       </div>
     </div>
   </section>
 </template>
+
 <script>
+import anime from "animejs";
+
 export default {
   name: "HowItWorks",
   data() {
@@ -75,18 +86,62 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.observeAnimations();
+  },
+  methods: {
+    observeAnimations() {
+      const options = {
+        threshold: 0.1, // Start animation when 10% of the element is visible
+      };
+
+      const observer = new IntersectionObserver(
+        this.handleIntersection,
+        options
+      );
+
+      this.$el.querySelectorAll(".animate-hidden").forEach((el) => {
+        observer.observe(el);
+      });
+    },
+    handleIntersection(entries, observer) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+
+          // Remove the hidden class and animate with a fade-up effect
+          element.classList.remove("animate-hidden");
+
+          anime({
+            targets: element,
+            translateY: [200, 0], // Move up from below
+            opacity: [0, 1], // Fade in
+            easing: "easeOutExpo", // Smooth easing function
+            duration: 1200, // Duration of the animation
+          });
+
+          // Stop observing the element after it has animated
+          observer.unobserve(element);
+        }
+      });
+    },
+  },
 };
 </script>
+
 <style scoped>
 .how-it-works-section {
-  padding: 4rem 1rem;
-  background-color: #f9f9f9;
+  padding: 5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background-color: #f0f4f8;
 }
 
 .section-title {
   font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+  font-weight: 800;
+  color: #1c592f;
+  margin-bottom: 3rem;
 }
 
 .timeline {
@@ -101,10 +156,12 @@ export default {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 30px; /* Thicker line representing the road */
-  background-color: #7e7e7e;
+  width: 5px;
+  border-radius: 6px;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 2;
+  background: linear-gradient(to bottom, #fff 50%, transparent 0);
+  background-size: 12px 40px;
 }
 
 .timeline::after {
@@ -113,18 +170,24 @@ export default {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 4px; /* Thinner dashed line for lane markings */
-  background-image: linear-gradient(#ffffff 50%, transparent 0);
-  background-size: 4px 20px;
+  width: 40px;
+  background-color: #908f8f;
+  border-radius: 10px;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 1;
+}
+
+.animate-hidden {
+  opacity: 0;
+  transform: translateY(50px); /* Start below and fade up */
 }
 
 .timeline-item {
   position: relative;
   width: 50%;
-  padding: 20px 40px;
+  padding: 20px 30px;
   box-sizing: border-box;
+  z-index: 8;
 }
 
 .timeline-item:nth-child(odd) {
@@ -140,9 +203,9 @@ export default {
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50px;
-  height: 50px;
-  background-color: #3b82f6;
+  width: 60px;
+  height: 60px;
+  background-color: #1c592f;
   border: 4px solid #ffffff;
   border-radius: 50%;
   display: flex;
@@ -150,58 +213,58 @@ export default {
   justify-content: center;
   z-index: 3;
   color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .milestone-left {
-  left: calc(50% - 20px);
+  left: calc(50% - 6px);
 }
 
 .milestone-right {
-  left: calc(50% + 20px);
+  left: calc(50% + 6px);
 }
 
 .milestone-number {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
 .content-box {
-  padding: 20px;
+  padding: 30px;
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: 15px;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
+  text-align: center;
 }
 
 .content-box:hover {
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-10px);
 }
 
 .content-left {
-  text-align: right;
-  padding-right: 80px;
+  padding-right: 60px;
 }
 
 .content-right {
-  text-align: left;
-  padding-left: 80px;
+  padding-left: 60px;
 }
 
 .timeline-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
+  color: #1c592f;
+  margin-bottom: 15px;
 }
 
 .timeline-description {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  color: #607d8b;
+  line-height: 1.8;
 }
 
 @media (max-width: 768px) {
@@ -212,7 +275,7 @@ export default {
 
   .timeline-item {
     width: 100%;
-    padding-left: 100px;
+    padding-left: 40px;
     padding-right: 0;
   }
 
@@ -223,17 +286,38 @@ export default {
 
   .milestone {
     left: 20px;
-  }
-
-  .milestone-left,
-  .milestone-right {
-    left: 20px;
+    z-index: 5; /* Ensure milestones are in the foreground */
   }
 
   .content-left,
   .content-right {
     text-align: left;
     padding: 20px;
+  }
+
+  .timeline::after {
+    width: 20px;
+  }
+  .timeline::before {
+    width: 3px;
+  }
+  .milestone {
+    width: 40px;
+    height: 40px;
+  }
+  .milestone-number {
+    font-size: 1rem;
+  }
+
+  .timeline-title {
+    font-size: 1rem;
+  }
+
+  .timeline-description {
+    font-size: 0.8rem;
+  }
+  .section-title {
+    font-size: 2rem;
   }
 }
 </style>

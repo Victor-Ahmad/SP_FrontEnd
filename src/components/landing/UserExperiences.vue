@@ -1,38 +1,53 @@
 <template>
-  <section id="user-experiences" class="user-experiences-section">
+  <section id="user-experiences" class="user-experiences-section my-10">
     <div class="container mx-auto text-center">
-      <h2 class="section-title animate-hidden">
-        Ervaringen van onze gebruikers
-      </h2>
-      <div class="testimonials-grid">
-        <div
-          v-for="(experience, index) in experiences"
-          :key="index"
-          class="testimonial-card animate-hidden"
-        >
-          <div class="testimonial-content">
-            <div class="quote-icon">
-              <i class="fas fa-quote-left"></i>
+      <h2 class="section-title">Ervaringen van onze gebruikers</h2>
+      <Swiper
+        :slides-per-view="1"
+        :modules="modules"
+        :pagination="{ clickable: true, dynamicBullets: true }"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        :grabCursor="true"
+        loop
+        class="mySwiper"
+      >
+        <SwiperSlide v-for="(experience, index) in experiences" :key="index">
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="quote-icon">
+                <i class="fas fa-quote-left"></i>
+              </div>
+              <p class="testimonial-text">"{{ experience.text }}"</p>
+              <div class="author-container">
+                <p class="testimonial-author">- {{ experience.author }}</p>
+              </div>
             </div>
-            <p class="testimonial-text">"{{ experience.text }}"</p>
-            <p class="testimonial-author">- {{ experience.author }}</p>
           </div>
-        </div>
-      </div>
+        </SwiperSlide>
+      </Swiper>
     </div>
   </section>
 </template>
-
 <script>
-import anime from "animejs";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Pagination, Autoplay, EffectFade } from "swiper/modules";
+import "swiper/swiper-bundle.css";
 
 export default {
-  name: "UserExperiences",
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    return {
+      modules: [Pagination, Autoplay, EffectFade],
+    };
+  },
   data() {
     return {
       experiences: [
         {
-          text: "Snelwoningruil hielp me snel een geschikte woning te vinden. Het proces was eenvoudig en snel!",
+          text: "Snel Woningruil hielp me snel een geschikte woning te vinden. Het proces was eenvoudig en snel!",
           author: "Anneke",
         },
         {
@@ -40,118 +55,60 @@ export default {
           author: "Fatima",
         },
         {
-          text: "Ik had nooit eerder van huizenruil gehoord, maar ik was niet tevreden met mijn huis. Dankzij Snelwoningruil heb ik een geweldige manier gevonden om mijn huis te ruilen.",
+          text: "Ik had nooit eerder van huizenruil gehoord, maar ik was niet tevreden met mijn huis. Dankzij Snel Woningruil heb ik een geweldige manier gevonden om mijn huis te ruilen.",
           author: "Ahmed",
         },
         {
-          text: "Ik hoorde over de dienst, maar durfde het niet meteen te proberen. Na een gesprek met het Snelwoningruil team voelde ik me zelfverzekerd en heb ik mijn huis geruild. Nu ben ik erg tevreden!",
+          text: "Ik hoorde over de dienst, maar durfde het niet meteen te proberen. Na een gesprek met het Snel Woningruil team voelde ik me zelfverzekerd en heb ik mijn huis geruild. Nu ben ik erg tevreden!",
           author: "Marieke",
         },
         {
-          text: "Snelwoningruil hielp me niet alleen een nieuw huis te vinden, maar ook met alle vereiste procedures en papierwerk. Het was een grote hulp!",
+          text: "Snel Woningruil hielp me niet alleen een nieuw huis te vinden, maar ook met alle vereiste procedures en papierwerk. Het was een grote hulp!",
           author: "Alicia",
         },
         {
-          text: "Dankzij de Snelwoningruil website hebben mijn gezin en ik een nieuwe woning gevonden die perfect bij ons past. We zijn er ontzettend blij mee!",
+          text: "Dankzij de Snel Woningruil website hebben mijn gezin en ik een nieuwe woning gevonden die perfect bij ons past. We zijn er ontzettend blij mee!",
           author: "Danny",
         },
       ],
     };
   },
-  mounted() {
-    this.observeAnimations();
-  },
-  methods: {
-    observeAnimations() {
-      const options = {
-        threshold: 0.1,
-      };
-
-      const observer = new IntersectionObserver(
-        this.handleIntersection,
-        options
-      );
-
-      this.$refs.section.querySelectorAll(".animate-hidden").forEach((el) => {
-        observer.observe(el);
-      });
-    },
-    handleIntersection(entries, observer) {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-
-          element.classList.remove("animate-hidden");
-
-          anime({
-            targets: element,
-            translateY: [50, 0],
-            opacity: [0, 1],
-            duration: 800,
-            easing: "easeOutExpo",
-            delay: (el, i) => i * 200,
-          });
-
-          observer.unobserve(element);
-        }
-      });
-    },
-  },
 };
 </script>
-
 <style scoped>
 .user-experiences-section {
-  padding: 4rem 1rem;
-  background-color: #f9fafb;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #f5f7fa, #e4eee6);
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
-  font-size: 2.75rem;
-  font-weight: 700;
-  color: #1a202c;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1c592f;
   margin-bottom: 3rem;
   position: relative;
-  z-index: 10;
 }
 
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+.mySwiper {
+  padding: 2rem 0;
 }
 
 .testimonial-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   position: relative;
   overflow: hidden;
-}
-
-.testimonial-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: linear-gradient(90deg, #3b82f6, #9333ea);
-  border-radius: 15px 15px 0 0;
-}
-
-.testimonial-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  margin: 2.5rem;
 }
 
 .quote-icon {
-  font-size: 2rem;
-  color: #9333ea;
+  font-size: 3rem;
+  color: #1c592f;
   margin-bottom: 1rem;
 }
 
@@ -160,18 +117,44 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .testimonial-text {
-  font-size: 1.125rem;
-  color: #4a5568;
+  font-size: 1.25rem;
+  color: #4b5563;
   margin-bottom: 1.5rem;
   text-align: center;
+  line-height: 1.6;
+}
+
+.author-container {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.author-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .testimonial-author {
-  font-weight: 600;
-  color: #1a202c;
+  font-weight: 700;
+  color: #1c592f;
+}
+
+.swiper-pagination-bullet {
+  background: #1c592f;
+  opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+  background: #1c592f;
+  opacity: 1;
 }
 
 @media (max-width: 768px) {

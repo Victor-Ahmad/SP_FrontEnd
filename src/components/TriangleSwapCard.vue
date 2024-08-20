@@ -111,12 +111,12 @@
       >
         <!-- First House Card -->
         <div class="flex flex-col w-1/2 max-w-xs h-auto">
-          <HouseCardTriangle :house="triangle.house_a" />
+          <HouseCardTriangle :house="triangle.house_b" />
         </div>
 
         <!-- Second House Card -->
         <div class="flex flex-col w-1/2 max-w-xs h-auto">
-          <HouseCardTriangle :house="triangle.house_b" />
+          <HouseCardTriangle :house="triangle.house_a" />
         </div>
       </div>
     </div>

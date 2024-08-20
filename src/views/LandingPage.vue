@@ -4,29 +4,9 @@
     <Header />
     <main id="main-content" class="py-12">
       <div class="container mx-auto">
-        <section class="text-center my-16">
-          <h2 class="text-3xl font-bold mb-6">
-            Make Home Swapping Easy with Snelwoningruil
-          </h2>
-          <p class="mb-4">
-            Our system and personalized guidance with the documents ensure that
-            you can quickly and simply find and exchange a new house.
-          </p>
-          <p>
-            <a
-              href="mailto:info@example.com"
-              class="text-blue-500 hover:underline"
-              >info@example.com</a
-            >
-            <a
-              href="#signup"
-              class="ml-4 bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300"
-              >Start Here</a
-            >
-          </p>
-        </section>
         <HowItWorks />
-        <AboutUs />
+        <CallToActionButton />
+        <HowCanWeHelp />
         <UserExperiences />
         <Tips />
         <FAQ />
@@ -43,18 +23,21 @@ import HowItWorks from "@/components/landing/HowItWorks.vue";
 import UserExperiences from "@/components/landing/UserExperiences.vue";
 import Tips from "@/components/landing/Tips.vue";
 import FAQ from "@/components/landing/FAQ.vue";
-import AboutUs from "@/components/landing/AboutUs.vue";
+import HowCanWeHelp from "@/components/landing/HowCanWeHelp.vue";
 import ContactUs from "@/components/landing/ContactUs.vue";
+import CallToActionButton from "@/components/landing/CallToActionButton.vue"; // Import the CTA Button
+
 export default {
   components: {
     Navbar,
     Header,
     HowItWorks,
-    AboutUs,
+    HowCanWeHelp,
     UserExperiences,
     Tips,
     FAQ,
     ContactUs,
+    CallToActionButton, // Register the CTA Button
   },
 };
 </script>
@@ -68,5 +51,11 @@ body {
 }
 a {
   text-decoration: none;
+}
+
+/* Optional styling for the CTA container */
+.cta-container {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 </style>

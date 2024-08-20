@@ -1,9 +1,16 @@
 <template>
-  <section id="faq" class="faq-section">
+  <section id="faq" class="faq-section my-10">
     <div class="container mx-auto">
-      <h2 class="section-title">Veelgestelde Vragen (FAQ)</h2>
+      <h2 class="section-title" data-aos="fade-up">
+        Veelgestelde Vragen (FAQ)
+      </h2>
       <div class="faq-list">
-        <div v-for="(faq, index) in faqs" :key="index" class="faq-item">
+        <div
+          v-for="(faq, index) in faqs"
+          :key="index"
+          class="faq-item"
+          :data-aos="'zoom-in'"
+        >
           <button @click="toggleFaq(index)" class="faq-question">
             {{ faq.question }}
             <span
@@ -13,8 +20,8 @@
               <i class="fas fa-chevron-down"></i>
             </span>
           </button>
-          <transition name="faq-toggle">
-            <div v-if="faq.open" class="faq-answer">
+          <transition name="faq-toggle" @enter="enter" @leave="leave">
+            <div v-show="faq.open" ref="faqAnswers" class="faq-answer">
               {{ faq.answer }}
             </div>
           </transition>
@@ -25,6 +32,9 @@
 </template>
 
 <script>
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 export default {
   name: "FAQ",
   data() {
@@ -122,6 +132,22 @@ export default {
     toggleFaq(index) {
       this.faqs[index].open = !this.faqs[index].open;
     },
+    enter(el) {
+      el.style.height = el.scrollHeight + "px";
+    },
+    leave(el) {
+      el.style.height = el.scrollHeight + "px";
+      requestAnimationFrame(() => {
+        el.style.height = 0;
+      });
+    },
+  },
+  mounted() {
+    AOS.init({
+      duration: 1200, // Duration of the animation
+      easing: "ease-in-out", // Easing for the animation
+      once: false, // Allow animations to repeat
+    });
   },
 };
 </script>
@@ -129,15 +155,16 @@ export default {
 <style scoped>
 .faq-section {
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #e2e8f0, #f7fafc);
+  background: linear-gradient(135deg, #e4eee6, #f7fafc);
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden; /* Add this to hide overflow on the x-axis */
 }
 
 .section-title {
   font-size: 2.75rem;
   font-weight: 700;
-  color: #1a202c;
+  color: #1c592f;
   text-align: center;
   margin-bottom: 2.5rem;
 }
@@ -157,11 +184,6 @@ export default {
   overflow: hidden;
 }
 
-.faq-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
 .faq-question {
   width: 100%;
   text-align: left;
@@ -179,27 +201,20 @@ export default {
 }
 
 .faq-question:hover {
-  color: #3182ce;
+  color: #1c592f;
 }
 
 .faq-answer {
-  margin-top: 1rem;
+  overflow: hidden;
   font-size: 1rem;
   color: #4a5568;
   line-height: 1.6;
-  opacity: 1;
-  transition: opacity 0.3s ease;
+  height: 0;
+  transition: height 0.3s ease;
 }
 
-/* Animation classes */
-.faq-toggle-enter-active,
-.faq-toggle-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.faq-toggle-enter, 
-.faq-toggle-leave-to /* .faq-toggle-leave-active in <2.1.8 */ {
-  opacity: 0;
+.rotate-180 {
+  transform: rotate(180deg);
 }
 
 @media (max-width: 768px) {

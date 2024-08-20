@@ -1,13 +1,17 @@
 <template>
-  <section id="contact-us" class="contact-us-section py-12">
+  <section id="contact-us" class="contact-us-section py-12 my-10">
     <div class="container mx-auto text-center">
-      <h2 class="section-title mb-8">Contact</h2>
-      <p class="contact-description mb-10">
+      <h2 class="section-title mb-8" data-aos="fade-up">Contact</h2>
+      <p
+        class="contact-description mb-10"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
         Heb je vragen of heb je hulp nodig bij het woningruilproces? Neem
         contact met ons op, en we helpen je graag verder!
       </p>
-      <div class="contact-info-grid">
-        <div class="contact-card">
+      <div class="contact-info-grid" data-aos="fade-up">
+        <div class="contact-card" data-aos="zoom-in" data-aos-delay="400">
           <div class="icon-container">
             <i class="fas fa-envelope"></i>
           </div>
@@ -16,14 +20,14 @@
             >info@snelwoningruil.nl</a
           >
         </div>
-        <div class="contact-card">
+        <div class="contact-card" data-aos="zoom-in" data-aos-delay="600">
           <div class="icon-container">
             <i class="fas fa-phone-alt"></i>
           </div>
           <p class="contact-label">Telefoon</p>
           <p class="contact-detail">+31 123 456 789</p>
         </div>
-        <div class="contact-card">
+        <div class="contact-card" data-aos="zoom-in" data-aos-delay="800">
           <div class="icon-container">
             <i class="fas fa-map-marker-alt"></i>
           </div>
@@ -38,31 +42,24 @@
 </template>
 
 <script>
-import anime from "animejs";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default {
   name: "ContactUs",
   mounted() {
-    this.animateSection();
-  },
-  methods: {
-    animateSection() {
-      anime({
-        targets: ".contact-card",
-        opacity: [0, 1],
-        translateY: [50, 0],
-        easing: "easeOutExpo",
-        duration: 800,
-        delay: anime.stagger(150),
-      });
-    },
+    AOS.init({
+      duration: 1000, // Animation duration
+      easing: "ease-out-quart", // Easing function for a smooth effect
+      // Animation triggers only once when the element comes into view
+    });
   },
 };
 </script>
 
 <style scoped>
 .contact-us-section {
-  background-color: #f7fafc; /* Light grey background */
+  background-color: #f7fafc;
   padding: 4rem 2rem;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -77,7 +74,7 @@ export default {
   right: -50px;
   width: 200px;
   height: 200px;
-  background: #3b82f6;
+  background: #1c592f;
   border-radius: 50%;
   opacity: 0.1;
 }
@@ -85,7 +82,7 @@ export default {
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1a202c;
+  color: #1c592f;
   margin-bottom: 2rem;
 }
 
@@ -121,7 +118,7 @@ export default {
 
 .icon-container {
   font-size: 2.5rem;
-  color: #3b82f6;
+  color: #1c592f;
   margin-bottom: 1rem;
 }
 
@@ -144,7 +141,7 @@ export default {
 }
 
 a {
-  color: inherit; /* Inherit color for consistent styling */
+  color: inherit;
   text-decoration: none;
 }
 </style>

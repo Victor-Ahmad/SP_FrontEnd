@@ -1,30 +1,44 @@
 <template>
-  <section id="tips" class="tips-section">
+  <section id="tips" class="tips-section my-10">
     <div class="container mx-auto text-center">
       <h2 class="section-title">Tips voor een succesvolle ruil</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div class="tips-grid">
         <ul class="tips-list">
-          <li v-for="(tip, index) in tips" :key="index" class="tip-item">
+          <li
+            v-for="(tip, index) in tips"
+            :key="index"
+            class="tip-item"
+            :data-aos="index % 2 === 0 ? 'fade-right' : 'fade-left'"
+            :data-aos-delay="100 * index"
+          >
             <div class="icon-container">
               <i :class="tip.icon"></i>
             </div>
             <div class="tip-content">
-              <strong>{{ tip.title }}</strong
+              <strong class="tip-title">{{ tip.title }}</strong
               >: {{ tip.description }}
             </div>
           </li>
         </ul>
-        <img
-          src="@/assets/images/landing_4.jpg"
-          alt="Tips"
-          class="tips-image"
-        />
+        <div
+          class="tips-image-container"
+          data-aos="zoom-in"
+          data-aos-delay="300"
+        >
+          <img
+            src="@/assets/images/landing_4.jpg"
+            alt="Tips"
+            class="tips-image"
+          />
+        </div>
       </div>
     </div>
   </section>
 </template>
-
 <script>
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 export default {
   name: "Tips",
   data() {
@@ -63,15 +77,24 @@ export default {
       ],
     };
   },
+  mounted() {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-out-quart",
+    });
+  },
 };
 </script>
-
 <style scoped>
+.tip-title {
+  color: #1c592f;
+}
 .tips-section {
   padding: 4rem 2rem;
   background-color: #f7fafc;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .section-title {
@@ -81,44 +104,41 @@ export default {
   margin-bottom: 3rem;
 }
 
-.grid {
+.tips-grid {
   display: grid;
   grid-template-columns: 1fr;
+  gap: 3rem;
 }
 
 @media (min-width: 768px) {
-  .grid {
+  .tips-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 .tips-list {
-  text-align: left;
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .tip-item {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 2rem;
-  background: white;
   padding: 1.5rem;
   border-radius: 10px;
+  background: white;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.tip-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
 .icon-container {
-  font-size: 2rem;
-  color: #3182ce;
-  margin-right: 1rem;
+  font-size: 2.5rem;
+  color: #1c592f;
+  margin-right: 1.5rem;
   flex-shrink: 0;
 }
 
@@ -126,18 +146,21 @@ export default {
   flex-grow: 1;
   font-size: 1.125rem;
   color: #4a5568;
+  text-align: left;
 }
 
-.tips-image {
-  width: 100%;
+.tips-image-container {
+  position: relative;
+  overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.tips-image:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+.tips-image {
+  width: 100%;
+  display: block;
+  border-radius: inherit;
 }
 
 @media (max-width: 768px) {
