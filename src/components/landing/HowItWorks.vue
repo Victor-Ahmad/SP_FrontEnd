@@ -30,6 +30,9 @@
               },
             ]"
           >
+            <div class="content-icon-container">
+              <img :src="step.icon" alt="" />
+            </div>
             <h3 class="timeline-title">{{ step.title }}</h3>
             <p class="timeline-description">{{ step.description }}</p>
           </div>
@@ -40,9 +43,16 @@
     </div>
   </section>
 </template>
-
 <script>
 import anime from "animejs";
+
+import Image1 from "@/assets/HowItWorks/1.png";
+import Image2 from "@/assets/HowItWorks/2.png";
+import Image3 from "@/assets/HowItWorks/3.png";
+import Image4 from "@/assets/HowItWorks/4.png";
+import Image5 from "@/assets/HowItWorks/5.png";
+import Image6 from "@/assets/HowItWorks/6.png";
+import Image7 from "@/assets/HowItWorks/7.png";
 
 export default {
   name: "HowItWorks",
@@ -50,35 +60,42 @@ export default {
     return {
       steps: [
         {
+          icon: Image1,
           title: "Waar wil je naartoe en wat zoek je?",
           description:
             "Geef details over het huis dat je zoekt. Wees duidelijk en geef volledige informatie zodat het systeem van de site je kan helpen een geschikt huis te vinden.",
         },
         {
+          icon: Image2,
           title: "Jouw woninginformatie",
           description:
             "Vul de informatie over je huis in, zoals huurprijs, aantal kamers, type huis, enz. Zorg dat het duidelijk is en alle nodige details bevat.",
         },
         {
+          icon: Image3,
           title: "Het account",
           description:
             "Vul vervolgens je persoonlijke informatie in. Deze informatie wordt niet weergegeven en wordt alleen gebruikt voor het aanmaken van het account. Onze website garandeert je privacy.",
         },
         {
+          icon: Image4,
           title: "Foto’s en beschrijving",
           description: "Voeg duidelijke foto's van je huis toe.",
         },
         {
+          icon: Image5,
           title: "Blader door beschikbare woningen",
           description:
             "Je kunt vervolgens alle woningen op de site bekijken. Als je een van de huizen leuk vindt, laat je interesse weten door een like te geven en neem contact op met de andere partij via de chat.",
         },
         {
+          icon: Image6,
           title: "De documenten",
           description:
             "Willen jullie met elkaar ruilen? Begin met het regelen van de documenten. Als je hulp nodig hebt, stuur ons een mail op info@snelwoningruil.nl",
         },
         {
+          icon: Image7,
           title: "Genieten van een geslaagde ruil!",
           description:
             "Het proces is succesvol afgerond. De site helpt je een huis vinden dat aan je verwachtingen voldoet en bespaart je tijd en moeite. We bieden je ook consultaties aan met betrekking tot alle nodige papieren. Klanttevredenheid is ons belangrijkste doel.",
@@ -128,7 +145,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .how-it-works-section {
   padding: 5rem 1rem;
@@ -201,7 +217,7 @@ export default {
 .milestone {
   position: absolute;
   top: 0;
-  left: 50%;
+
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
@@ -217,11 +233,11 @@ export default {
 }
 
 .milestone-left {
-  left: calc(50% - 6px);
+  left: 100%;
 }
 
 .milestone-right {
-  left: calc(50% + 6px);
+  left: 0%;
 }
 
 .milestone-number {
@@ -254,11 +270,32 @@ export default {
   padding-left: 60px;
 }
 
+.content-icon-container {
+  width: 70px;
+  height: 70px;
+  background-color: transparent;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -35px; /* Half of the circle's height */
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden; /* Ensure the image stays within the circle */
+}
+
+.content-icon-container img {
+  width: 100%; /* Adjust the size of the image inside the circle */
+  height: auto;
+}
+
 .timeline-title {
   font-size: 1.5rem;
   font-weight: bold;
   color: #1c592f;
   margin-bottom: 15px;
+  margin-top: 40px; /* Space to avoid overlap with the circle */
 }
 
 .timeline-description {

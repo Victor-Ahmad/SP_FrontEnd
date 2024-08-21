@@ -1,12 +1,12 @@
 <template>
   <section id="user-experiences" class="user-experiences-section my-10">
     <div class="container mx-auto text-center">
-      <h2 class="section-title">Ervaringen van onze gebruikers</h2>
+      <h2 class="section-title">Tevreden gebruikers</h2>
       <Swiper
         :slides-per-view="1"
         :modules="modules"
         :pagination="{ clickable: true, dynamicBullets: true }"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        :autoplay="{ delay: 4000, disableOnInteraction: false }"
         :grabCursor="true"
         loop
         class="mySwiper"
@@ -14,12 +14,28 @@
         <SwiperSlide v-for="(experience, index) in experiences" :key="index">
           <div class="testimonial-card">
             <div class="testimonial-content">
-              <div class="quote-icon">
-                <i class="fas fa-quote-left"></i>
+              <div class="author-container">
+                <div class="author-icon">
+                  {{ experience.author[0].toUpperCase() }}
+                </div>
+                <p class="testimonial-author">{{ experience.author }}</p>
               </div>
               <p class="testimonial-text">"{{ experience.text }}"</p>
-              <div class="author-container">
-                <p class="testimonial-author">- {{ experience.author }}</p>
+              <div class="review-container">
+                <div class="stars">
+                  <span v-for="n in 5" :key="n" class="star">
+                    <i
+                      :class="[
+                        'fas',
+                        n <= experience.rating
+                          ? 'fa-star'
+                          : n - experience.rating === 0.5
+                          ? 'fa-star-half-alt'
+                          : 'fa-star-o',
+                      ]"
+                    ></i>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -49,26 +65,32 @@ export default {
         {
           text: "Snel Woningruil hielp me snel een geschikte woning te vinden. Het proces was eenvoudig en snel!",
           author: "Anneke",
+          rating: 4.5,
         },
         {
           text: "De site is ontzettend handig en bespaart me veel tijd. Geen gedoe meer met eindeloos zoeken!",
           author: "Fatima",
+          rating: 4.5,
         },
         {
           text: "Ik had nooit eerder van huizenruil gehoord, maar ik was niet tevreden met mijn huis. Dankzij Snel Woningruil heb ik een geweldige manier gevonden om mijn huis te ruilen.",
           author: "Ahmed",
+          rating: 4,
         },
         {
           text: "Ik hoorde over de dienst, maar durfde het niet meteen te proberen. Na een gesprek met het Snel Woningruil team voelde ik me zelfverzekerd en heb ik mijn huis geruild. Nu ben ik erg tevreden!",
           author: "Marieke",
+          rating: 4.5,
         },
         {
           text: "Snel Woningruil hielp me niet alleen een nieuw huis te vinden, maar ook met alle vereiste procedures en papierwerk. Het was een grote hulp!",
           author: "Alicia",
+          rating: 4.5,
         },
         {
           text: "Dankzij de Snel Woningruil website hebben mijn gezin en ik een nieuwe woning gevonden die perfect bij ons past. We zijn er ontzettend blij mee!",
           author: "Danny",
+          rating: 4,
         },
       ],
     };
@@ -106,18 +128,32 @@ export default {
   margin: 2.5rem;
 }
 
-.quote-icon {
-  font-size: 3rem;
-  color: #1c592f;
-  margin-bottom: 1rem;
-}
-
-.testimonial-content {
+.author-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.author-icon {
+  display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #1c592f;
+  color: white;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-author {
+  font-weight: 700;
+  color: #1c592f;
+  text-align: center;
 }
 
 .testimonial-text {
@@ -128,23 +164,19 @@ export default {
   line-height: 1.6;
 }
 
-.author-container {
+.review-container {
   display: flex;
-  align-items: center;
-  margin-top: 1.5rem;
+  justify-content: center;
 }
 
-.author-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.stars {
+  display: flex;
 }
 
-.testimonial-author {
-  font-weight: 700;
-  color: #1c592f;
+.star {
+  font-size: 1.5rem;
+  color: #ffcc00;
+  margin: 0 2px;
 }
 
 .swiper-pagination-bullet {
@@ -163,6 +195,9 @@ export default {
   }
   .testimonial-text {
     font-size: 1rem;
+  }
+  .star {
+    font-size: 1.25rem;
   }
 }
 </style>

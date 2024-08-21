@@ -56,7 +56,6 @@ export default {
 </script>
 <style scoped>
 .hero-section {
-  background: url("@/assets/images/landing_1.jpg") no-repeat center center/cover;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -64,6 +63,7 @@ export default {
   position: relative;
   text-align: center;
   padding: 0 1rem;
+  overflow: hidden; /* Prevents overflow during animation */
 }
 
 .overlay {
@@ -94,23 +94,6 @@ export default {
   margin-bottom: 2.5rem;
   color: white;
   text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.7);
-}
-
-.cta-button {
-  background-color: #ff6b6b;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-weight: 600;
-}
-
-.cta-button:hover {
-  background-color: #e63946;
-  transform: translateY(-3px);
 }
 
 .email-input-wrapper {
@@ -149,6 +132,51 @@ export default {
   transform: translateY(-3px);
 }
 
+/* Background Image Slideshow */
+.hero-section::before,
+.hero-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  opacity: 0;
+  animation: fadeSlideshow 12s infinite;
+}
+
+.hero-section::before {
+  background-image: url("@/assets/header/1.jpg"); /* First image */
+  animation-delay: 0s;
+}
+
+.hero-section::after {
+  background-image: url("@/assets/header/2.jpg"); /* Second image */
+  animation-delay: 6s;
+}
+
+/* Keyframes for seamless fading effect */
+@keyframes fadeSlideshow {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 640px) {
   .hero-title {
     font-size: 1.1rem;
@@ -156,11 +184,6 @@ export default {
 
   .hero-subtitle {
     font-size: 0.8rem;
-  }
-
-  .cta-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
   }
 
   .email-input {

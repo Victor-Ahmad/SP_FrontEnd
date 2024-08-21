@@ -146,7 +146,7 @@ export default {
     AOS.init({
       duration: 1200, // Duration of the animation
       easing: "ease-in-out", // Easing for the animation
-      once: false, // Allow animations to repeat
+      once: true, // Allow animations to repeat
     });
   },
 };

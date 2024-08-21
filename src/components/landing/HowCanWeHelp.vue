@@ -20,6 +20,9 @@
           data-aos="fade-up"
           :data-aos-delay="100 * (index + 1)"
         >
+          <div class="benefit-icon-container">
+            <img :src="benefit.icon" alt="" />
+          </div>
           <p class="benefit-title">{{ benefit.title }}</p>
           <p class="benefit-text">{{ benefit.text }}</p>
         </div>
@@ -27,10 +30,14 @@
     </div>
   </section>
 </template>
-
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
+
+import Driehoeksruil from "@/assets/HowCanWeHelp/Driehoeksruil.png";
+import Ideaal from "@/assets/HowCanWeHelp/Ideaal.png";
+import Persoonlijke from "@/assets/HowCanWeHelp/Persoonlijke.png";
+import Het from "@/assets/HowCanWeHelp/Het.png";
 
 export default {
   name: "HowCanWeHelp",
@@ -38,20 +45,24 @@ export default {
     return {
       benefits: [
         {
-          text: "Ons systeem zorgt ervoor dat jij snel de beste match vindt. We matchen jou met een heel wat aantal potentiële ruilpartners.",
+          icon: Het, // Adjust the path as needed
           title: "Het systeem",
+          text: "Ons systeem zorgt ervoor dat jij snel de beste match vindt. We matchen jou met een heel wat aantal potentiële ruilpartners.",
         },
         {
-          text: "We begrijpen dat direct ruilen soms moeilijk te vinden is. Daarom bieden we ook een optie tot driehoekruil aan.",
+          icon: Driehoeksruil, // Adjust the path as needed
           title: "Driehoeksruil",
+          text: "We begrijpen dat direct ruilen soms moeilijk te vinden is. Daarom bieden we ook een optie tot driehoekruil aan.",
         },
         {
-          text: "Wij helpen je bij elke stap, van het zoeken tot het regelen van de ruil.",
+          icon: Persoonlijke, // Adjust the path as needed
           title: "Persoonlijke begeleiding",
+          text: "Wij helpen je bij elke stap, van het zoeken tot het regelen van de ruil.",
         },
         {
-          text: "Of je nu weinig tijd hebt of niet technisch bent, wij maken woningruil makkelijk en toegankelijk voor iedereen.",
+          icon: Ideaal, // Adjust the path as needed
           title: "Ideaal voor iedereen",
+          text: "Of je nu weinig tijd hebt of niet technisch bent, wij maken woningruil makkelijk en toegankelijk voor iedereen.",
         },
       ],
     };
@@ -60,12 +71,11 @@ export default {
     AOS.init({
       duration: 1200, // Smooth transition duration
       easing: "ease-in-out", // Easing for smooth animations
-      once: false, // Allow animations to repeat
+      once: true, // Allow animations to repeat
     });
   },
 };
 </script>
-
 <style scoped>
 .how-can-we-help-section {
   background: linear-gradient(135deg, #e3edf7, #f8f9fa);
@@ -107,6 +117,29 @@ export default {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease,
     background-color 0.3s ease;
+  position: relative; /* Required for absolute positioning of the icon */
+}
+
+.benefit-icon-container {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: white;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); */
+  position: absolute;
+  top: -35px; /* Half of the circle's height */
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden; /* Ensure the image stays within the circle */
+}
+
+.benefit-icon-container img {
+  width: 100%; /* Adjust the size of the image inside the circle */
+  height: auto;
 }
 
 .benefit-title {
@@ -114,6 +147,7 @@ export default {
   color: #1c592f;
   margin-bottom: 1rem;
   letter-spacing: 0.5px;
+  margin-top: 40px; /* Space to avoid overlap with the circle */
 }
 
 .benefit-text {

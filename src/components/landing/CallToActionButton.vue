@@ -1,6 +1,6 @@
 <template>
   <div class="cta-container my-12 text-center">
-    <button @click="handleJoinClick" class="cta-button">Join Us Now</button>
+    <button @click="handleJoinClick" class="cta-button">Begin hier</button>
   </div>
 </template>
 
