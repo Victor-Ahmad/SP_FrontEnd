@@ -63,7 +63,7 @@
         >
           <!-- Progress Bar Section -->
           <div
-            v-if="progress < 100"
+            v-if="showProgress && progress < 100"
             class="progress-background col-span-full w-full rounded-full shadow-lg h-min"
           >
             <div class="progress-container">
@@ -354,10 +354,11 @@ export default {
       error: null,
       showCopyMessage: false,
       // Progress related data
-      progress: 60,
+      progress: 0,
       showDescription: false,
       showImages: false,
       showWishes: false,
+      showProgress: true,
     };
   },
   async created() {
@@ -550,6 +551,8 @@ export default {
           this.progress = progressPercentage;
           this.updateProgress(progressPercentage);
           this.processMissingSteps(response.result.missing_steps);
+        } else if (response == "no access token") {
+          this.showProgress = false;
         }
       } catch (error) {
         console.error("Error fetching profile progress:", error);

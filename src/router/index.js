@@ -97,7 +97,7 @@ const routes = [
         path: "/house/:id",
         component: HouseDetail,
         name: "HouseDetail",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: false },
       },
       {
         path: "forget-password",

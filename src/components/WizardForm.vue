@@ -90,7 +90,7 @@ import Step4 from "./Step4.vue";
 import {
   validateEmailAndPhone,
   verifyOtpRegister,
-  updateDescriptionAndImages,
+  addImagesAndDescription,
 } from "@/services/apiService";
 import step1Image from "@/assets/images/step1.png";
 import step2Image from "@/assets/images/step2.png";
@@ -308,18 +308,15 @@ export default {
       if (hasDescription || hasImages) {
         try {
           this.isLoading = true;
-          const response = await updateDescriptionAndImages(
-            description,
-            images,
-            null
-          );
-          this.isLoading = false;
+          const response = await addImagesAndDescription(description, images);
+
           Swal.fire({
             icon: "success",
             title: "Update successful",
             showConfirmButton: false,
             timer: 1500,
           }).then(() => {
+            this.isLoading = false;
             this.goToHome();
           });
         } catch (error) {
@@ -333,6 +330,7 @@ export default {
         }
       } else {
         this.goToHome();
+        this.isLoading = false;
       }
     },
     goToHome() {

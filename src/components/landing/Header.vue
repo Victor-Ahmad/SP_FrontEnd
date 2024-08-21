@@ -25,6 +25,17 @@
           >Begin hier</router-link
         >
       </div>
+      <div
+        class="text-sm lg:text-xl text-center"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+        <router-link
+          to="/login"
+          class="font-medium hover:text-secondary-dark"
+          >{{ $t("register.login") }}</router-link
+        >
+      </div>
     </div>
   </header>
 </template>
@@ -117,6 +128,7 @@ export default {
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
   color: black;
   background-color: white;
+  width: 20%;
 }
 
 .email-submit-button {
@@ -137,29 +149,29 @@ export default {
   transform: translateY(-3px);
 }
 
-/* Media query for mobile screens */
 @media (max-width: 640px) {
   .hero-title {
-    font-size: 1.1rem; /* Smaller font size for mobile */
+    font-size: 1.1rem;
   }
 
   .hero-subtitle {
-    font-size: 0.8rem; /* Smaller font size for mobile */
+    font-size: 0.8rem;
   }
 
   .cta-button {
-    padding: 0.5rem 1rem; /* Adjust padding for mobile */
-    font-size: 0.9rem; /* Smaller font size for mobile */
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 
   .email-input {
-    font-size: 0.9rem; /* Adjust input font size for mobile */
-    padding: 0.5rem 0.75rem; /* Adjust padding for mobile */
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    width: 50%;
   }
 
   .email-submit-button {
-    padding: 0.5rem 1rem; /* Adjust button padding for mobile */
-    font-size: 0.9rem; /* Smaller font size for mobile */
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }
 </style>

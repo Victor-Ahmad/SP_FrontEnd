@@ -1,5 +1,5 @@
 import axiosInstance from "@/plugins/axios";
-
+import store from "@/store";
 const removeNullValues = (params) => {
   return Object.fromEntries(
     Object.entries(params).filter(([_, v]) => v != null)
@@ -129,9 +129,13 @@ export const removeFavorite = async (houseId) => {
 
 export const getProfileProgress = async () => {
   try {
-    const response = await axiosInstance.get("/profile_progress");
-    console.log(response.data);
-    return response.data;
+    const token = store.getters.token;
+    if (token) {
+      const response = await axiosInstance.get("/profile_progress");
+      console.log(response.data);
+      return response.data;
+    }
+    return "no access token";
   } catch (error) {
     throw error;
   }
@@ -157,6 +161,35 @@ export const getCompleteInterest = async () => {
 export const getProfile = async () => {
   try {
     const response = await axiosInstance.get("/get_profile");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const addImagesAndDescription = async (description, images) => {
+  const formData = new FormData();
+  if (description) {
+    formData.append("description", description);
+  }
+
+  images.forEach((file, index) => {
+    formData.append(`images[${index}]`, file);
+  });
+
+  // images.forEach((image, index) => {
+  //   const file = dataURLtoFile(image, `image${index}.png`);
+  //   formData.append(`images[${index}]`, file);
+  // });
+  try {
+    const response = await axiosInstance.post(
+      "addImagesAndDescription",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -582,10 +615,14 @@ export const verifyOtpRegister = async (otp) => {
 };
 export const storeFcmTokenOnServer = async (firebase_token) => {
   try {
-    const response = await axiosInstance.post("/save-fcm-token", {
-      firebase_token,
-    });
-    return response.data;
+    const token = store.getters.token;
+    if (token) {
+      const response = await axiosInstance.post("/save-fcm-token", {
+        firebase_token,
+      });
+      return response.data;
+    }
+    return "no access token";
   } catch (error) {
     throw error;
   }

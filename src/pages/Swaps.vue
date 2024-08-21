@@ -270,22 +270,6 @@ export default {
         console.error("Error fetching favorites:", error);
       }
     };
-
-    const updateSwapsCount = async () => {
-      try {
-        const response = await getSwapsCounts();
-        if (response && response.success) {
-          myInterestsCount.value = response.result.interest_count;
-          completeProfileCount.value = response.result.complete_interest_count;
-          swapWithMeCount.value = response.result.swap_with_me_count;
-          myFavoritesCount.value = response.result.favorite_count;
-          myTriangleSwapsCount.value = response.result.top_perfect_swaps_count;
-        }
-      } catch (error) {
-        console.error("Error fetching swaps count:", error);
-      }
-    };
-
     const fetchSwapWithMe = async () => {
       try {
         const response = await getSwapWithMe();
@@ -305,6 +289,21 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching complete interest:", error);
+      }
+    };
+
+    const updateSwapsCount = async () => {
+      try {
+        const response = await getSwapsCounts();
+        if (response && response.success) {
+          myInterestsCount.value = response.result.interest_count;
+          completeProfileCount.value = response.result.complete_interest_count;
+          swapWithMeCount.value = response.result.swap_with_me_count;
+          myFavoritesCount.value = response.result.favorite_count;
+          myTriangleSwapsCount.value = response.result.top_perfect_swaps_count;
+        }
+      } catch (error) {
+        console.error("Error fetching swaps count:", error);
       }
     };
 

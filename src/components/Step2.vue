@@ -235,7 +235,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group mb-4">
+        <!-- <div class="form-group mb-4">
           <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
             {{ $t("myHouse.housingCorporation") }}
           </h3>
@@ -248,7 +248,7 @@
           <div v-if="errors.swap_company" class="invalid-feedback">
             {{ errors.swap_company }}
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="w-full md:w-2/5 hidden lg:flex items-center md:pl-6">
@@ -499,7 +499,8 @@ export default {
       }
     },
     validatePostCode(postCode) {
-      const regex = /^[0-9]{4}[A-Za-z]{2}$/;
+      // const regex = /^[0-9]{4}[A-Za-z]{2}$/;
+      const regex = /^[0-9]{4}[-\s]*[A-Za-z]{2}$/;
       return regex.test(postCode);
     },
     handlePostCodeInput() {

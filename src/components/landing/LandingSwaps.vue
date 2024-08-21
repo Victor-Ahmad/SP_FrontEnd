@@ -13,6 +13,7 @@
           :key="house.id"
           class="house-card flex flex-col rounded overflow-hidden shadow-lg"
           data-aos="fade-in"
+          @click="goToDetailPage(house.id)"
         >
           <!-- House Image Slider -->
           <div class="relative w-full h-64">
@@ -26,7 +27,6 @@
               <swiper-slide
                 v-for="(image, imgIndex) in house.images"
                 :key="imgIndex"
-                data-aos="fade-in"
               >
                 <img
                   :src="getImageUrl(image.image_path)"
@@ -67,7 +67,7 @@ import "swiper/swiper-bundle.css";
 import { getLandingSwaps } from "@/services/apiService";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
+import { useRouter } from "vue-router"; // Import the router
 export default {
   name: "LandingSwaps",
   mounted() {
@@ -103,6 +103,9 @@ export default {
     },
     calculateDelay(index) {
       return index * 100; // Stagger delay by 100ms increments
+    },
+    goToDetailPage(id) {
+      this.$router.push({ name: "HouseDetail", params: { id } });
     },
   },
 };
