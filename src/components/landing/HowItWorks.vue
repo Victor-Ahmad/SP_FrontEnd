@@ -43,6 +43,7 @@
     </div>
   </section>
 </template>
+
 <script>
 import anime from "animejs";
 
@@ -145,12 +146,15 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .how-it-works-section {
   padding: 5rem 1rem;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   background-color: #f0f4f8;
+  position: relative;
+  overflow: hidden;
 }
 
 .section-title {
@@ -304,6 +308,30 @@ export default {
   line-height: 1.8;
 }
 
+/* Adding the circle decorations similar to "About Us" */
+.how-it-works-section::before,
+.how-it-works-section::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(28, 89, 47, 0.15);
+  z-index: 0;
+}
+
+.how-it-works-section::before {
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  right: -150px;
+}
+
+.how-it-works-section::after {
+  width: 500px;
+  height: 500px;
+  bottom: -200px;
+  left: -250px;
+}
+
 @media (max-width: 768px) {
   .timeline::before,
   .timeline::after {
@@ -355,6 +383,23 @@ export default {
   }
   .section-title {
     font-size: 2rem;
+  }
+  /* Ensure circles are visible on mobile */
+  .how-it-works-section::before,
+  .how-it-works-section::after {
+    display: block;
+    width: 200px; /* Smaller size */
+    height: 200px; /* Smaller size */
+  }
+
+  .how-it-works-section::before {
+    top: -50px;
+    right: -75px;
+  }
+
+  .how-it-works-section::after {
+    bottom: -100px;
+    left: -125px;
   }
 }
 </style>

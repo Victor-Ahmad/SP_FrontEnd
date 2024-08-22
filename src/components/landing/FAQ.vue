@@ -5,13 +5,8 @@
         Veelgestelde Vragen (FAQ)
       </h2>
       <div class="faq-content">
-        <div class="faq-list">
-          <div
-            v-for="(faq, index) in faqs"
-            :key="index"
-            class="faq-item"
-            :data-aos="'zoom-in'"
-          >
+        <div class="faq-list" :data-aos="'fade-up'">
+          <div v-for="(faq, index) in faqs" :key="index" class="faq-item">
             <button @click="toggleFaq(index)" class="faq-question">
               {{ faq.question }}
               <span

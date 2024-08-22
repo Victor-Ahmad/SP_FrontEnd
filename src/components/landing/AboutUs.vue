@@ -97,20 +97,22 @@ export default {
   z-index: 1;
 }
 
+/* Adjust circle sizes and positions for larger screens */
 .about-us-section::before {
   width: 300px;
   height: 300px;
-  top: -50px;
-  right: -150px;
+  top: -100px; /* Move higher */
+  left: -100px; /* Shift to the left */
 }
 
 .about-us-section::after {
   width: 400px;
   height: 400px;
-  bottom: -100px;
-  left: -200px;
+  bottom: -150px; /* Move lower */
+  right: -150px; /* Shift to the right */
 }
 
+/* Ensure circles are visible on mobile */
 @media (max-width: 768px) {
   .section-title {
     font-size: 2rem;
@@ -126,7 +128,19 @@ export default {
 
   .about-us-section::before,
   .about-us-section::after {
-    display: none;
+    display: block; /* Ensure circles are visible on mobile */
+    width: 150px; /* Smaller size */
+    height: 150px; /* Smaller size */
+  }
+
+  .about-us-section::before {
+    top: -50px; /* Move higher */
+    left: -50px; /* Shift to the left */
+  }
+
+  .about-us-section::after {
+    bottom: -75px; /* Move lower */
+    right: -75px; /* Shift to the right */
   }
 }
 </style>

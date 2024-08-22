@@ -1,6 +1,11 @@
 <template>
   <header class="hero-section">
     <div class="overlay"></div>
+    <!-- Slideshow images -->
+    <div class="slideshow slide1"></div>
+    <div class="slideshow slide2"></div>
+    <div class="slideshow slide3"></div>
+
     <div class="container mx-auto text-center text-white z-10">
       <h1 class="hero-title" data-aos="fade-up">
         Vind eenvoudig je perfecte woningruil
@@ -39,6 +44,7 @@
     </div>
   </header>
 </template>
+
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -54,6 +60,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .hero-section {
   height: 100vh;
@@ -74,6 +81,33 @@ export default {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1;
+}
+
+.slideshow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  background-size: cover;
+  background-position: center;
+  animation: fadeSlideshow 18s infinite;
+}
+
+.slide1 {
+  background-image: url("@/assets/header/1.jpg");
+}
+
+.slide2 {
+  background-image: url("@/assets/header/2.jpg");
+  animation-delay: 6s;
+}
+
+.slide3 {
+  background-image: url("@/assets/header/3.jpg");
+  animation-delay: 12s;
 }
 
 .container {
@@ -132,45 +166,22 @@ export default {
   transform: translateY(-3px);
 }
 
-/* Background Image Slideshow */
-.hero-section::before,
-.hero-section::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  opacity: 0;
-  animation: fadeSlideshow 12s infinite;
-}
-
-.hero-section::before {
-  background-image: url("@/assets/header/1.jpg"); /* First image */
-  animation-delay: 0s;
-}
-
-.hero-section::after {
-  background-image: url("@/assets/header/2.jpg"); /* Second image */
-  animation-delay: 6s;
-}
-
 /* Keyframes for seamless fading effect */
 @keyframes fadeSlideshow {
   0% {
     opacity: 1;
   }
-  45% {
+  33.33% {
     opacity: 1;
   }
-  50% {
+  38% {
     opacity: 0;
   }
-  95% {
+  66.66% {
     opacity: 0;
+  }
+  71% {
+    opacity: 1;
   }
   100% {
     opacity: 1;
