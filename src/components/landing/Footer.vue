@@ -3,7 +3,7 @@
     <div class="container mx-auto text-center">
       <div class="social-icons">
         <a
-          href="ttps://www.facebook.com/profile.php?id=61560892673549"
+          href="https://www.facebook.com/profile.php?id=61560892673549"
           target="_blank"
           class="social-icon"
         >
