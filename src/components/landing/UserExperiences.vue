@@ -2,6 +2,12 @@
   <section id="user-experiences" class="user-experiences-section my-10">
     <div class="container mx-auto text-center">
       <h2 class="section-title">Tevreden gebruikers</h2>
+      <img
+        src="@/assets/userExperiance.png"
+        alt="Icon"
+        class="section-icon mx-auto my-4 h-24 mt-10"
+      />
+
       <Swiper
         :slides-per-view="1"
         :modules="modules"
@@ -109,12 +115,8 @@ export default {
   font-size: 2.5rem;
   font-weight: 800;
   color: #1c592f;
-  margin-bottom: 3rem;
-  position: relative;
-}
 
-.mySwiper {
-  padding: 2rem 0;
+  position: relative;
 }
 
 .testimonial-card {

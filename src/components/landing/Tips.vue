@@ -7,7 +7,7 @@
           <li
             v-for="(tip, index) in tips"
             :key="index"
-            class="tip-item"
+            class="tip-item my-5"
             :data-aos="index % 2 === 0 ? 'fade-right' : 'fade-left'"
             :data-aos-delay="100 * index"
           >
@@ -90,6 +90,7 @@ export default {
 .tip-title {
   color: #1c592f;
 }
+
 .tips-section {
   padding: 4rem 2rem;
   background-color: #f7fafc;
@@ -127,34 +128,59 @@ export default {
 }
 
 .tip-item {
+  position: relative; /* Needed for the absolute positioning of the icon */
   display: flex;
-  align-items: flex-start;
-  padding: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem; /* Extra padding at the top to accommodate the icon */
   border-radius: 10px;
   background: white;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center; /* Center the title and text */
 }
 
 .icon-container {
-  font-size: 2.5rem;
-  color: #1c592f;
-  margin-right: 1.5rem;
-  flex-shrink: 0;
+  position: absolute;
+  top: -25px; /* Position the icon above the card */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #1c592f;
+  color: white;
+  font-size: 2rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tip-content {
-  flex-grow: 1;
-  font-size: 1.125rem;
-  color: #4a5568;
-  text-align: left;
+  margin-top: 1rem; /* Space for the icon */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.tip-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #1c592f;
+}
+
+.tip-description {
+  font-size: 1rem;
+  color: #4a5568;
+}
+
+/* Image Container Styles */
 .tips-image-container {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  height: fit-content;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -164,12 +190,16 @@ export default {
   border-radius: inherit;
 }
 
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .section-title {
     font-size: 2rem;
   }
   .tip-content {
     font-size: 1rem;
+  }
+  .tips-image-container {
+    display: none;
   }
 }
 </style>

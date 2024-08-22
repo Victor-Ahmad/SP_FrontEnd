@@ -32,7 +32,7 @@
       >
         <router-link
           to="/login"
-          class="font-medium hover:text-secondary-dark"
+          class="font-medium hover:text-secondary-dark hero-subtitle"
           >{{ $t("register.login") }}</router-link
         >
       </div>
@@ -72,7 +72,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -179,7 +179,7 @@ export default {
 
 @media (max-width: 640px) {
   .hero-title {
-    font-size: 1.1rem;
+    font-size: 1.7rem;
   }
 
   .hero-subtitle {

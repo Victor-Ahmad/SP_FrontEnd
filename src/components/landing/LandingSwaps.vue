@@ -4,7 +4,10 @@
       <h2 class="section-title text-center mb-10" data-aos="fade-up">
         Onze Woningruil Aanbiedingen
       </h2>
+
+      <!-- Grid for larger screens -->
       <div
+        v-if="!isMobile"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         data-aos="fade-up"
       >
@@ -15,7 +18,6 @@
           data-aos="fade-in"
           @click="goToDetailPage(house.id)"
         >
-          <!-- House Image Slider -->
           <div class="relative w-full h-64">
             <swiper
               :slides-per-view="1"
@@ -35,8 +37,6 @@
               </swiper-slide>
             </swiper>
           </div>
-
-          <!-- House Details -->
           <div class="p-4 bg-white">
             <h3 class="text-lg font-semibold">{{ house.street }}</h3>
             <p class="text-sm text-gray-500">
@@ -56,6 +56,62 @@
           </div>
         </div>
       </div>
+
+      <!-- Swiper for mobile screens -->
+      <swiper
+        v-else
+        :slides-per-view="1"
+        :modules="swiperModules"
+        style="height: 100%"
+        :pagination="{ clickable: true }"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        class="shadow-lg pb-10 bg-white rounded-lg"
+        data-aos="fade-up"
+      >
+        <swiper-slide
+          v-for="(house, index) in houses"
+          :key="house.id"
+          @click="goToDetailPage(house.id)"
+          class="house-card flex flex-col rounded overflow-hidden h-full"
+        >
+          <div class="relative w-full h-64">
+            <swiper
+              :slides-per-view="1"
+              class="w-full h-full"
+              :modules="swiperModules"
+              :pagination="{ clickable: true }"
+              :autoplay="{ delay: 5000, disableOnInteraction: false }"
+            >
+              <swiper-slide
+                v-for="(image, imgIndex) in house.images"
+                :key="imgIndex"
+              >
+                <img
+                  :src="getImageUrl(image.image_path)"
+                  class="w-full h-full object-cover"
+                />
+              </swiper-slide>
+            </swiper>
+          </div>
+          <div class="p-4 bg-white">
+            <h3 class="text-lg font-semibold">{{ house.street }}</h3>
+            <p class="text-sm text-gray-500">
+              {{ house.location }}, {{ house.post_code }}
+            </p>
+            <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+              <p><i class="fas fa-home mr-2"></i>{{ house.house_type.type }}</p>
+              <p>
+                <i class="fas fa-door-open mr-2"></i
+                >{{ house.number_of_rooms }} kamers
+              </p>
+              <p>
+                <i class="fas fa-euro-sign mr-2"></i
+                >{{ Math.floor(house.price) }} / maand
+              </p>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
     </div>
   </section>
 </template>
@@ -67,15 +123,20 @@ import "swiper/swiper-bundle.css";
 import { getLandingSwaps } from "@/services/apiService";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useRouter } from "vue-router"; // Import the router
+
 export default {
   name: "LandingSwaps",
   mounted() {
     AOS.init({
-      duration: 1200, // Duration of the animation
-      easing: "ease-in-out", // Easing function for smooth animations
-      once: true, // Animation occurs only once
+      duration: 1200,
+      easing: "ease-in-out",
+      once: true,
     });
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize(); // Initial check
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   },
   components: {
     Swiper,
@@ -84,6 +145,7 @@ export default {
   data() {
     return {
       houses: [],
+      isMobile: false,
       swiperModules: [Pagination, Autoplay],
     };
   },
@@ -101,11 +163,11 @@ export default {
     getImageUrl(path) {
       return `https://phplaravel-1239567-4600161.cloudwaysapps.com/${path}`;
     },
-    calculateDelay(index) {
-      return index * 100; // Stagger delay by 100ms increments
-    },
     goToDetailPage(id) {
       this.$router.push({ name: "HouseDetail", params: { id } });
+    },
+    handleResize() {
+      this.isMobile = window.innerWidth <= 768; // Example mobile threshold
     },
   },
 };
@@ -122,7 +184,7 @@ export default {
   font-weight: bold;
   margin-bottom: 2rem;
   text-align: center;
-  color: #1c592f;
+  /* color: #1c592f; */
 }
 
 .house-card {
@@ -130,7 +192,7 @@ export default {
 }
 
 .house-card .swiper-container {
-  height: 16rem; /* Matches the height of the image section */
+  height: 16rem;
 }
 
 .house-card img {

@@ -85,6 +85,7 @@ export default {
 }
 
 .section-title {
+  font-size: 2rem;
   font-weight: 800;
   color: #1c592f;
   margin-bottom: 2.5rem;
@@ -138,8 +139,7 @@ export default {
 }
 
 .benefit-icon-container img {
-  width: 100%; /* Adjust the size of the image inside the circle */
-  height: auto;
+  height: 100%;
 }
 
 .benefit-title {

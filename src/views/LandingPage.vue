@@ -7,6 +7,7 @@
         <LandingSwaps />
         <HowItWorks />
         <CallToActionButton />
+        <AboutUs />
         <HowCanWeHelp />
         <UserExperiences />
         <Tips />
@@ -14,6 +15,7 @@
         <ContactUs />
       </div>
     </main>
+    <Footer />
   </div>
 </template>
 
@@ -28,6 +30,9 @@ import HowCanWeHelp from "@/components/landing/HowCanWeHelp.vue";
 import ContactUs from "@/components/landing/ContactUs.vue";
 import CallToActionButton from "@/components/landing/CallToActionButton.vue"; // Import the CTA Button
 import LandingSwaps from "@/components/landing/LandingSwaps.vue";
+import AboutUs from "@/components/landing/AboutUs.vue";
+import Footer from "@/components/landing/Footer.vue";
+
 export default {
   components: {
     Navbar,
@@ -36,10 +41,12 @@ export default {
     HowCanWeHelp,
     UserExperiences,
     Tips,
+    AboutUs,
     FAQ,
     ContactUs,
     CallToActionButton,
     LandingSwaps,
+    Footer,
   },
 };
 </script>

@@ -20,38 +20,22 @@
         :class="[
           'nav-links',
           menuOpen ? 'block' : 'hidden',
-          'md:flex md:space-x-6',
+          'md:flex md:space-x-8',
         ]"
       >
-        <li>
+        <li v-for="(link, index) in navLinks" :key="index">
           <a
-            href="#how-can-we-help"
+            :href="link.href"
             class="nav-link hover-color transition duration-300 ease-in-out"
-            @click="closeMenu"
-            >Hoe kunnen we helpen</a
+            @click.prevent="scrollToSection(link.section)"
           >
-        </li>
-        <li>
-          <a
-            href="#faq"
-            class="nav-link hover-color transition duration-300 ease-in-out"
-            @click="closeMenu"
-            >FAQ</a
-          >
-        </li>
-        <li>
-          <a
-            href="#contact-us"
-            class="nav-link hover-color transition duration-300 ease-in-out"
-            @click="closeMenu"
-            >Contact</a
-          >
+            {{ link.text }}
+          </a>
         </li>
         <li>
           <router-link
             to="/register"
-            class="nav-link hover-color cta-button transition duration-300 ease-in-out"
-            @click="closeMenu"
+            class="nav-link cta-button transition duration-300 ease-in-out"
             >Aanmelden</router-link
           >
         </li>
@@ -66,13 +50,30 @@ export default {
   data() {
     return {
       menuOpen: false, // State to track if the mobile menu is open
+      scrolled: false, // Track if the user has scrolled down
+      navLinks: [
+        {
+          text: "Advertenties",
+          section: "landing-swaps",
+          href: "#landing-swaps",
+        },
+        {
+          text: "Hoe werkt het?",
+          section: "how-it-works",
+          href: "#how-it-works",
+        },
+        { text: "Over Ons", section: "about-us", href: "#about-us" },
+        { text: "Tips", section: "tips", href: "#tips" },
+        { text: "FAQ", section: "faq", href: "#faq" },
+        { text: "Contact", section: "contact-us", href: "#contact-us" },
+      ],
     };
   },
   computed: {
     navbarClasses() {
-      return this.menuOpen
-        ? "w-full bg-white text-black p-4 fixed top-0 shadow-md z-50"
-        : "w-full bg-white text-black p-4 fixed top-0 shadow-md z-50 transition-all duration-300 ease-in-out";
+      return this.menuOpen || this.scrolled
+        ? "navbar w-full bg-white text-black p-4 fixed top-0 shadow-md z-50 transition-all duration-300 ease-in-out"
+        : "navbar w-full bg-transparent text-white p-4 fixed top-0 z-50 transition-all duration-300 ease-in-out";
     },
   },
   methods: {
@@ -82,27 +83,37 @@ export default {
     closeMenu() {
       this.menuOpen = false; // Close the menu after clicking a link
     },
+    scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        const navbarHeight = document.querySelector("nav").offsetHeight;
+        const sectionPosition = section.offsetTop - navbarHeight;
+
+        window.scrollTo({
+          top: sectionPosition,
+          behavior: "smooth",
+        });
+
+        this.closeMenu();
+      }
+    },
+    handleScroll() {
+      this.scrolled = window.scrollY > 50;
+    },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>
 
 <style scoped>
-/* Active Link Style */
-.active {
-  color: #1c592f;
-  font-weight: bold;
-}
-
-/* Hover Link Style */
-.hover-color:hover {
-  color: #1c592f;
-}
-
-/* Navbar Styling */
+/* Base Navbar Styling */
 .navbar {
-  background-color: #ffffff;
-  transition: background-color 0.3s ease-in-out;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .nav-links {
@@ -119,10 +130,10 @@ export default {
 
 .nav-link {
   font-size: 1rem;
-  color: #333;
   text-decoration: none;
   padding: 0.5rem 1rem;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  transition: color 0.3s ease;
+  color: inherit;
 }
 
 .cta-button {
@@ -150,6 +161,23 @@ export default {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.navbar.bg-transparent .nav-link,
+.navbar.bg-transparent .cta-button {
+  color: white;
+}
+
+.navbar.bg-transparent .mobile-menu-button i {
+  color: white;
+}
+
+.navbar.bg-white .nav-link,
+.navbar.bg-white .cta-button {
+  color: #333;
+}
+
+.navbar.bg-white .mobile-menu-button i {
   color: #1c592f;
 }
 
@@ -159,12 +187,12 @@ export default {
     display: none;
     flex-direction: column;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     position: absolute;
     top: 60px; /* Adjust for navbar height */
     left: 0;
     width: 100%;
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 999;
   }
@@ -174,19 +202,32 @@ export default {
   }
 
   .nav-link {
-    color: white;
-    padding: 0.75rem 0;
+    padding: 1rem 0;
     display: block;
     width: 100%;
     margin: 0;
     text-align: center;
-    border-radius: 0; /* Remove border-radius for full-width background */
-    background-color: rgba(0, 0, 0, 0.8);
+    color: white !important;
+    font-size: 0.8rem;
+    background-color: transparent; /* No background on items */
   }
 
   .nav-link:hover {
-    background-color: rgba(59, 130, 246, 0.1);
-    color: #1c592f;
+    color: #1c592f; /* Change text color to green on hover */
+  }
+
+  .cta-button {
+    margin-top: 1rem;
+    background-color: transparent; /* Remove background */
+    color: white; /* Set text color to white */
+    padding: 1rem 0; /* Match padding with other nav links */
+    width: 100%;
+  }
+
+  .cta-button:hover {
+    color: #1c592f; /* Change text color to green on hover */
+    background-color: transparent; /* No background on hover */
+    transform: none; /* Remove transform effect */
   }
 }
 

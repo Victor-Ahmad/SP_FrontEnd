@@ -4,33 +4,37 @@
       <h2 class="section-title" data-aos="fade-up">
         Veelgestelde Vragen (FAQ)
       </h2>
-      <div class="faq-list">
-        <div
-          v-for="(faq, index) in faqs"
-          :key="index"
-          class="faq-item"
-          :data-aos="'zoom-in'"
-        >
-          <button @click="toggleFaq(index)" class="faq-question">
-            {{ faq.question }}
-            <span
-              :class="faq.open ? 'rotate-180' : 'rotate-0'"
-              class="transform transition-transform duration-300"
-            >
-              <i class="fas fa-chevron-down"></i>
-            </span>
-          </button>
-          <transition name="faq-toggle" @enter="enter" @leave="leave">
-            <div v-show="faq.open" ref="faqAnswers" class="faq-answer">
-              {{ faq.answer }}
-            </div>
-          </transition>
+      <div class="faq-content">
+        <div class="faq-list">
+          <div
+            v-for="(faq, index) in faqs"
+            :key="index"
+            class="faq-item"
+            :data-aos="'zoom-in'"
+          >
+            <button @click="toggleFaq(index)" class="faq-question">
+              {{ faq.question }}
+              <span
+                :class="faq.open ? 'rotate-180' : 'rotate-0'"
+                class="transform transition-transform duration-300"
+              >
+                <i class="fas fa-chevron-down"></i>
+              </span>
+            </button>
+            <transition name="faq-toggle" @enter="enter" @leave="leave">
+              <div v-show="faq.open" ref="faqAnswers" class="faq-answer">
+                {{ faq.answer }}
+              </div>
+            </transition>
+          </div>
+        </div>
+        <div class="faq-image-container" data-aos="fade-left">
+          <img src="@/assets/faq.png" alt="FAQ" class="faq-image" />
         </div>
       </div>
     </div>
   </section>
 </template>
-
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -130,7 +134,13 @@ export default {
   },
   methods: {
     toggleFaq(index) {
-      this.faqs[index].open = !this.faqs[index].open;
+      this.faqs.forEach((faq, i) => {
+        if (i === index) {
+          faq.open = !faq.open; // Toggle the clicked FAQ
+        } else {
+          faq.open = false; // Close all other FAQs
+        }
+      });
     },
     enter(el) {
       el.style.height = el.scrollHeight + "px";
@@ -142,6 +152,7 @@ export default {
       });
     },
   },
+
   mounted() {
     AOS.init({
       duration: 1200, // Duration of the animation
@@ -158,7 +169,7 @@ export default {
   background: linear-gradient(135deg, #e4eee6, #f7fafc);
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  overflow-x: hidden; /* Add this to hide overflow on the x-axis */
+  overflow-x: hidden;
 }
 
 .section-title {
@@ -169,25 +180,34 @@ export default {
   margin-bottom: 2.5rem;
 }
 
+.faq-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
 .faq-list {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
 }
 
 .faq-item {
-  background: white;
-  padding: 1.5rem 2rem;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   overflow: hidden;
+  background: white;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
 }
 
 .faq-question {
   width: 100%;
   text-align: left;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
   background: none;
   border: none;
@@ -198,6 +218,7 @@ export default {
   padding: 0;
   transition: color 0.3s ease;
   color: #2d3748;
+  padding: 0.5rem 0;
 }
 
 .faq-question:hover {
@@ -217,6 +238,43 @@ export default {
   transform: rotate(180deg);
 }
 
+.faq-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.faq-image {
+  max-width: 70%;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: floating 6s ease-in-out infinite; /* Add floating animation */
+}
+
+/* Keyframes for the floating effect */
+@keyframes floating {
+  0% {
+    transform: translateY(100px);
+  }
+  50% {
+    transform: translateY(-100px); /* Adjust the height as needed */
+  }
+  100% {
+    transform: translateY(100px);
+  }
+}
+
+@media (min-width: 768px) {
+  .faq-content {
+    grid-template-columns: 1fr 1fr; /* Two columns: one for FAQs, one for the image */
+  }
+
+  .faq-image-container {
+    align-self: center; /* Center the image vertically */
+    padding-left: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .section-title {
     font-size: 2rem;
@@ -226,6 +284,9 @@ export default {
   }
   .faq-answer {
     font-size: 0.875rem;
+  }
+  .faq-image-container {
+    display: none;
   }
 }
 </style>
