@@ -59,7 +59,7 @@ export default {
 .section-title {
   font-size: 2.75rem;
   font-weight: 700;
-  color: #1c592f;
+  color: #000;
   margin-bottom: 2rem;
   text-transform: uppercase;
   position: relative;

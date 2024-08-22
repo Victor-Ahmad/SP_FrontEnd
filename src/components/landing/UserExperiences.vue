@@ -114,7 +114,7 @@ export default {
 .section-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1c592f;
+  color: #000;
 
   position: relative;
 }

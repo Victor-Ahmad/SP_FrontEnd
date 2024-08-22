@@ -175,7 +175,7 @@ export default {
 .section-title {
   font-size: 2.75rem;
   font-weight: 700;
-  color: #1c592f;
+  color: #000;
   text-align: center;
   margin-bottom: 2.5rem;
 }
@@ -257,7 +257,7 @@ export default {
     transform: translateY(100px);
   }
   50% {
-    transform: translateY(-100px); /* Adjust the height as needed */
+    transform: translateY(-300px); /* Adjust the height as needed */
   }
   100% {
     transform: translateY(100px);
