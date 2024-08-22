@@ -172,11 +172,13 @@ export default {
   color: white;
 }
 
-.navbar.bg-white .nav-link,
-.navbar.bg-white .cta-button {
+.navbar.bg-white .nav-link {
   color: #333;
 }
 
+.navbar.bg-white .cta-button {
+  color: white;
+}
 .navbar.bg-white .mobile-menu-button i {
   color: #1c592f;
 }
