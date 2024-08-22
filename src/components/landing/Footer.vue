@@ -2,13 +2,25 @@
   <footer class="footer-section py-8">
     <div class="container mx-auto text-center">
       <div class="social-icons">
-        <a href="https://www.facebook.com" target="_blank" class="social-icon">
+        <a
+          href="ttps://www.facebook.com/profile.php?id=61560892673549"
+          target="_blank"
+          class="social-icon"
+        >
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href="https://www.instagram.com" target="_blank" class="social-icon">
+        <a
+          href="https://www.instagram.com/snelwoningruil"
+          target="_blank"
+          class="social-icon"
+        >
           <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://www.linkedin.com" target="_blank" class="social-icon">
+        <a
+          href="https://www.linkedin.com/company/snelwoningruil"
+          target="_blank"
+          class="social-icon"
+        >
           <i class="fab fa-linkedin-in"></i>
         </a>
       </div>
