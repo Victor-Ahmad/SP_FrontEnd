@@ -2,39 +2,30 @@
   <section id="tips" class="tips-section my-10">
     <div class="container mx-auto text-center">
       <h2 class="section-title">Tips voor een succesvolle ruil</h2>
-      <div class="tips-grid">
-        <ul class="tips-list">
-          <li
-            v-for="(tip, index) in tips"
-            :key="index"
-            class="tip-item my-5"
-            :data-aos="index % 2 === 0 ? 'fade-right' : 'fade-left'"
-            :data-aos-delay="100 * index"
-          >
-            <div class="icon-container">
-              <i :class="tip.icon"></i>
-            </div>
-            <div class="tip-content">
-              <strong class="tip-title">{{ tip.title }}</strong
-              >{{ tip.description }}
-            </div>
-          </li>
-        </ul>
-        <div
-          class="tips-image-container"
-          data-aos="zoom-in"
-          data-aos-delay="300"
+
+      <img src="@/assets/tips.png" alt="Tips Image" class="title-image" />
+
+      <ul class="tips-list">
+        <li
+          v-for="(tip, index) in tips"
+          :key="index"
+          class="tip-item my-5"
+          :data-aos="index % 2 === 0 ? 'fade-right' : 'fade-left'"
+          :data-aos-delay="100 * index"
         >
-          <img
-            src="@/assets/images/landing_4.jpg"
-            alt="Tips"
-            class="tips-image"
-          />
-        </div>
-      </div>
+          <div class="icon-container">
+            <i :class="tip.icon"></i>
+          </div>
+          <div class="tip-content">
+            <strong class="tip-title">{{ tip.title }}</strong>
+            {{ tip.description }}
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
+
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -86,7 +77,9 @@ export default {
   },
 };
 </script>
+
 <style scoped>
+/* Base Styles */
 .tip-title {
   color: #1c592f;
 }
@@ -96,6 +89,7 @@ export default {
   background-color: #f7fafc;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
   overflow: hidden;
 }
 
@@ -106,43 +100,90 @@ export default {
   margin-bottom: 3rem;
 }
 
-.tips-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
-
-@media (min-width: 768px) {
-  .tips-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 .tips-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.title-image {
+  display: none;
+  margin-bottom: 2rem;
+}
+
+/* Circles for Background */
+.tips-section::before,
+.tips-section::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(28, 89, 47, 0.15);
+  z-index: 0;
+}
+
+.tips-section::before {
+  width: 300px;
+  height: 300px;
+  top: -50px;
+  left: -100px;
+}
+
+.tips-section::after {
+  width: 400px;
+  height: 400px;
+  bottom: -100px;
+  right: -150px;
+}
+
+/* Two columns on larger screens */
+@media (min-width: 768px) {
+  .title-image {
+    display: block;
+    max-width: 250px; /* Adjust size as needed */
+    margin: 1rem auto 2rem; /* Center the image and add spacing below */
+  }
+
+  .tip-item {
+    width: calc(50% - 1rem); /* Two items per row */
+  }
+
+  /* Additional circle for web screens */
+  .tips-section::before {
+    width: 200px;
+    height: 200px;
+    top: 150px;
+    left: -100px;
+  }
+
+  .tips-section::after {
+    width: 250px;
+    height: 250px;
+    bottom: 200px;
+    right: 100px;
+  }
 }
 
 .tip-item {
-  position: relative; /* Needed for the absolute positioning of the icon */
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem; /* Extra padding at the top to accommodate the icon */
+  padding: 1.5rem;
   border-radius: 10px;
   background: white;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center; /* Center the title and text */
+  text-align: center;
+  z-index: 1;
 }
 
 .icon-container {
   position: absolute;
-  top: -25px; /* Position the icon above the card */
+  top: -25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -156,7 +197,7 @@ export default {
 }
 
 .tip-content {
-  margin-top: 1rem; /* Space for the icon */
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -172,34 +213,5 @@ export default {
 .tip-description {
   font-size: 1rem;
   color: #4a5568;
-}
-
-/* Image Container Styles */
-.tips-image-container {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  height: fit-content;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.tips-image {
-  width: 100%;
-  display: block;
-  border-radius: inherit;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
-  }
-  .tip-content {
-    font-size: 1rem;
-  }
-  .tips-image-container {
-    display: none;
-  }
 }
 </style>
