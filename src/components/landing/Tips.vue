@@ -16,7 +16,7 @@
             </div>
             <div class="tip-content">
               <strong class="tip-title">{{ tip.title }}</strong
-              >: {{ tip.description }}
+              >{{ tip.description }}
             </div>
           </li>
         </ul>
