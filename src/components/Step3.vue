@@ -59,6 +59,7 @@
                 class="input-field w-full p-2 border rounded"
                 required
               />
+
               <div class="invalid-feedback" v-if="emailError">
                 {{ emailErrorMessage }}
               </div>

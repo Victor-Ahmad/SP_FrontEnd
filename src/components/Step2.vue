@@ -96,6 +96,22 @@
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showDropdown')"
                 />
+                <span class="dropdown-icon" :class="{ open: showDropdown }">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-4 h-4 transition-transform duration-300"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </span>
                 <ul v-show="showDropdown" class="dropdown-content">
                   <li
                     v-for="(type, index) in houseTypes"
@@ -187,6 +203,22 @@
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showAreaDropdown')"
                 />
+                <span class="dropdown-icon" :class="{ open: showAreaDropdown }">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-4 h-4 transition-transform duration-300"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </span>
                 <ul v-show="showAreaDropdown" class="dropdown-content">
                   <li
                     v-for="(area, index) in areas"
@@ -215,6 +247,25 @@
                   class="input-field w-full p-2 border rounded cursor-pointer"
                   @click="toggleDropdown('showFeaturesDropdown')"
                 />
+                <span
+                  class="dropdown-icon"
+                  :class="{ open: showFeaturesDropdown }"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-4 h-4 transition-transform duration-300"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </span>
                 <ul v-show="showFeaturesDropdown" class="multi-select-content">
                   <li
                     v-for="(feature, index) in features"
@@ -272,7 +323,7 @@ export default {
       selectedHouseTypeName: "",
       numberOfRooms: [1, 2, 3, 4, 5, 6],
       floorOptions: [0, 1, 2, 3, 4, 5, 6], // G represented as 0
-      areas: ["50", "100", "150", "200"],
+      areas: ["50", "75", "100", "125", "150", "175", "200"],
       features: [],
       selectedFeatureNames: "",
       showDropdown: false,
@@ -564,5 +615,32 @@ export default {
 }
 .invalid-feedback {
   @apply text-red-600 text-sm;
+}
+.dropdown-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #1c592f; /* Match your theme color */
+  transition: transform 0.3s ease;
+}
+
+.dropdown-icon.open svg {
+  transform: rotate(180deg); /* Rotate the arrow up */
+}
+
+.input-field {
+  @apply w-full p-2 border border-gray-300 rounded;
+}
+
+.dropdown-content,
+.multi-select-content {
+  @apply absolute bg-white shadow-lg max-h-48 overflow-y-auto z-10 w-full mt-1 border border-gray-300 rounded;
+}
+
+.dropdown-content li,
+.multi-select-content li {
+  @apply cursor-pointer p-2 hover:bg-gray-100;
 }
 </style>

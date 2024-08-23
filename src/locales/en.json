@@ -81,7 +81,7 @@
         "houseTypePlaceholder": "Select an option",
         "maxRentPrice": "Max Rent Price (€)",
         "pricePlaceholder": "Enter price",
-        "minRooms": "Min Number of Rooms",
+        "minRooms": "Min Number of Bedrooms",
         "floor": "Floor",
         "floorPlaceholder": "Enter floor number",
         "minArea": "Min Area (m²)",

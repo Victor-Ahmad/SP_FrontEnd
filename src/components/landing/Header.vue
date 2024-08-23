@@ -22,9 +22,11 @@
           type="email"
           class="email-input"
           placeholder="Voer je e-mail in"
+          v-model="email"
         />
+
         <router-link
-          to="/register"
+          :to="{ path: '/register', query: { email: email } }"
           class="email-submit-button"
           @click="closeMenu"
           >Begin hier</router-link
@@ -51,6 +53,11 @@ import "aos/dist/aos.css";
 
 export default {
   name: "Header",
+  data() {
+    return {
+      email: "", // Bind this to the input field
+    };
+  },
   mounted() {
     AOS.init({
       duration: 1200, // Smooth transition duration

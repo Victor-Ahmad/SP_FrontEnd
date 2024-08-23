@@ -186,6 +186,16 @@ export default {
       error,
     };
   },
+  mounted() {
+    this.scrollToTop(); // Scroll to top when the component is mounted
+    const emailFromQuery = this.$route.query.email;
+
+    // Check if the email exists and assign it to formData.email
+    if (emailFromQuery) {
+      this.formData.email = emailFromQuery;
+      console.log("Email set to:", this.formData.email); // Debugging: Check if the email is being set
+    }
+  },
   methods: {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });

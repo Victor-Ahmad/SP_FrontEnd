@@ -1,5 +1,6 @@
 <template>
   <nav
+    v-if="shouldShowBottomNav"
     class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center py-2 z-50"
   >
     <router-link
@@ -45,6 +46,9 @@
 </template>
 
 <script>
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
+
 export default {
   name: "BottomNavBar",
   props: {
@@ -53,35 +57,50 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      isMobile: window.innerWidth <= 768,
+  setup() {
+    const route = useRoute();
+    const isMobile = ref(window.innerWidth <= 768);
+
+    const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"];
+
+    const shouldShowBottomNav = computed(() => {
+      return !hiddenRoutesOnMobile.includes(route.path);
+    });
+
+    const checkScreenSize = () => {
+      isMobile.value = window.innerWidth <= 768;
     };
-  },
-  methods: {
-    toggleSidebar() {
+
+    const toggleSidebar = () => {
       this.$emit("toggle-sidebar");
-    },
-    checkScreenSize() {
-      this.isMobile = window.innerWidth <= 768;
-    },
-    handleNavItemClick(route) {
-      // If sidebar is visible, only close it instead of navigating
+    };
+
+    const handleNavItemClick = (route) => {
       if (this.isSidebarVisible) {
-        this.toggleSidebar();
+        toggleSidebar();
       } else {
         this.$router.push(route);
       }
-    },
-    handleMenuClick() {
-      this.toggleSidebar();
-    },
-  },
-  mounted() {
-    window.addEventListener("resize", this.checkScreenSize);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.checkScreenSize);
+    };
+
+    const handleMenuClick = () => {
+      toggleSidebar();
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", checkScreenSize);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("resize", checkScreenSize);
+    });
+
+    return {
+      isMobile,
+      shouldShowBottomNav,
+      handleNavItemClick,
+      handleMenuClick,
+    };
   },
 };
 </script>
@@ -90,7 +109,7 @@ export default {
 .bottom-nav-bar {
   background-color: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 50; /* Ensure it is below the filter drawer */
+  z-index: 50;
 }
 
 .nav-item {
@@ -99,8 +118,8 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  font-size: 24px; /* Increase font size for icons */
-  position: relative; /* Position relative for the border effect */
+  font-size: 24px;
+  position: relative;
 }
 
 .icon-text {
@@ -111,32 +130,32 @@ export default {
 }
 
 .icon-text i {
-  font-size: 24px; /* Adjust icon size */
+  font-size: 24px;
 }
 
 .icon-text span {
-  font-size: 12px; /* Adjust text size */
-  margin-top: 4px; /* Space between icon and text */
+  font-size: 12px;
+  margin-top: 4px;
 }
 
 .active {
-  color: #1c592f; /* Highlight color for active link */
+  color: #1c592f;
   font-weight: bold;
 }
 
 .active::before {
   content: "";
   position: absolute;
-  top: -6px; /* Adjust position to ensure it appears above the nav item */
+  top: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
   height: 4px;
-  background-color: #1c592f; /* Same color as the active icon */
-  border-radius: 4px; /* Rounds the edges of the border */
+  background-color: #1c592f;
+  border-radius: 4px;
 }
 
 .hover-color:hover {
-  color: #1c592f; /* Hover color */
+  color: #1c592f;
 }
 </style>
