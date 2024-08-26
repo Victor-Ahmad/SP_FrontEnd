@@ -1,7 +1,7 @@
 <template>
   <nav
     v-if="shouldShowBottomNav"
-    class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center py-2 z-40"
+    class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-40"
   >
     <router-link
       :to="{ path: '/home', query: { tab: 'houses' } }"
@@ -58,15 +58,25 @@ export default {
     },
   },
   setup(props, { emit }) {
-    // Use the emit function from setup's context
     const route = useRoute();
     const router = useRouter();
     const isMobile = ref(window.innerWidth <= 768);
 
     const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"];
+    const dynamicRoutePattern = /^\/house\/\d+$/;
 
     const shouldShowBottomNav = computed(() => {
-      return !hiddenRoutesOnMobile.includes(route.path);
+      // Check for exact matches in the hiddenRoutesOnMobile array
+      if (hiddenRoutesOnMobile.includes(route.path)) {
+        return false;
+      }
+
+      // Check if the current route matches the dynamic route pattern
+      if (dynamicRoutePattern.test(route.path)) {
+        return false;
+      }
+
+      return true;
     });
 
     const checkScreenSize = () => {
@@ -148,7 +158,7 @@ export default {
 .active::before {
   content: "";
   position: absolute;
-  top: -6px;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
   width: 80%;

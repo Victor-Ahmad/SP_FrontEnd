@@ -281,7 +281,7 @@
 
     <!-- Fixed Bottom Navbar -->
     <div
-      class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-50 gap-3 px-3"
+      class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-50 gap-3 p-3"
     >
       <button
         @click="handleInterestedClick"
@@ -607,6 +607,10 @@ export default {
 </script>
 
 <style scoped>
+.bottom-nav-bar {
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
 /* Ensure fixed height for the swiper */
 .swiper-container {
   height: 100%;
