@@ -53,8 +53,8 @@
               <div
                 class="text-purple-custom text-base font-semibold flex items-center"
               >
-                <i class="fas fa-euro-sign mr-2"></i> {{ house?.price || "" }} /
-                month
+                <i class="fas fa-euro-sign mr-2"></i>
+                {{ Math.floor(house?.price) || "" }} / month
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-home mr-2 icon_custom_color"></i>
@@ -66,7 +66,7 @@
               </div>
               <div class="text-gray-700 text-sm flex items-center">
                 <i class="fas fa-map-marker-alt mr-2 icon_custom_color"></i>
-                <strong>Area: </strong> {{ house?.area || "" }} (m²)
+                <strong>Area: </strong> {{ Math.floor(house?.area) || "" }} (m²)
               </div>
             </div>
             <div class="flex flex-wrap space-x-2 border-t border-gray-200 pt-2">

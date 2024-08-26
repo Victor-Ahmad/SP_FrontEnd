@@ -1,27 +1,34 @@
 <template>
   <div class="relative" @click="toggleDropdown">
     <!-- Notification Bell Icon -->
-    <svg
-      class="w-6 h-6 cursor-pointer"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M15 17h5l-1.405-1.405C18.79 15.79 18 14.195 18 12.5V9a6 6 0 10-12 0v3.5c0 1.695-.79 3.29-2.595 4.095L3 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-      ></path>
-    </svg>
+    <div class="relative">
+      <svg
+        class="w-6 h-6 cursor-pointer"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 17h5l-1.405-1.405C18.79 15.79 18 14.195 18 12.5V9a6 6 0 10-12 0v3.5c0 1.695-.79 3.29-2.595 4.095L3 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+        ></path>
+      </svg>
+      <!-- Red Dot Indicator -->
+      <span
+        v-if="hasUnreadNotifications"
+        class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
+      ></span>
+    </div>
 
     <!-- Dropdown Menu -->
     <div
       v-if="isOpen"
-      class="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+      class="absolute -right-16 md:right-0 lg:right-0 mt-2 min-w-80 bg-white border border-gray-200 rounded-md shadow-lg z-50"
     >
-      <!-- Dropdown Header -->
+      <!-- Dropdown content here -->
       <div
         class="flex justify-between items-center px-4 py-2 bg-gray-100 border-b border-gray-200"
       >
@@ -209,6 +216,16 @@ export default {
         this.closeDropdown();
       }
     },
+    addNotification(notification) {
+      // Add the new notification to the list and set it as unread
+      this.notifications.unshift({
+        id: notification.messageId,
+        title: notification.notification.title,
+        body: notification.notification.body,
+        sent_at: new Date().toISOString(), // Set the current time
+        read: false,
+      });
+    },
   },
   mounted() {
     document.addEventListener("click", this.handleClickOutside);
@@ -230,6 +247,10 @@ export default {
 
 .cursor-not-allowed {
   cursor: not-allowed;
+}
+
+.bg-red-500 {
+  background-color: #f56565;
 }
 
 /* Additional styles if needed */

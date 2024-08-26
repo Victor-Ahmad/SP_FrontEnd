@@ -57,17 +57,6 @@
         <div class="flex justify-center w-1/2 max-w-sm">
           <img
             :class="{
-              'green-arrow': triangle.is_b_interested_in_c,
-              'gray-arrow': !triangle.is_b_interested_in_c,
-            }"
-            src="@/assets/icons/arrow-fat.png"
-            alt="Up Arrow"
-            class="h-20 w-20"
-          />
-        </div>
-        <div class="flex justify-center w-1/2 max-w-sm">
-          <img
-            :class="{
               'green-arrow': triangle.is_c_interested_in_a,
               'gray-arrow': !triangle.is_c_interested_in_a,
             }"
@@ -75,6 +64,17 @@
             alt="Down Arrow"
             class="h-20 w-20"
             style="transform: rotate(180deg)"
+          />
+        </div>
+        <div class="flex justify-center w-1/2 max-w-sm">
+          <img
+            :class="{
+              'green-arrow': triangle.is_b_interested_in_c,
+              'gray-arrow': !triangle.is_b_interested_in_c,
+            }"
+            src="@/assets/icons/arrow-fat.png"
+            alt="Up Arrow"
+            class="h-20 w-20"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@
       >
         <!-- First House Card -->
         <div class="flex flex-col w-full lg:w-1/2 max-w-sm relative">
-          <HouseCardTriangle :house="triangle.house_b" />
+          <HouseCardTriangle :house="triangle.house_a" />
         </div>
         <div class="flex flex-col justify-center max-w-sm">
           <img
@@ -94,14 +94,14 @@
               'gray-arrow': !triangle.is_a_interested_in_b,
             }"
             src="@/assets/icons/arrow-fat.png"
-            alt="Left Arrow"
+            alt="Right Arrow"
             class="h-20 w-20"
-            style="transform: rotate(-90deg)"
+            style="transform: rotate(90deg)"
           />
         </div>
         <!-- Second House Card -->
         <div class="flex flex-col w-full lg:w-1/2 max-w-sm relative">
-          <HouseCardTriangle :house="triangle.house_a" />
+          <HouseCardTriangle :house="triangle.house_b" />
         </div>
       </div>
 
@@ -111,12 +111,12 @@
       >
         <!-- First House Card -->
         <div class="flex flex-col w-1/2 max-w-xs h-auto">
-          <HouseCardTriangle :house="triangle.house_b" />
+          <HouseCardTriangle :house="triangle.house_a" />
         </div>
 
         <!-- Second House Card -->
         <div class="flex flex-col w-1/2 max-w-xs h-auto">
-          <HouseCardTriangle :house="triangle.house_a" />
+          <HouseCardTriangle :house="triangle.house_b" />
         </div>
       </div>
     </div>

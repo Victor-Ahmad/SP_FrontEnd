@@ -16,7 +16,7 @@
     </div>
     <nav v-if="!isMobile && token" class="flex space-x-4 items-center">
       <router-link
-        to="/home"
+        :to="{ path: '/home', query: { tab: 'houses' } }"
         class="hover-color transition duration-300 ease-in-out"
         active-class="active"
         >{{ $t("nav.home") }}</router-link
@@ -27,12 +27,20 @@
         active-class="active"
         >{{ $t("nav.swaps") }}</router-link
       >
-      <router-link
-        to="/chatPage"
-        class="hover-color transition duration-300 ease-in-out"
-        active-class="active"
-        >{{ $t("nav.messages") }}</router-link
-      >
+      <div class="relative" :class="{ shake: isShakingMessage }">
+        <router-link
+          to="/chatPage"
+          class="hover-color transition duration-300 ease-in-out"
+          active-class="active"
+          @click="resetMessageNotification"
+          >{{ $t("nav.messages") }}</router-link
+        >
+        <!-- Red Dot Indicator for New Messages -->
+        <span
+          v-if="hasNewMessage"
+          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
+        ></span>
+      </div>
       <router-link
         to="/profile"
         class="hover-color transition duration-300 ease-in-out"
@@ -41,7 +49,14 @@
       >
     </nav>
     <div class="flex space-x-4 items-center">
-      <NotificationDropdown v-if="token" />
+      <div class="relative" :class="{ shake: isShakingNotification }">
+        <NotificationDropdown ref="notificationDropdown" v-if="token" />
+        <!-- Red Dot Indicator for General Notifications -->
+        <span
+          v-if="hasNewNotification"
+          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
+        ></span>
+      </div>
       <router-link
         v-if="!isMobile && !token"
         to="/login"
@@ -74,6 +89,8 @@ import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import LanguageDropdown from "@/components/LanguageDropdown.vue";
 import NotificationDropdown from "@/components/NotificationDropdown.vue";
+import { initializeApp } from "firebase/app";
+import { getMessaging, onMessage } from "firebase/messaging";
 
 export default {
   name: "Header",
@@ -86,6 +103,13 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const isMobile = ref(false);
+    const notificationDropdown = ref(null); // Ref for NotificationDropdown
+
+    // States for shaking animations and red dots
+    const isShakingNotification = ref(false);
+    const isShakingMessage = ref(false);
+    const hasNewNotification = ref(false);
+    const hasNewMessage = ref(false);
 
     const checkScreenSize = () => {
       isMobile.value = window.innerWidth <= 768;
@@ -94,6 +118,44 @@ export default {
     onMounted(() => {
       checkScreenSize();
       window.addEventListener("resize", checkScreenSize);
+
+      // Firebase initialization and onMessage handling
+      const firebaseConfig = {
+        apiKey: "AIzaSyD1pYbJOZtRoI6uP0CG2BJwbyiF66t8yhs",
+        authDomain: "snelwoningruil.firebaseapp.com",
+        projectId: "snelwoningruil",
+        storageBucket: "snelwoningruil.appspot.com",
+        messagingSenderId: "95029283842",
+        appId: "1:95029283842:web:cf6baac956ad264d7b2b1b",
+        measurementId: "G-ZB2PQERS5W",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+
+      onMessage(messaging, (payload) => {
+        console.log("Message received. ", payload);
+
+        // Handle different types of notifications
+        if (payload.data.type === "message") {
+          hasNewMessage.value = true; // Show red dot on Messages link only
+          isShakingMessage.value = true; // Trigger shake animation for Messages link
+          setTimeout(() => {
+            isShakingMessage.value = false; // Stop shaking after 0.5s
+          }, 500);
+        } else {
+          hasNewNotification.value = true; // Show red dot on Notification icon only
+          isShakingNotification.value = true; // Trigger shake animation for Notification icon
+          setTimeout(() => {
+            isShakingNotification.value = false; // Stop shaking after 0.5s
+          }, 500);
+        }
+
+        // Add the notification to the NotificationDropdown
+        if (notificationDropdown.value) {
+          notificationDropdown.value.addNotification(payload);
+        }
+      });
     });
 
     onUnmounted(() => {
@@ -108,14 +170,22 @@ export default {
       });
     };
 
+    const resetMessageNotification = () => {
+      hasNewMessage.value = false; // Hide red dot when Messages link is clicked
+    };
+
+    const resetNotification = () => {
+      hasNewNotification.value = false; // Hide red dot when Notification icon is clicked
+    };
+
     const headerClasses = computed(() => {
       return isMobile.value
         ? "w-full bg-white text-black p-4 flex justify-between items-center shadow-md z-50"
         : "fixed top-0 left-0 w-full bg-white text-black p-4 flex justify-between items-center shadow-md z-50";
     });
 
-    const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"]; // List of routes where header should be hidden on mobile
-    const noBackButtonRoutes = ["/home", "/swaps"]; // Routes where the back button should not appear
+    const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"];
+    const noBackButtonRoutes = ["/home", "/swaps"];
 
     const shouldShowHeader = computed(() => {
       const isHiddenRoute = hiddenRoutesOnMobile.includes(route.path);
@@ -141,12 +211,50 @@ export default {
       shouldShowHeader,
       shouldShowBackButton,
       goBack,
+      notificationDropdown,
+      isShakingNotification,
+      isShakingMessage,
+      hasNewNotification,
+      hasNewMessage,
+      resetMessageNotification,
+      resetNotification,
     };
   },
 };
 </script>
 
 <style scoped>
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+.bg-red-500 {
+  background-color: #f56565;
+}
+
+.relative {
+  position: relative;
+}
+
+/* Existing styles */
 .active {
   color: #1c592f; /* Highlight color for active link */
   font-weight: bold;

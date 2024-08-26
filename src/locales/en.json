@@ -41,7 +41,7 @@
         "goToProfile": "Go to profile",
         "loading": "Loading...",
         "allList": "All List",
-        "perfectTriangles": "Perfect Triangles",
+        "perfectTriangles": "Triangle Swaps",
         "openFilters": "Open Filters",
         "filters": "Filters",
         "leadingImage": "Leading Image",
@@ -159,7 +159,8 @@
         "checkingEmailPhone": "Checking Email & Phone Number ...",
         "previous": "Previous",
         "next": "Next",
-        "submit": "Submit"
+        "submit": "Submit",
+        "start":"Start"
     },
     "filters": {
         "title": "Filters",
@@ -260,7 +261,7 @@
         "swapWithMe": "Swap with me",
         "myInterests": "My Interests",
         "myFavorites": "My Favorites",
-        "myTriangleSwaps":"My Triangle Swaps"
+        "myTriangleSwaps":"Perfect Triangles"
     },
     "chat": {
         "viewHouse": "View House"

@@ -174,7 +174,7 @@ export default {
     });
 
     const progress = ref(60);
-    const activeTab = ref("houses");
+    const activeTab = computed(() => store.getters.activeTab);
     const currentPage = ref(1);
     const totalPages = ref(1);
     const triangleCurrentPage = ref(1);
@@ -257,12 +257,11 @@ export default {
     };
 
     const setActiveTab = (tab) => {
+      store.dispatch("updateActiveTab", tab);
       if (tab === "triangles") {
         fetchTriangleSwapHouses();
-        activeTab.value = "triangles";
       } else {
         fetchFilteredHouses();
-        activeTab.value = tab;
       }
     };
 
@@ -343,6 +342,16 @@ export default {
       clearFilters,
       hasMoreThanTwoImages,
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      const tab = to.query.tab || null;
+      if (tab) {
+        vm.setActiveTab(tab);
+      } else {
+        vm.setActiveTab(vm.activeTab);
+      }
+    });
   },
 };
 </script>

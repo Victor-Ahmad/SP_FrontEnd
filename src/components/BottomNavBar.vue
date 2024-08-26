@@ -1,10 +1,10 @@
 <template>
   <nav
     v-if="shouldShowBottomNav"
-    class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center py-2 z-50"
+    class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center py-2 z-40"
   >
     <router-link
-      to="/home"
+      :to="{ path: '/home', query: { tab: 'houses' } }"
       class="nav-item"
       active-class="active"
       @click.native="handleNavItemClick('/home')"
@@ -47,7 +47,7 @@
 
 <script>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   name: "BottomNavBar",
@@ -57,8 +57,10 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props, { emit }) {
+    // Use the emit function from setup's context
     const route = useRoute();
+    const router = useRouter();
     const isMobile = ref(window.innerWidth <= 768);
 
     const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"];
@@ -72,14 +74,14 @@ export default {
     };
 
     const toggleSidebar = () => {
-      this.$emit("toggle-sidebar");
+      emit("toggle-sidebar");
     };
 
-    const handleNavItemClick = (route) => {
-      if (this.isSidebarVisible) {
+    const handleNavItemClick = (routePath) => {
+      if (props.isSidebarVisible) {
         toggleSidebar();
       } else {
-        this.$router.push(route);
+        router.push(routePath);
       }
     };
 
@@ -109,7 +111,6 @@ export default {
 .bottom-nav-bar {
   background-color: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 50;
 }
 
 .nav-item {
@@ -120,6 +121,7 @@ export default {
   padding: 10px;
   font-size: 24px;
   position: relative;
+  color: gray;
 }
 
 .icon-text {

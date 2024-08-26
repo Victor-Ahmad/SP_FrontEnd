@@ -9,6 +9,7 @@ import {
 
 const store = createStore({
   state: {
+    activeTab: localStorage.getItem("activeTab") || "houses",
     loading: false,
     user: null,
     token: localStorage.getItem("token") || null,
@@ -32,6 +33,10 @@ const store = createStore({
     hasMoreThanTwoImages: false,
   },
   mutations: {
+    setActiveTab(state, tab) {
+      state.activeTab = tab;
+      localStorage.setItem("activeTab", tab); // Persist tab choice in local storage
+    },
     setLoading(state, status) {
       state.loading = status;
     },
@@ -85,6 +90,9 @@ const store = createStore({
     },
   },
   actions: {
+    updateActiveTab({ commit }, tab) {
+      commit("setActiveTab", tab);
+    },
     startLoading({ commit }) {
       commit("startLoading");
     },
@@ -200,6 +208,7 @@ const store = createStore({
     },
   },
   getters: {
+    activeTab: (state) => state.activeTab,
     isLoading: (state) => state.loading,
     user: (state) => state.user,
     token: (state) => state.token,

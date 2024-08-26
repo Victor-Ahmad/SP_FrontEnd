@@ -158,7 +158,8 @@
         "checkingEmailPhone": "E-mail en telefoonnummer controleren ...",
         "previous": "Vorige",
         "next": "Volgende",
-        "submit": "Indienen"
+        "submit": "Indienen",
+        "start":"Begin"
     },
     "filters": {
         "title": "Filters",
@@ -260,7 +261,7 @@
         "swapWithMe": "Ruil met mij",
         "myInterests": "Mijn interesses",
         "myFavorites": "Mijn favorieten",
-        "myTriangleSwaps": "Mijn Driehoekswissels"
+        "myTriangleSwaps": "Perfecte Driehoeksruil"
     },
     "chat": {
         "viewHouse": "Bekijk Huis"

@@ -281,12 +281,12 @@
 
     <!-- Fixed Bottom Navbar -->
     <div
-      class="fixed-bottom-navbar fixed bottom-0 left-0 w-full bg-white shadow-lg flex lg:hidden justify-around items-center py-4 px-2 z-50 gap-2"
+      class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-50 gap-3 px-3"
     >
       <button
         @click="handleInterestedClick"
         :class="[
-          'w-1/3 px-4  rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+          'w-1/3 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
           isInterested
             ? 'bg-interested-active text-white'
             : 'border border-interested-active text-interested-active',
@@ -297,7 +297,7 @@
       <button
         @click="toggleNotInterested"
         :class="[
-          'w-1/3 px-4 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+          'w-1/3 px-4 py-2  rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
           isNotInterested
             ? 'bg-gray-custom text-white'
             : 'border border-red-custom text-red-custom',
@@ -307,7 +307,7 @@
       </button>
       <button
         @click="startChat"
-        class="w-1/3 px-4 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 text-white"
+        class="w-1/3 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-[#154aa8] text-white"
       >
         <i class="fas fa-comment"></i>
       </button>

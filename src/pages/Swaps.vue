@@ -3,9 +3,16 @@
     <div v-if="isLoading" class="text-center">{{ $t("common.loading") }}</div>
     <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
     <div v-else class="flex flex-col md:flex-row">
-      <div class="w-full md:w-1/5">
+      <div class="w-full md:w-1/5 relative">
+        <!-- Left Arrow -->
+        <div v-if="showLeftArrow" class="arrow-left" @click="scrollLeft">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+
         <div
           class="tabs-container lg:p-4 md:mr-6 md:grid-cols-1 md:flex md:flex-col"
+          ref="tabsContainer"
+          @scroll="handleScroll"
         >
           <div class="tab-item">
             <button
@@ -51,6 +58,10 @@
               }})
             </button>
           </div>
+        </div>
+        <!-- Right Arrow -->
+        <div v-if="showRightArrow" class="arrow-right" @click="scrollRight">
+          <i class="fas fa-chevron-right"></i>
         </div>
       </div>
       <div class="w-full md:w-4/5 lg:pt-4 px-4 lg:py-4">
@@ -237,6 +248,31 @@ export default {
     const complete_interest = ref([]);
     const my_triangles = ref([]);
     const activeTab = ref("my_interests");
+
+    const tabsContainer = ref(null);
+    const showLeftArrow = ref(false);
+    const showRightArrow = ref(false);
+
+    const scrollLeft = () => {
+      tabsContainer.value.scrollBy({ left: -200, behavior: "smooth" });
+    };
+
+    const scrollRight = () => {
+      tabsContainer.value.scrollBy({ left: 200, behavior: "smooth" });
+    };
+
+    const handleScroll = () => {
+      updateArrowsVisibility();
+    };
+
+    const updateArrowsVisibility = () => {
+      if (tabsContainer.value) {
+        const { scrollLeft, scrollWidth, clientWidth } = tabsContainer.value;
+        showLeftArrow.value = scrollLeft > 0;
+        showRightArrow.value = scrollLeft + clientWidth < scrollWidth;
+      }
+    };
+
     const trianglePagination = ref({
       current_page: 1,
       last_page: 1,
@@ -404,6 +440,7 @@ export default {
     };
 
     onMounted(() => {
+      updateArrowsVisibility();
       fetchAllData();
     });
 
@@ -429,6 +466,12 @@ export default {
       handleUninterested,
       handleUnfavorite,
       updateSwapsCount,
+      tabsContainer,
+      showLeftArrow,
+      showRightArrow,
+      scrollLeft,
+      scrollRight,
+      handleScroll,
     };
   },
 };
@@ -480,6 +523,26 @@ export default {
   max-width: 200px;
   max-height: 200px;
   filter: grayscale(100%) opacity(50%);
+}
+.arrow-left,
+.arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 10px;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  color: black;
+  z-index: 10;
+}
+
+.arrow-left {
+  left: 0;
+}
+
+.arrow-right {
+  right: 0;
 }
 
 @media (max-width: 767px) {

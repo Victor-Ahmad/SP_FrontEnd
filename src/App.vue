@@ -9,7 +9,7 @@
 import { mapGetters } from "vuex";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken } from "firebase/messaging";
 import { storeFcmTokenOnServer } from "@/services/apiService";
 
 export default {
@@ -32,11 +32,7 @@ export default {
     };
 
     const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging();
-
-    onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
-    });
+    const messaging = getMessaging(app);
 
     if (this.token) {
       getToken(messaging, {

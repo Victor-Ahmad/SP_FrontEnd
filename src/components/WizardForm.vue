@@ -64,10 +64,10 @@
         @click="handleFinalStep"
         class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
       >
-        {{ $t("stepper.submit") }}
+        {{ $t("stepper.start") }}
       </button>
     </div>
-    <div class="text-sm text-center lg:hidden">
+    <div v-if="currentStep < 3" class="text-sm text-center lg:hidden">
       <router-link
         to="/login"
         class="font-medium text-[#1c592f] hover:text-secondary-dark"

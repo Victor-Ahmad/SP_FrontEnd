@@ -154,7 +154,7 @@
         </div>
         <div class="flex justify-center">
           <router-link
-            to="/home"
+            :to="{ path: '/home', query: { tab: 'houses' } }"
             class="px-4 py-2 bg-[#154aa8] text-white rounded transition"
           >
             Home
