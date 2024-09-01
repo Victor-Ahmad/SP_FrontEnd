@@ -11,7 +11,7 @@
     >
       <div class="icon-text">
         <i class="fas fa-home"></i>
-        <span>{{ $t("bottomNav.home") }}</span>
+        <span class="font-small">{{ $t("bottomNav.home") }}</span>
       </div>
     </router-link>
     <router-link
@@ -22,7 +22,7 @@
     >
       <div class="icon-text">
         <i class="fas fa-exchange-alt"></i>
-        <span>{{ $t("bottomNav.swaps") }}</span>
+        <span class="font-small">{{ $t("bottomNav.swaps") }}</span>
       </div>
     </router-link>
     <router-link
@@ -33,13 +33,13 @@
     >
       <div class="icon-text">
         <i class="fas fa-comments"></i>
-        <span>{{ $t("bottomNav.chats") }}</span>
+        <span class="font-small">{{ $t("bottomNav.chats") }}</span>
       </div>
     </router-link>
     <button @click="handleMenuClick" class="nav-item sidebar">
       <div class="icon-text">
         <i class="fas fa-bars"></i>
-        <span>{{ $t("bottomNav.menu") }}</span>
+        <span class="font-small">{{ $t("bottomNav.menu") }}</span>
       </div>
     </button>
   </nav>
@@ -66,16 +66,12 @@ export default {
     const dynamicRoutePattern = /^\/house\/\d+$/;
 
     const shouldShowBottomNav = computed(() => {
-      // Check for exact matches in the hiddenRoutesOnMobile array
       if (hiddenRoutesOnMobile.includes(route.path)) {
         return false;
       }
-
-      // Check if the current route matches the dynamic route pattern
       if (dynamicRoutePattern.test(route.path)) {
         return false;
       }
-
       return true;
     });
 
@@ -142,12 +138,12 @@ export default {
 }
 
 .icon-text i {
-  font-size: 24px;
+  font-size: 20px; /* Slightly reduced size */
 }
 
 .icon-text span {
-  font-size: 12px;
   margin-top: 4px;
+  /* font size is now controlled by .font-small */
 }
 
 .active {

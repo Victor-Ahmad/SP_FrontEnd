@@ -4,21 +4,21 @@
     <div class="tab-buttons underlined-tabs hidden lg:flex mb-4">
       <button
         :class="[
-          'py-2 lg:py-2.5 h-min',
-          { 'active-tab': activeTab === 'tab1' },
+          'py-2 lg:py-2.5 font-medium',
+          activeTab === 'tab1' ? 'active-tab' : '',
         ]"
         @click="setActiveTab('tab1')"
       >
-        Direct Chats
+        {{ $t("chat.chats") }}
       </button>
       <button
         :class="[
-          'py-2 lg:py-2.5 h-min',
-          { 'active-tab': activeTab === 'tab2' },
+          'py-2 lg:py-2.5 font-medium',
+          activeTab === 'tab2' ? 'active-tab' : '',
         ]"
         @click="setActiveTab('tab2')"
       >
-        Triangle Chats
+        {{ $t("chat.triangleChats") }}
       </button>
     </div>
     <!-- Tab Content -->
@@ -30,25 +30,24 @@
         @click="selectChat(chat)"
       >
         <div class="flex justify-between items-center mb-1">
-          <div class="font-semibold">
+          <div class="font-medium text-gray-700">
             <template v-if="chat.other_persons.length > 0">
               {{ chat.other_persons[0].first_name }}
               {{ chat.other_persons[0].last_name }}
             </template>
             <template v-else> Unknown User </template>
           </div>
-          <div class="text-sm text-gray-500">
+          <div class="font-small text-gray-500">
             {{ formatDate(chat.latest_message.created_at) }}
           </div>
         </div>
-
-        <div class="text-xs text-gray-500">
+        <div class="font-small text-gray-500">
           <template v-if="chat.other_persons.length > 0">
             {{ chat.other_persons[0].street }},
             {{ chat.other_persons[0].location }}
           </template>
         </div>
-        <div class="text-sm text-gray-600 truncate mt-4">
+        <div class="font-medium text-gray-600 truncate mt-4">
           {{ chat.latest_message.content }}
         </div>
       </div>
@@ -61,22 +60,21 @@
         @click="selectChat(chat)"
       >
         <div class="flex justify-between mb-1">
-          <div class="font-semibold">
+          <div class="font-medium text-gray-700">
             <div v-for="person in chat.other_persons" :key="person.id">
               <div class="mr-4">
                 {{ person.first_name }} {{ person.last_name }}
               </div>
-              <div class="text-xs text-gray-500 flex flex-wrap mb-4">
+              <div class="font-small text-gray-500 flex flex-wrap mb-4">
                 {{ person.street }}, {{ person.location }}
               </div>
             </div>
           </div>
-          <div class="flex text-sm text-gray-500">
+          <div class="font-small text-gray-500">
             {{ formatDate(chat.latest_message.created_at) }}
           </div>
         </div>
-
-        <div class="text-sm text-gray-600 truncate mt-2">
+        <div class="font-medium text-gray-600 truncate mt-2">
           {{ chat.latest_message.content }}
         </div>
       </div>

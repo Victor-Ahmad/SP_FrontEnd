@@ -1,38 +1,42 @@
 <template>
   <div class="bg-white mr-6 mb-20">
-    <h2 class="text-xl font-bold mb-4 text-[#1c592f]">
+    <h2 class="text-xl font-large mb-4 text-[#1c592f]">
       {{ $t("filters.title") }}
     </h2>
+
+    <!-- Location Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("profile.house.location") }}
       </h3>
       <input
         type="text"
         id="areasAutocompleteInput"
         :placeholder="$t('filters.areasPlaceholder')"
-        class="input-field w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f]"
+        class="input-field w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f] font-small"
       />
       <div class="tags-container flex flex-wrap mt-2">
         <span
           v-for="(area, index) in selectedAreas"
           :key="index"
-          class="tag bg-gray-200 p-2 rounded-sm mr-2 mb-2"
+          class="tag bg-gray-200 p-2 rounded-sm mr-2 mb-2 font-small"
         >
           {{ area }}
           <span
             @click="removeArea(area)"
-            class="cursor-pointer text-red-500 ml-1"
+            class="cursor-pointer text-red-500 ml-1 font-small"
             >&times;</span
           >
         </span>
       </div>
     </div>
+
+    <!-- Amenities Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("filters.amenities") }}
       </h3>
-      <div v-if="loadingAmenities" class="text-center mb-4">
+      <div v-if="loadingAmenities" class="text-center mb-4 font-small">
         <i class="fas fa-spinner fa-spin"></i>
         {{ $t("filters.loadingAmenities") }}
       </div>
@@ -48,13 +52,14 @@
             v-model="localFilters.amenities"
             class="form-checkbox text-[#1c592f] mr-2"
           />
-          <label class="text-gray-700">{{ amenity.name }}</label>
+          <label class="text-gray-700 font-small">{{ amenity.name }}</label>
         </div>
       </div>
     </div>
 
+    <!-- Not Interested Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("filters.notInterested") }}
       </h3>
       <div class="flex items-center mb-2">
@@ -63,14 +68,15 @@
           v-model="localFilters.notInterested"
           class="form-checkbox text-[#1c592f] mr-2"
         />
-        <label class="text-gray-700">{{
+        <label class="text-gray-700 font-small">{{
           $t("filters.notInterestedLabel")
         }}</label>
       </div>
     </div>
 
+    <!-- Rent Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("filters.rent") }}
       </h3>
       <input
@@ -81,11 +87,12 @@
         step="10"
         class="w-full mb-2"
       />
-      <p class="text-gray-700">0 — {{ localFilters.maxRent }} €</p>
+      <p class="text-gray-700 font-small">0 — {{ localFilters.maxRent }} €</p>
     </div>
 
+    <!-- Size Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("filters.size") }}
       </h3>
       <input
@@ -93,12 +100,13 @@
         v-model="localFilters.minSize"
         min="1"
         :placeholder="$t('filters.minSizePlaceholder')"
-        class="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f]"
+        class="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:border-[#1c592f] font-small"
       />
     </div>
 
+    <!-- Floor Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("filters.floor") }}
       </h3>
       <ul class="flex w-full no-gap-list">
@@ -106,7 +114,7 @@
           v-for="(floor, index) in floors"
           :key="index"
           @click="selectFloor(floor)"
-          class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+          class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-small"
           :class="floorClasses(floor)"
         >
           {{ floor }}
@@ -114,8 +122,9 @@
       </ul>
     </div>
 
+    <!-- Number of Rooms Filter -->
     <div class="mb-4">
-      <h3 class="font-semibold mb-2 text-[#1c592f]">
+      <h3 class="font-medium mb-2 text-[#1c592f]">
         {{ $t("filters.numberOfRooms") }}
       </h3>
       <ul class="flex w-full no-gap-list">
@@ -123,7 +132,7 @@
           v-for="(number, index) in numberOfRooms"
           :key="index"
           @click="selectNumberOfRooms(number)"
-          class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+          class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-small"
           :class="roomClasses(number)"
         >
           {{ number }}
@@ -131,15 +140,16 @@
       </ul>
     </div>
 
+    <!-- Apply and Clear Buttons for Large Screens -->
     <button
       @click="applyFilters"
-      class="w-full bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition hidden lg:block"
+      class="w-full bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition hidden lg:block font-medium"
     >
       {{ $t("filters.apply") }}
     </button>
     <button
       @click="clearFilters"
-      class="w-full bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition mt-2 hidden lg:block"
+      class="w-full bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition mt-2 hidden lg:block font-medium"
     >
       {{ $t("filters.clear") }}
     </button>
@@ -151,13 +161,13 @@
     >
       <button
         @click="applyFilters"
-        class="w-2/5 bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition"
+        class="w-2/5 bg-[#1c592f] text-white py-2 rounded hover:bg-green-800 transition font-medium"
       >
         {{ $t("filters.apply") }}
       </button>
       <button
         @click="clearFilters"
-        class="w-2/5 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition"
+        class="w-2/5 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition font-medium"
       >
         {{ $t("filters.clear") }}
       </button>
@@ -219,7 +229,6 @@ export default {
     applyFilters() {
       const formData = new FormData();
 
-      // Add non-empty values to formData
       if (this.localFilters.search) {
         formData.append("search", this.localFilters.search);
       }
@@ -394,7 +403,6 @@ export default {
     document.addEventListener("click", this.handleClickOutside);
     window.addEventListener("resize", this.checkScreenSize);
 
-    // Ensure the input exists before initializing autocomplete
     this.$nextTick(() => {
       if (document.getElementById("areasAutocompleteInput")) {
         this.initAutocomplete();

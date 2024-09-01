@@ -1,8 +1,14 @@
 <template>
   <div class="pagination-container">
-    <button @click="changePage(1)" :disabled="currentPage <= 1">First</button>
     <button
-      class="hidden sm:block"
+      @click="changePage(1)"
+      :disabled="currentPage <= 1"
+      class="font-medium"
+    >
+      First
+    </button>
+    <button
+      class="hidden sm:block font-medium"
       @click="previousPage"
       :disabled="currentPage <= 1"
     >
@@ -11,13 +17,13 @@
     <button
       v-for="page in pagesToShow"
       :key="page"
-      :class="{ active: page === currentPage }"
+      :class="{ active: page === currentPage, 'font-medium': true }"
       @click="changePage(page)"
     >
       {{ page }}
     </button>
     <button
-      class="hidden sm:block"
+      class="hidden sm:block font-medium"
       @click="nextPage"
       :disabled="currentPage >= totalPages"
     >
@@ -26,6 +32,7 @@
     <button
       @click="changePage(totalPages)"
       :disabled="currentPage >= totalPages"
+      class="font-medium"
     >
       Last
     </button>

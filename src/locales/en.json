@@ -264,12 +264,15 @@
         "myTriangleSwaps":"Perfect Triangles"
     },
     "chat": {
-        "viewHouse": "View House"
+        "viewHouse": "View House",
+        "chats": "Chats",
+        "triangleChats": "Triangle Chats"
     },
     "otp": {
         "title": "Verify OTP",
         "instruction": "We've sent you an email with a one-time password (OTP). Please check your email and enter the code here.",
         "verify_button": "Verify",
+        "resend_button":"Re-send OTP",
         "error": "Invalid OTP. Please try again."
     },
     "bottomNav": {

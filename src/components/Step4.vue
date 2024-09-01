@@ -2,27 +2,27 @@
   <div class="flex flex-col md:flex-row justify-between h-full">
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-4">
-        <h3 class="text-4xl font-bold text-[#1c592f]">
+        <h3 class="font-bold text-[#1c592f]">
           {{ $t("houseDescription.title") }}
         </h3>
       </div>
 
       <div class="mb-6">
         <div class="form-group mb-4">
-          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+          <h3 class="font-semibold text-[#1c592f] mb-2">
             {{ $t("houseDescription.description") }}
           </h3>
           <textarea
             v-model="formData.house_description"
             :placeholder="$t('houseDescription.descriptionPlaceholder')"
-            class="input-field w-full p-2 border rounded"
+            class="input-field"
             rows="4"
             style="resize: none"
           ></textarea>
         </div>
 
         <div class="form-group mb-4">
-          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+          <h3 class="font-semibold text-[#1c592f] mb-2">
             {{ $t("houseDescription.gallery") }}
           </h3>
           <p class="mt-4">{{ $t("houseDescription.addPictures") }}</p>
@@ -33,9 +33,9 @@
             class="input-field mt-4"
             @change="previewImages"
           />
-          <div class="preview-container flex flex-col items-center mt-4">
+          <div class="preview-container mt-4">
             <div
-              class="preview-slideshow flex"
+              class="preview-slideshow"
               id="previewSlideshow"
               :style="slideshowStyle"
             >
@@ -49,15 +49,12 @@
                   :alt="$t('houseDescription.imageAlt')"
                   class="w-32 h-32 object-cover"
                 />
-                <button
-                  @click="removeImage(index)"
-                  class="remove-image absolute top-1 right-1"
-                >
+                <button @click="removeImage(index)" class="remove-image">
                   &times;
                 </button>
               </div>
             </div>
-            <div class="preview-controls flex mt-2">
+            <div class="preview-controls mt-2">
               <button
                 @click="prevSlide"
                 :disabled="currentSlide === 0"
@@ -149,7 +146,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .input-field {
   @apply w-full p-2 border border-gray-300 rounded;

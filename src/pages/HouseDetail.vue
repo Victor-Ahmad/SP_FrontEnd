@@ -1,7 +1,11 @@
 <template>
   <div class="min-h-screen p-4 mb-10 md:p-8">
-    <div v-if="isLoading" class="text-center">{{ $t("page.loading") }}</div>
-    <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
+    <div v-if="isLoading" class="text-center font-medium">
+      {{ $t("page.loading") }}
+    </div>
+    <div v-else-if="error" class="text-red-600 text-center font-medium">
+      {{ error }}
+    </div>
     <div v-else class="house-detail-page flex flex-col items-center">
       <div class="house-detail-images-container w-full pt-4 px-2 md:px-10">
         <div
@@ -38,12 +42,11 @@
         <button
           v-if="house.images.length"
           @click="openGallery"
-          class="bg-[#1c592f] text-white w-full lg:w-1/6 py-2 px-4 rounded-lg mb-4"
+          class="bg-[#1c592f] text-white w-full lg:w-1/6 py-2 px-4 rounded-lg mb-4 font-small"
         >
           {{ $t("page.viewAllImages") }}
         </button>
 
-        <!-- Image Gallery Popup component -->
         <ImageGalleryPopup
           :images="house.images.map((img) => getImageUrl(img.image_path))"
           :visible="isGalleryVisible"
@@ -61,7 +64,6 @@
         <div
           class="house-detail-info-container bg-white lg:p-4 md:p-5 w-full md:w-[74%] mb-4 md:mb-0"
         >
-          <!-- Progress Bar Section -->
           <div
             v-if="showProgress && progress < 100"
             class="progress-background col-span-full w-full rounded-full shadow-lg h-min"
@@ -72,71 +74,74 @@
                   <circle class="background" cx="50" cy="50" r="45"></circle>
                   <circle class="foreground" cx="50" cy="50" r="45"></circle>
                 </svg>
-                <div class="progress-text">{{ progress }}%</div>
+                <div class="progress-text font-medium">{{ progress }}%</div>
               </div>
               <div class="missing-steps">
-                <p>{{ $t("page.completeAccount") }}</p>
-                <router-link :to="profileCompletionLink">{{
+                <p class="font-small">{{ $t("page.completeAccount") }}</p>
+                <router-link :to="profileCompletionLink" class="font-small">{{
                   $t("page.goToProfile")
                 }}</router-link>
               </div>
             </div>
           </div>
-          <!-- End of Progress Bar Section -->
+
           <div
             class="house-detail-header flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-300 pb-2"
           >
-            <div class="text-2xl md:text-4xl font-bold text-gray-700">
+            <div class="text-gray-700 font-large font-bold">
               {{ house.street }}, {{ house.location }}
             </div>
-            <div class="text-lg text-[#1c592f] font-bold mt-2 md:mt-0">
+            <div class="text-[#1c592f] font-medium font-bold mt-2 md:mt-0">
               {{ Math.floor(house.price) }} / {{ $t("page.month") }}
             </div>
           </div>
+
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">
+              <h2 class="font-medium font-bold text-gray-800 mb-4">
                 {{ $t("page.houseDetails") }}
               </h2>
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                <span class="font-medium text-gray-700"
-                  >{{ $t("page.type") }}:</span
-                >
-                <span>{{ house.house_type.type }}</span>
+                <span class="font-medium text-gray-700">
+                  {{ $t("page.type") }}:
+                </span>
+                <span class="font-small">{{ house.house_type.type }}</span>
               </div>
               <hr class="border-t border-gray-300 my-2" />
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                <span class="font-medium text-gray-700"
-                  >{{ $t("page.numberOfRooms") }}:</span
-                >
-                <span>{{ house.number_of_rooms }}</span>
+                <span class="font-medium text-gray-700">
+                  {{ $t("page.numberOfRooms") }}:
+                </span>
+                <span class="font-small">{{ house.number_of_rooms }}</span>
               </div>
               <hr class="border-t border-gray-300 my-2" />
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                <span class="font-medium text-gray-700"
-                  >{{ $t("page.area") }}:</span
-                >
-                <span
-                  >{{ Math.floor(house.area || 0) || $t("page.na") }} m²</span
-                >
+                <span class="font-medium text-gray-700">
+                  {{ $t("page.area") }}:
+                </span>
+                <span class="font-small">
+                  {{ Math.floor(house.area || 0) || $t("page.na") }} m²
+                </span>
               </div>
             </div>
           </div>
 
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">
+              <h2 class="font-medium font-bold text-gray-800 mb-4">
                 {{ $t("page.description") }}
               </h2>
               <div class="info-item py-2">
-                <span>{{ house.description || $t("page.noDescription") }}</span>
+                <span class="font-small">{{
+                  house.description || $t("page.noDescription")
+                }}</span>
               </div>
             </div>
           </div>
 
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">
+              <h2 class="font-medium font-bold text-gray-800 mb-4">
                 {{ $t("page.wishes") }}
               </h2>
               <div
@@ -145,49 +150,50 @@
                 class="wish-item mt-3"
               >
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700"
-                    >{{ $t("page.houseType") }}:</span
-                  >
-                  <span>{{
+                  <span class="font-medium text-gray-700">
+                    {{ $t("page.houseType") }}:
+                  </span>
+                  <span class="font-small">{{
                     wish.house_type ? wish.house_type.type : $t("page.na")
                   }}</span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700"
-                    >{{ $t("page.numberOfRooms") }}:</span
-                  >
-                  <span>{{ wish.number_of_rooms || $t("page.na") }}</span>
+                  <span class="font-medium text-gray-700">
+                    {{ $t("page.numberOfRooms") }}:
+                  </span>
+                  <span class="font-small">{{
+                    wish.number_of_rooms || $t("page.na")
+                  }}</span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700"
-                    >{{ $t("page.price") }}:</span
-                  >
-                  <span
-                    >{{ wish.price || $t("page.na") }} /
-                    {{ $t("page.month") }}</span
-                  >
+                  <span class="font-medium text-gray-700">
+                    {{ $t("page.price") }}:
+                  </span>
+                  <span class="font-small">
+                    {{ wish.price || $t("page.na") }} / {{ $t("page.month") }}
+                  </span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
-                  <span class="font-medium text-gray-700"
-                    >{{ $t("page.area") }}:</span
-                  >
-                  <span
-                    >{{ Math.floor(wish.area || 0) || $t("page.na") }} m²</span
-                  >
+                  <span class="font-medium text-gray-700">
+                    {{ $t("page.area") }}:
+                  </span>
+                  <span class="font-small">
+                    {{ Math.floor(wish.area || 0) || $t("page.na") }} m²
+                  </span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div
                   v-if="wish.wish_locations.length"
                   class="info-item py-2 grid grid-cols-1 md:grid-cols-2"
                 >
-                  <span class="font-medium text-gray-700"
-                    >{{ $t("page.preferredLocations") }}:</span
-                  >
+                  <span class="font-medium text-gray-700">
+                    {{ $t("page.preferredLocations") }}:
+                  </span>
                   <div>
-                    <ul class="list-disc pl-5">
+                    <ul class="list-disc pl-5 font-small">
                       <li
                         v-for="location in wish.wish_locations"
                         :key="location.id"
@@ -206,7 +212,7 @@
           class="contact-info-container bg-white p-4 md:p-5 rounded-lg shadow-lg w-full md:w-[25%] self-start"
         >
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-gray-800">
+            <h2 class="font-medium font-bold text-gray-800">
               {{ $t("page.contactInfo") }}
             </h2>
             <button
@@ -219,15 +225,17 @@
           <div
             class="info-item py-2 flex flex-col md:flex-row justify-between md:justify-evenly"
           >
-            <span class="font-medium text-gray-700"
-              >{{ $t("page.name") }}:</span
+            <span class="font-medium text-gray-700">
+              {{ $t("page.name") }}:
+            </span>
+            <span class="font-small"
+              >{{ houseOwner.first_name }} {{ houseOwner.last_name }}</span
             >
-            <span>{{ houseOwner.first_name }} {{ houseOwner.last_name }}</span>
           </div>
           <hr class="border-t border-gray-300 my-2" />
           <div class="info-item py-2">
             <button
-              class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4"
+              class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4 font-small"
               @click="startChat($event)"
             >
               <i class="fas fa-comment mr-1"></i>
@@ -240,7 +248,7 @@
             <button
               @click="handleInterestedClick($event)"
               :class="[
-                'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95',
+                'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95 font-small',
                 isInterested
                   ? 'bg-interested-active text-white'
                   : 'border border-interested-active text-interested-active',
@@ -252,7 +260,7 @@
             <button
               @click="toggleNotInterested($event)"
               :class="[
-                'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95',
+                'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95 font-small',
                 isNotInterested
                   ? 'bg-red-custom text-white'
                   : 'border border-red-custom text-red-custom',
@@ -265,7 +273,7 @@
           <div class="info-item py-2 mt-4">
             <button
               @click="copyLink"
-              class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center"
+              class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center font-small"
             >
               <i class="fas fa-share-alt mr-2"></i> {{ $t("page.share") }}
             </button>
@@ -279,14 +287,13 @@
       />
     </div>
 
-    <!-- Fixed Bottom Navbar -->
     <div
-      class="bottom-nav-bar fixed bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-50 gap-3 p-3"
+      class="bottom-nav-bar fixed md:hidden lg:hidden bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-50 gap-3 p-3"
     >
       <button
         @click="handleInterestedClick"
         :class="[
-          'w-1/3 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+          'w-1/3 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
           isInterested
             ? 'bg-interested-active text-white'
             : 'border border-interested-active text-interested-active',
@@ -297,9 +304,9 @@
       <button
         @click="toggleNotInterested"
         :class="[
-          'w-1/3 px-4 py-2  rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+          'w-1/3 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
           isNotInterested
-            ? 'bg-gray-custom text-white'
+            ? 'bg-red-custom text-white'
             : 'border border-red-custom text-red-custom',
         ]"
       >
@@ -307,7 +314,7 @@
       </button>
       <button
         @click="startChat"
-        class="w-1/3 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-[#154aa8] text-white"
+        class="w-1/3 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 bg-[#154aa8] text-white font-small"
       >
         <i class="fas fa-comment"></i>
       </button>

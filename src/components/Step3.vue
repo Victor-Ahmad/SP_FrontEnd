@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row justify-between h-full">
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-4">
-        <h3 class="text-4xl font-bold text-[#1c592f]">
+        <h3 class="font-bold text-[#1c592f]">
           {{ $t("myInfo.title") }}
         </h3>
       </div>
@@ -11,7 +11,7 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myInfo.firstName") }}
               </h3>
               <input
@@ -19,7 +19,7 @@
                 v-model="formData.first_name"
                 :placeholder="$t('myInfo.firstNamePlaceholder')"
                 :disabled="disabled"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 required
               />
               <div class="invalid-feedback" v-if="errors.first_name">
@@ -27,7 +27,7 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myInfo.lastName") }}
               </h3>
               <input
@@ -35,7 +35,7 @@
                 v-model="formData.last_name"
                 :placeholder="$t('myInfo.lastNamePlaceholder')"
                 :disabled="disabled"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 required
               />
               <div class="invalid-feedback" v-if="errors.last_name">
@@ -48,7 +48,7 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myInfo.email") }}
               </h3>
               <input
@@ -56,16 +56,15 @@
                 v-model="formData.email"
                 :placeholder="$t('myInfo.emailPlaceholder')"
                 :disabled="disabled"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 required
               />
-
               <div class="invalid-feedback" v-if="emailError">
                 {{ emailErrorMessage }}
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myInfo.phoneNumber") }}
               </h3>
               <input
@@ -73,7 +72,7 @@
                 v-model="formData.phone_number"
                 :placeholder="$t('myInfo.phoneNumberPlaceholder')"
                 :disabled="disabled"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 required
               />
               <div class="invalid-feedback" v-if="phoneError">
@@ -86,7 +85,7 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myInfo.password") }}
               </h3>
               <input
@@ -94,7 +93,7 @@
                 v-model="formData.password"
                 :placeholder="$t('myInfo.passwordPlaceholder')"
                 :disabled="disabled"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 required
                 @blur="validatePassword"
               />
@@ -103,7 +102,7 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myInfo.confirmPassword") }}
               </h3>
               <input
@@ -111,7 +110,7 @@
                 v-model="formData.password_confirmation"
                 :placeholder="$t('myInfo.confirmPasswordPlaceholder')"
                 :disabled="disabled"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 required
                 @blur="validatePassword"
               />
@@ -133,14 +132,8 @@
                   />
                   <span>
                     {{ $t("myInfo.agreeTo") }}
-                    <!-- <a href="" target="_blank" class="text-[#1c592f]">{{
-                      $t("myInfo.privacyPolicy")
-                    }}</a> -->
                     {{ $t("myInfo.privacyPolicy") }}
                     {{ $t("myInfo.and") }}
-                    <!-- <a href="#" target="_blank" class="text-[#1c592f]">{{
-                      $t("myInfo.termsOfUse")
-                    }}</a> -->
                     {{ $t("myInfo.termsOfUse") }}
                   </span>
                 </label>
@@ -153,7 +146,7 @@
         </div>
 
         <div v-if="showOtp" class="form-group mb-4 p-4 custom_border">
-          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+          <h3 class="font-semibold text-[#1c592f] mb-2">
             {{ $t("otp.title") }}
           </h3>
           <p class="mb-4">{{ $t("otp.instruction") }}</p>
@@ -164,7 +157,7 @@
                 :key="index"
                 type="text"
                 maxlength="1"
-                class="otp-input w-16 p-2 border border-gray-300 rounded text-center text-lg focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+                class="otp-input"
                 v-model="otp[index]"
                 @input="onInput(index, $event)"
                 @keydown.backspace="onBackspace(index, $event)"
@@ -275,7 +268,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .custom_border {
   box-shadow: 0 0 10px #1c592f;
@@ -297,7 +289,6 @@ export default {
   gap: 10px;
 }
 .otp-input {
-  width: 4rem;
-  text-align: center;
+  @apply w-16 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400;
 }
 </style>

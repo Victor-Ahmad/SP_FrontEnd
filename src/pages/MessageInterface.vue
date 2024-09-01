@@ -5,55 +5,61 @@
       localSelectedChat?.second_person ? ' lg:pt-0' : ' lg:pt-0',
     ]"
   >
+    <!-- Header for Large Screens -->
     <div
       class="fixed z-50 lg:z-0 lg:static top-0 w-full hidden md:flex lg:flex flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
     >
+      <!-- First Person Details -->
       <div
         v-if="localSelectedChat && localSelectedChat.first_person"
         :class="[
-          'p-4 flex justify-between items-center w-full ',
+          'p-4 flex justify-between items-center w-full',
           localSelectedChat.second_person ? 'md:w-5/12' : 'md:px-10',
         ]"
       >
         <div>
-          <div class="font-bold text-lg">
+          <div class="font-large font-bold">
             {{ localSelectedChat.first_person.street }},
             {{ localSelectedChat.first_person.location }}
           </div>
-          <div class="text-xs text-gray-500">
+          <div class="font-small text-gray-500">
             {{ localSelectedChat.first_person.first_name }}
             {{ localSelectedChat.first_person.last_name }}
           </div>
         </div>
         <button
           @click="goToDetailPage(localSelectedChat.first_person.house_id)"
-          class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+          class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition font-small"
         >
           {{ $t("chat.viewHouse") }}
         </button>
       </div>
+
+      <!-- Second Person Details -->
       <div
         v-if="localSelectedChat && localSelectedChat.second_person"
         class="p-4 flex justify-between items-center w-full md:w-5/12"
       >
         <div>
-          <div class="font-bold text-lg">
+          <div class="font-large font-bold">
             {{ localSelectedChat.second_person.street }},
             {{ localSelectedChat.second_person.location }}
           </div>
-          <div class="text-xs text-gray-500">
+          <div class="font-small text-gray-500">
             {{ localSelectedChat.second_person.first_name }}
             {{ localSelectedChat.second_person.last_name }}
           </div>
         </div>
         <button
           @click="goToDetailPage(localSelectedChat.second_person.house_id)"
-          class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition"
+          class="p-2 bg-[#1c592f] text-white rounded hover:bg-green-600 transition font-small"
         >
           {{ $t("chat.viewHouse") }}
         </button>
       </div>
     </div>
+
+    <!-- Dropdown for Mobile Screens -->
     <div
       class="mobile_dropdown fixed z-50 lg:z-0 lg:static top-0 w-full flex md:hidden lg:hidden flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
     >
@@ -62,7 +68,7 @@
           class="flex justify-between items-center cursor-pointer p-4"
           @click="toggleDropdown"
         >
-          <span>Houses Dropdown Menu</span>
+          <span class="font-medium">Houses Dropdown Menu</span>
           <i
             :class="dropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
           ></i>
@@ -76,11 +82,11 @@
             @click="goToDetailPage(localSelectedChat.first_person.house_id)"
             class="p-4 hover:bg-gray-100 cursor-pointer"
           >
-            <div class="font-bold text-lg">
+            <div class="font-large font-bold">
               {{ localSelectedChat.first_person.street }},
               {{ localSelectedChat.first_person.location }}
             </div>
-            <div class="text-xs text-gray-500">
+            <div class="font-small text-gray-500">
               {{ localSelectedChat.first_person.first_name }}
               {{ localSelectedChat.first_person.last_name }}
             </div>
@@ -90,11 +96,11 @@
             @click="goToDetailPage(localSelectedChat.second_person.house_id)"
             class="p-4 hover:bg-gray-100 cursor-pointer"
           >
-            <div class="font-bold text-lg">
+            <div class="font-large font-bold">
               {{ localSelectedChat.second_person.street }},
               {{ localSelectedChat.second_person.location }}
             </div>
-            <div class="text-xs text-gray-500">
+            <div class="font-small text-gray-500">
               {{ localSelectedChat.second_person.first_name }}
               {{ localSelectedChat.second_person.last_name }}
             </div>
@@ -102,6 +108,8 @@
         </ul>
       </div>
     </div>
+
+    <!-- Messages List -->
     <div
       ref="messageList"
       class="flex-1 p-4 overflow-y-auto flex flex-col-reverse bg-gray-50 messageList-container"
@@ -118,7 +126,7 @@
               'self-end bg-[#E8FDF6] text-right': message.type === 'sender',
               'self-start bg-white': message.type === 'receiver',
             }"
-            class="p-4 rounded-lg shadow-md max-w-xs relative"
+            class="p-4 rounded-lg shadow-md max-w-xs relative font-small"
           >
             <div
               v-if="
@@ -129,16 +137,18 @@
               {{ message.sender_name }}:
             </div>
             <div class="message-content mb-2">{{ message.message }}</div>
-            <div class="text-xs text-gray-500 flex justify-end items-center">
+            <div
+              class="text-xs text-gray-500 flex justify-end items-center font-small"
+            >
               <span class="message-timestamp">{{
                 formatTime(message.created_at)
               }}</span>
               <div class="relative ml-2">
                 <i
                   v-if="message.is_read"
-                  class="fas fa-check text-green-500"
+                  class="fas fa-check text-green-500 font-small"
                 ></i>
-                <i v-else class="fas fa-check text-gray-500"></i>
+                <i v-else class="fas fa-check text-gray-500 font-small"></i>
               </div>
             </div>
           </div>
@@ -155,13 +165,15 @@
         <div class="flex justify-center">
           <router-link
             :to="{ path: '/home', query: { tab: 'houses' } }"
-            class="px-4 py-2 bg-[#154aa8] text-white rounded transition"
+            class="px-4 py-2 bg-[#154aa8] text-white rounded transition font-small"
           >
             Home
           </router-link>
         </div>
       </div>
     </div>
+
+    <!-- Message Input Section -->
     <div
       class="message-input-container p-4 border-t border-gray-300 bg-white flex items-center"
     >
@@ -170,16 +182,16 @@
         v-model="newMessage"
         @keyup.enter="sendMessage"
         placeholder="Type a message..."
-        class="flex-1 p-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#154aa8]"
+        class="flex-1 p-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#154aa8] font-small"
         :disabled="isSending"
       />
       <button
         @click="sendMessage"
         :class="[
-          'ml-2 pl-3 pr-4 pt-2 pb-2 rounded-full transition',
+          'ml-2 pl-3 pr-4 pt-2 pb-2 rounded-full transition font-small',
           isSending
-            ? 'bg-gray-500 cursor-not-allowed  text-white '
-            : 'bg-[#154aa8] hover:bg-green-600  text-white ',
+            ? 'bg-gray-500 cursor-not-allowed text-white'
+            : 'bg-[#154aa8] hover:bg-green-600 text-white',
         ]"
         :disabled="isSending"
       >
@@ -303,6 +315,7 @@ export default {
 </script>
 
 <style scoped>
+/* Adjustments made to ensure consistency */
 .message-content {
   white-space: pre-wrap;
   word-wrap: break-word;

@@ -11,17 +11,17 @@
             class="w-24 h-24 rounded-full mb-4 md:mb-0 md:mr-6 border-4 border-[#1c592f]"
           />
           <div class="text-center md:text-left">
-            <h1 class="text-2xl md:text-4xl font-bold text-[#1c592f]">
+            <h1 class="font-large font-bold text-[#1c592f]">
               {{ profile.first_name }} {{ profile.last_name }}
             </h1>
-            <p class="text-gray-700">{{ profile.email }}</p>
-            <p class="text-gray-700">{{ profile.number }}</p>
+            <p class="text-gray-700 font-medium">{{ profile.email }}</p>
+            <p class="text-gray-700 font-medium">{{ profile.number }}</p>
           </div>
         </div>
         <div class="flex space-x-4 mt-4 md:mt-0">
           <button
             @click="toggleEdit"
-            class="bg-[#1c592f] text-white px-4 py-2 rounded shadow hover:bg-[#06826e] transition"
+            class="bg-[#1c592f] text-white px-4 py-2 rounded shadow hover:bg-[#06826e] transition font-small"
           >
             {{
               isEditable
@@ -32,7 +32,7 @@
           <button
             v-if="isEditable"
             @click="cancelEdit"
-            class="bg-gray-400 text-white px-4 py-2 rounded shadow hover:bg-gray-500 transition"
+            class="bg-gray-400 text-white px-4 py-2 rounded shadow hover:bg-gray-500 transition font-small"
           >
             {{ $t("profile.buttons.cancel") }}
           </button>
@@ -41,18 +41,27 @@
       <div
         class="tabs flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-8"
       >
-        <button @click="setActiveTab('details')" :class="tabClass('details')">
+        <button
+          @click="setActiveTab('details')"
+          :class="['font-medium', tabClass('details')]"
+        >
           {{ $t("profile.tabs.details") }}
         </button>
-        <button @click="setActiveTab('house')" :class="tabClass('house')">
+        <button
+          @click="setActiveTab('house')"
+          :class="['font-medium', tabClass('house')]"
+        >
           {{ $t("profile.tabs.house") }}
         </button>
-        <button @click="setActiveTab('wishes')" :class="tabClass('wishes')">
+        <button
+          @click="setActiveTab('wishes')"
+          :class="['font-medium', tabClass('wishes')]"
+        >
           {{ $t("profile.tabs.wishes") }}
         </button>
       </div>
       <div v-if="activeTab === 'details'" class="user-details">
-        <h2 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mb-4">
+        <h2 class="font-large font-semibold text-[#1c592f] mb-4">
           {{ $t("profile.details.title") }}
         </h2>
         <div>
@@ -60,12 +69,12 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.details.firstName") }}:</strong
               >
               <input
                 :readonly="true"
-                :class="inputClass"
+                :class="['font-medium', inputClass]"
                 v-model="profile.first_name"
                 class="input-noneditable w-full"
               />
@@ -73,12 +82,12 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.details.lastName") }}:</strong
               >
               <input
                 :readonly="true"
-                :class="inputClass"
+                :class="['font-medium', inputClass]"
                 v-model="profile.last_name"
                 class="input-noneditable w-full"
               />
@@ -86,12 +95,12 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.details.email") }}:</strong
               >
               <input
                 :readonly="true"
-                :class="inputClass"
+                :class="['font-medium', inputClass]"
                 v-model="profile.email"
                 class="input-noneditable w-full"
               />
@@ -99,12 +108,12 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.details.phone") }}:</strong
               >
               <input
                 :readonly="true"
-                :class="inputClass"
+                :class="['font-medium', inputClass]"
                 v-model="profile.number"
                 class="input-noneditable w-full"
               />
@@ -113,19 +122,19 @@
         </div>
       </div>
       <div v-if="activeTab === 'house'" class="house-details">
-        <h2 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mb-4">
+        <h2 class="font-large font-semibold text-[#1c592f] mb-4">
           {{ $t("profile.house.title") }}
         </h2>
         <div class="grid grid-cols-1 gap-4">
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.type") }}:</strong
             >
             <input
               :readonly="true"
-              :class="inputClass"
+              :class="['font-medium', inputClass]"
               v-model="profile.one_to_one_swap_house.house_type.type"
               class="input-noneditable w-full"
             />
@@ -133,12 +142,12 @@
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.location") }}:</strong
             >
             <input
               :readonly="true"
-              :class="inputClass"
+              :class="['font-medium', inputClass]"
               v-model="profile.one_to_one_swap_house.location"
               class="input-noneditable w-full"
             />
@@ -146,7 +155,7 @@
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.numberOfRooms") }}:</strong
             >
             <div class="w-full flex items-center">
@@ -155,7 +164,7 @@
                   v-for="number in numberOfRooms"
                   :key="number"
                   @click="isEditable ? selectNumberOfRooms(number) : null"
-                  class="flex-1 p-2 border border-gray-300 rounded text-center room-item"
+                  class="flex-1 p-2 border border-gray-300 rounded text-center room-item font-medium"
                   :class="[
                     getRoomClasses(
                       profile.one_to_one_swap_house.number_of_rooms,
@@ -172,7 +181,7 @@
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.floorNumber") }}:</strong
             >
             <div class="w-full flex items-center">
@@ -181,7 +190,7 @@
                   v-for="number in floorOptions"
                   :key="number"
                   :class="[
-                    'flex-1 p-2 border border-gray-300 rounded text-center room-item',
+                    'flex-1 p-2 border border-gray-300 rounded text-center room-item font-medium',
                     getFloorClasses(
                       profile.one_to_one_swap_house.floor_number,
                       number
@@ -198,12 +207,12 @@
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.price") }}:</strong
             >
             <input
               :readonly="!isEditable"
-              :class="inputClass"
+              :class="['font-medium', inputClass]"
               v-model="profile.one_to_one_swap_house.price"
               class="input-editable w-full"
             />
@@ -211,12 +220,12 @@
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.description") }}:</strong
             >
             <textarea
               :readonly="!isEditable"
-              :class="inputClass"
+              :class="['font-medium', inputClass]"
               v-model="profile.one_to_one_swap_house.description"
               class="input-editable w-full"
             ></textarea>
@@ -224,7 +233,7 @@
           <div
             class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
           >
-            <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+            <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
               >{{ $t("profile.house.specificProperties") }}:</strong
             >
             <div class="w-full flex flex-wrap">
@@ -233,7 +242,7 @@
                   .one_to_one_swap_house.specific_properties"
                 :key="property.id"
                 :class="isEditable ? 'w-auto' : 'w-fit'"
-                class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative"
+                class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative font-small"
                 :style="isEditable ? { paddingRight: '1.5rem' } : {}"
               >
                 {{ property.specific_property.name }}
@@ -251,7 +260,7 @@
                   v-model="selectedFeatureNames"
                   :placeholder="$t('profile.house.addProperties')"
                   readonly
-                  class="input-editable w-full p-2 border rounded cursor-pointer"
+                  class="input-editable w-full p-2 border rounded cursor-pointer font-medium"
                   @click="toggleDropdown('showFeaturesDropdown')"
                 />
                 <ul v-show="showFeaturesDropdown" class="dropdown-content">
@@ -266,7 +275,7 @@
                             property.specific_property.id === feature.id
                         ),
                     }"
-                    class="p-2 hover:bg-gray-100 cursor-pointer"
+                    class="p-2 hover:bg-gray-100 cursor-pointer font-small"
                   >
                     {{ feature.name }}
                   </li>
@@ -275,44 +284,10 @@
             </div>
           </div>
         </div>
-        <h3 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mt-8 mb-4">
+        <h3 class="font-large font-semibold text-[#1c592f] mt-8 mb-4">
           {{ $t("profile.house.gallery.title") }}
         </h3>
         <div>
-          <!-- <div class="mb-8">
-            <h4 class="text-xl md:text-2xl font-semibold text-[#1c592f] mb-2">
-              {{ $t("profile.house.gallery.leadingImage") }}
-            </h4>
-            <div class="relative">
-              <img
-                v-if="leadingImage"
-                :src="leadingImage"
-                class="w-full h-64 md:h-96 object-cover cursor-pointer rounded-lg"
-                :alt="$t('profile.house.gallery.leadingImageAlt')"
-                @click="openImage(leadingImage)"
-              />
-              <div
-                v-if="!leadingImage"
-                class="w-full h-64 md:h-96 flex items-center justify-center bg-gray-100"
-              >
-                {{ $t("profile.house.gallery.noLeadingImage") }}
-              </div>
-              <button
-                v-if="isEditable && leadingImage"
-                @click="removeLeadingImage"
-                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2"
-              >
-                X
-              </button>
-              <input
-                v-if="isEditable"
-                type="file"
-                @change="uploadLeadingImage"
-                class="mt-4"
-                accept="image/*"
-              />
-            </div>
-          </div> -->
           <div
             v-if="profile.one_to_one_swap_house.images.length > 0 || isEditable"
           >
@@ -343,7 +318,7 @@
               v-if="isEditable"
               type="file"
               @change="uploadNewImages"
-              class="mt-4"
+              class="mt-4 font-small"
               multiple
               accept="image/*"
             />
@@ -351,7 +326,7 @@
         </div>
       </div>
       <div v-if="activeTab === 'wishes'" class="wishes">
-        <h2 class="text-2xl md:text-3xl font-semibold text-[#1c592f] mb-4">
+        <h2 class="font-large font-semibold text-[#1c592f] mb-4">
           {{ $t("profile.wishes.title") }}
         </h2>
         <div
@@ -363,7 +338,7 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.location") }}:</strong
               >
               <div class="w-full flex flex-wrap">
@@ -371,7 +346,7 @@
                   v-for="(location, locationIndex) in wish.wish_locations"
                   :key="locationIndex"
                   :class="isEditable ? 'w-auto' : 'w-fit'"
-                  class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative"
+                  class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative font-small"
                   :style="isEditable ? { paddingRight: '1.5rem' } : {}"
                 >
                   {{ location.location }}
@@ -388,7 +363,7 @@
                     type="text"
                     :id="'wishAutocompleteInput' + wishIndex"
                     :placeholder="$t('profile.wishes.locationPlaceholder')"
-                    class="input-editable w-full p-2 border rounded"
+                    class="input-editable w-full p-2 border rounded cursor-pointer font-medium"
                   />
                 </div>
               </div>
@@ -396,7 +371,7 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.numberOfRooms") }}:</strong
               >
               <div class="w-full">
@@ -409,7 +384,7 @@
                         ? selectWishNumberOfRooms(wishIndex, number)
                         : null
                     "
-                    class="flex-1 p-2 border border-gray-300 rounded text-center room-item"
+                    class="flex-1 p-2 border border-gray-300 rounded text-center room-item font-medium"
                     :class="[
                       getRoomClasses(wish.number_of_rooms, number),
                       { 'cursor-pointer': isEditable },
@@ -423,7 +398,7 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.floorNumber") }}:</strong
               >
               <div class="w-full flex items-center">
@@ -432,7 +407,7 @@
                     v-for="number in floorOptions"
                     :key="number"
                     :class="[
-                      'flex-1 p-2 border border-gray-300 rounded text-center room-item',
+                      'flex-1 p-2 border border-gray-300 rounded text-center room-item font-medium',
                       getFloorClasses(wish.floor_number, number),
                       { 'cursor-pointer': isEditable },
                     ]"
@@ -450,12 +425,12 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.price") }}:</strong
               >
               <input
                 :readonly="!isEditable"
-                :class="inputClass"
+                :class="['font-medium', inputClass]"
                 v-model="wish.price"
                 class="input-editable w-full"
               />
@@ -463,7 +438,7 @@
             <div
               class="flex flex-col md:flex-row items-start md:items-center border-b py-2"
             >
-              <strong class="w-full md:w-1/3 mb-2 md:mb-0"
+              <strong class="font-medium w-full md:w-1/3 mb-2 md:mb-0"
                 >{{ $t("profile.wishes.specificProperties") }}:</strong
               >
               <div class="w-full flex flex-wrap">
@@ -471,7 +446,7 @@
                   v-for="(property, propertyIndex) in wish.specific_properties"
                   :key="property.id"
                   :class="isEditable ? 'w-auto' : 'w-fit'"
-                  class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative"
+                  class="bg-[#e4eee6] text-black px-3 py-1 m-1 rounded-full relative font-small"
                   :style="isEditable ? { paddingRight: '1.5rem' } : {}"
                 >
                   {{ property.specific_property.name }}
@@ -489,7 +464,7 @@
                     v-model="wish.selectedFeatureNames"
                     :placeholder="$t('profile.wishes.addProperties')"
                     readonly
-                    class="input-editable w-full p-2 border rounded cursor-pointer"
+                    class="input-editable w-full p-2 border rounded cursor-pointer font-medium"
                     @click="toggleWishDropdown(wishIndex)"
                   />
                   <ul
@@ -506,7 +481,7 @@
                             property.specific_property.id === feature.id
                         ),
                       }"
-                      class="p-2 hover:bg-gray-100 cursor-pointer"
+                      class="p-2 hover:bg-gray-100 cursor-pointer font-small"
                     >
                       {{ feature.name }}
                     </li>
@@ -519,7 +494,7 @@
       </div>
     </div>
     <div v-else class="w-full max-w-7xl bg-white p-8 text-center">
-      <p>{{ $t("profile.loading") }}</p>
+      <p class="font-medium">{{ $t("profile.loading") }}</p>
     </div>
     <ImagePopup
       :imageSrc="selectedImage"
@@ -1061,11 +1036,10 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .input-field,
 .input-noneditable {
-  @apply w-full p-2 border border-gray-300 rounded border-none text-lg w-full transition duration-300 bg-transparent;
+  @apply w-full p-2 border border-gray-300 rounded border-none w-full transition duration-300 bg-transparent font-medium;
 }
 
 .input-noneditable:focus {
@@ -1073,52 +1047,40 @@ export default {
 }
 
 .input-editable {
-  @apply w-full p-2 border border-gray-300 rounded;
+  @apply w-full p-2 border border-gray-300 rounded font-medium;
 }
+
 .input-field:focus,
 .input-editable:focus {
   border-color: #1c592f;
   outline: none;
   box-shadow: 0 0 5px rgba(7, 169, 132, 0.5);
 }
+
 .tags-container {
   @apply mt-2 flex flex-wrap;
-}
-.dropdown-content {
-  @apply absolute bg-white shadow-lg max-h-48 overflow-y-auto z-10 w-full mt-1 border border-gray-300 rounded;
-}
-.dropdown-content li {
-  @apply cursor-pointer p-2 hover:bg-gray-100;
-}
-.invalid-feedback {
-  @apply text-red-600 text-sm;
 }
 
 .dropdown-content {
   @apply absolute bg-white shadow-lg max-h-48 overflow-y-auto z-10 w-full mt-1 border border-gray-300 rounded;
 }
+
 .dropdown-content li {
   @apply cursor-pointer p-2 hover:bg-gray-100;
 }
-.input-editable {
-  @apply border-none text-lg w-full transition duration-300;
+
+.invalid-feedback {
+  @apply text-red-600 text-sm;
 }
-.input-editable[readonly] {
-  @apply bg-transparent;
-}
-.input-editable:focus {
-  @apply outline-none bg-[#e7f7f4];
-}
+
 .no-gap-list li {
   margin: 0 !important;
 }
+
 .room-item {
   transition: all 0.3s ease-in-out;
 }
-/* .room-item:hover {
-  box-shadow: 0 0 10px #1c592f;
-  border-color: #1c592f;
-} */
+
 .selected-room {
   background-color: white !important;
   color: #1c592f !important;

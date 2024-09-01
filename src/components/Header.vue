@@ -184,8 +184,8 @@ export default {
         : "fixed top-0 left-0 w-full bg-white text-black p-4 flex justify-between items-center shadow-md z-50";
     });
 
-    const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"];
-    const noBackButtonRoutes = ["/home", "/swaps"];
+    const hiddenRoutesOnMobile = ["/anotherRoute"];
+    const noBackButtonRoutes = ["/home", "/login", "/register", "/swaps"];
 
     const shouldShowHeader = computed(() => {
       const isHiddenRoute = hiddenRoutesOnMobile.includes(route.path);

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="text-center">
+  <div v-if="isLoading" class="text-center font-medium">
     <div class="spinner"></div>
     {{ $t("stepper.checkingEmailPhone") }}
   </div>
@@ -9,13 +9,13 @@
         v-for="(step, index) in steps"
         :key="index"
         :class="[
-          'stepper-item relative flex flex-col items-center flex-1 text-center',
+          'stepper-item relative flex flex-col items-center flex-1 text-center font-medium',
           currentStep >= index ? 'completed' : '',
           currentStep === index ? 'active' : '',
         ]"
       >
         <div
-          class="step-counter relative inline-block p-2 md:px-8 bg-gray-300 text-white font-bold text-lg transition duration-300 border-2 border-transparent"
+          class="step-counter relative inline-block p-2 md:px-8 bg-gray-300 text-white font-bold transition duration-300 border-2 border-transparent"
         >
           <span class="inline md:hidden lg:hidden">{{ index + 1 }}</span>
           <span class="hidden md:inline">{{ step.name }}</span>
@@ -47,7 +47,7 @@
       <button
         @click="prevStep"
         :disabled="currentStep === 0"
-        class="px-4 py-2 bg-gray-300 text-white w-40 rounded-full transition duration-300 hover:bg-gray-400 disabled:opacity-50"
+        class="px-4 py-2 bg-gray-300 text-white w-40 rounded-full transition duration-300 hover:bg-gray-400 disabled:opacity-50 font-medium"
       >
         {{ $t("stepper.previous") }}
       </button>
@@ -55,19 +55,22 @@
         v-if="currentStep < steps.length - 1"
         @click="nextStep"
         :disabled="isLoading"
-        class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
+        class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58] font-medium"
       >
         {{ $t("stepper.next") }}
       </button>
       <button
         v-if="currentStep === steps.length - 1"
         @click="handleFinalStep"
-        class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58]"
+        class="px-4 py-2 bg-[#1c592f] text-white w-40 rounded-full transition duration-300 hover:bg-[#065e58] font-medium"
       >
         {{ $t("stepper.start") }}
       </button>
     </div>
-    <div v-if="currentStep < 3" class="text-sm text-center lg:hidden">
+    <div
+      v-if="currentStep < 3"
+      class="text-sm text-center lg:hidden font-small"
+    >
       <router-link
         to="/login"
         class="font-medium text-[#1c592f] hover:text-secondary-dark"

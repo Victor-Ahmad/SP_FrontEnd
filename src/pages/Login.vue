@@ -5,17 +5,15 @@
     <div class="flex justify-center p-4 md:p-8 w-full md:w-1/2">
       <div class="max-w-md w-full bg-white p-8 space-y-6">
         <div class="text-center border-gray-300 py-2 mb-10">
-          <h2 class="text-4xl font-bold text-[#1c592f]">
+          <h2 class="font-bold text-[#1c592f]">
             {{ $t("login.logIn") }}
           </h2>
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
           <div class="form-group mb-4">
-            <label
-              for="email"
-              class="block text-lg font-semibold text-[#1c592f] mb-2"
-              >{{ $t("login.email") }}</label
-            >
+            <label for="email" class="block font-semibold text-[#1c592f] mb-2">
+              {{ $t("login.email") }}
+            </label>
             <input
               id="email"
               name="email"
@@ -23,7 +21,7 @@
               autocomplete="email"
               required
               v-model="email"
-              class="input-field w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+              class="input-field"
               placeholder="example@example.com"
               @input="validateEmail"
             />
@@ -31,9 +29,10 @@
           <div class="form-group mb-4">
             <label
               for="password"
-              class="block text-lg font-semibold text-[#1c592f] mb-2"
-              >{{ $t("login.password") }}</label
+              class="block font-semibold text-[#1c592f] mb-2"
             >
+              {{ $t("login.password") }}
+            </label>
             <input
               id="password"
               name="password"
@@ -41,7 +40,7 @@
               autocomplete="current-password"
               required
               v-model="password"
-              class="input-field w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+              class="input-field"
               placeholder="Password"
             />
           </div>
@@ -64,15 +63,17 @@
               <router-link
                 to="/register"
                 class="font-medium text-[#1c592f] hover:text-[#065e58]"
-                >{{ $t("login.register") }}</router-link
               >
+                {{ $t("login.register") }}
+              </router-link>
             </div>
             <div class="text-sm">
               <router-link
                 to="/forget-password"
                 class="font-medium text-[#1c592f] hover:text-[#065e58]"
-                >Forget Password?</router-link
               >
+                Forget Password?
+              </router-link>
             </div>
           </div>
         </form>
@@ -152,6 +153,9 @@ export default {
 </script>
 
 <style scoped>
+.input-field {
+  @apply w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400;
+}
 .input-field:focus {
   border-color: #1c592f;
   box-shadow: 0 0 5px rgba(7, 169, 132, 0.5);

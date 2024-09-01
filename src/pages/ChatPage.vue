@@ -1,12 +1,18 @@
 <template>
   <div>
+    <!-- Mobile View -->
     <div v-if="isMobile" class="flex flex-col h-screen">
       <router-view></router-view>
     </div>
+
+    <!-- Desktop View -->
     <div v-else class="flex" style="height: 83vh">
+      <!-- Chat List Sidebar -->
       <div class="w-1/4 border-r border-gray-300 bg-gray-100">
         <ChatList @chatSelected="handleChatSelected" />
       </div>
+
+      <!-- Message Interface -->
       <div class="w-3/4 flex flex-col">
         <MessageInterface :selectedChat="selectedChat" />
       </div>

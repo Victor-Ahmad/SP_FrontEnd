@@ -7,6 +7,7 @@
       <div
         class="w-full lg:w-4/5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 pt-8 lg:p-0"
       >
+        <!-- Progress Indicator -->
         <div
           v-if="progress < 100"
           class="progress-background col-span-full w-full rounded-full shadow-lg h-min"
@@ -17,27 +18,31 @@
                 <circle class="background" cx="50" cy="50" r="45"></circle>
                 <circle class="foreground" cx="50" cy="50" r="45"></circle>
               </svg>
-              <div class="progress-text">{{ progress }}%</div>
+              <div class="progress-text font-small">{{ progress }}%</div>
             </div>
             <div class="missing-steps">
-              <p>{{ $t("page.completeAccount") }}</p>
-              <router-link :to="profileCompletionLink">{{
+              <p class="font-small">{{ $t("page.completeAccount") }}</p>
+              <router-link :to="profileCompletionLink" class="font-small">{{
                 $t("page.goToProfile")
               }}</router-link>
             </div>
           </div>
         </div>
-        <div v-if="isLoading" class="text-center">{{ $t("page.loading") }}</div>
-        <div v-else-if="error" class="text-red-600 text-center">
+        <!-- Loading and Error States -->
+        <div v-if="isLoading" class="text-center font-medium">
+          {{ $t("page.loading") }}
+        </div>
+        <div v-else-if="error" class="text-red-600 text-center font-medium">
           {{ error }}
         </div>
+        <!-- Tab Buttons -->
         <div
           v-else
           class="tab-buttons col-span-full underlined-tabs hidden lg:flex"
         >
           <button
             :class="[
-              'py-2 lg:py-2.5 h-min',
+              'py-2 lg:py-2.5 h-min font-medium',
               { 'active-tab': activeTab === 'houses' },
             ]"
             @click="setActiveTab('houses')"
@@ -46,7 +51,7 @@
           </button>
           <button
             :class="[
-              'py-2 lg:py-2.5 h-min',
+              'py-2 lg:py-2.5 h-min font-medium',
               { 'active-tab': activeTab === 'triangles' },
             ]"
             @click="setActiveTab('triangles')"
@@ -54,7 +59,7 @@
             {{ $t("page.perfectTriangles") }}
           </button>
         </div>
-
+        <!-- Houses Tab Content -->
         <div
           v-if="activeTab === 'houses'"
           class="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
@@ -62,13 +67,13 @@
           <div class="flex justify-between lg:hidden">
             <button
               @click="openFilterDrawer"
-              class="w-2/3 p-4 border-r border-l border-t border-b bg-white border-[#1c592f] text-[#1c592f] flex items-center rounded-l-md justify-center"
+              class="w-2/3 p-2 border-r border-l border-t border-b bg-white border-[#1c592f] text-[#1c592f] flex items-center rounded-l-md justify-center font-small"
             >
               <i class="fas fa-filter mr-2"></i> {{ $t("page.filters") }}
             </button>
             <button
               @click="clearFilters"
-              class="w-1/3 p-4 border-r border-t border-b bg-white text-gray-700 border-gray-700 flex items-center rounded-r-md justify-center"
+              class="w-1/3 p-2 border-r border-t border-b bg-white text-gray-700 border-gray-700 flex items-center rounded-r-md justify-center font-small"
             >
               <i class="fas fa-times mr-2"></i> {{ $t("filters.clear") }}
             </button>
@@ -79,6 +84,7 @@
             :key="house.id"
             :house="house"
             @uninterested="removeFromFilteredHouses"
+            :updateCounts="updateCounts"
           />
           <div class="col-span-full">
             <BasePagination
@@ -88,6 +94,7 @@
             />
           </div>
         </div>
+        <!-- Triangles Tab Content -->
         <div
           v-else-if="activeTab === 'triangles'"
           class="col-span-full grid-cols-1 gap-6 px-4"
@@ -108,17 +115,19 @@
         </div>
       </div>
     </div>
-
+    <!-- Mobile Filter Drawer -->
     <transition name="slide-fade">
       <div
         v-if="showFilterDrawer"
         class="fixed inset-0 z-100 bg-white shadow-lg lg:hidden filter-drawer"
       >
         <div class="flex justify-between items-center mb-4 p-4">
-          <h2 class="text-xl font-bold text-[#1c592f]">
+          <h2 class="text-xl font-bold text-[#1c592f] font-large">
             {{ $t("page.filters") }}
           </h2>
-          <button @click="closeFilterDrawer" class="text-xl">&times;</button>
+          <button @click="closeFilterDrawer" class="text-xl font-large">
+            &times;
+          </button>
         </div>
         <div class="p-4 overflow-y-auto">
           <FilterBar
@@ -353,6 +362,9 @@ export default {
       }
     });
   },
+  methods: {
+    updateCounts() {},
+  },
 };
 </script>
 
@@ -365,18 +377,12 @@ export default {
 button i.fas.fa-heart,
 button i.far.fa-heart {
   transition: color 0.3s;
-  font-size: 24px;
-  /* Increase font size for larger icon */
+  font-size: 18px; /* Reduce size of icon */
 }
 
 button i.fas,
 button i.far {
-  font-size: 16px;
-  /* Decrease icon size for smaller buttons */
-}
-
-.house-card {
-  transition: border 0.3s ease;
+  font-size: 12px; /* Reduce size of smaller icons */
 }
 
 button.absolute {
@@ -387,7 +393,7 @@ button.absolute {
 }
 
 button.absolute i {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 /* Button hover effects */
@@ -395,62 +401,10 @@ button:hover {
   transform: none;
 }
 
-.bg-light-orange {
-  width: 500px;
-  background-color: rgba(255, 166, 0, 0.2);
-}
-
-.bg-blue-custom {
-  background-color: #fc3025;
-}
-
-.text-blue-custom {
-  color: #154aa8;
-}
-
-.text-purple-custom {
-  color: #1c592f;
-}
-
-.text-green-custom {
-  color: #22893c;
-}
-
-.text-orange-custom {
-  color: #ff6500;
-}
-
-.custom_hover:hover {
-  border-color: #ff6500;
-}
-
-.bg-green-custom {
-  background-color: #22893c;
-}
-
-.bg-purple-custom {
-  background-color: #1c592f;
-}
-
-.bg-red-custom {
-  background-color: #8a8a8a;
-}
-
-.bg-blue-custom {
-  background-color: #154aa8;
-}
-
-.bg-orange-custom {
-  background-color: #ff6500;
-}
-
-/* Additional CSS for the grid layout */
-
-/* Background for the progress section */
+/* Additional styles for progress and layout */
 .progress-background {
   padding: 20px;
   margin-bottom: 20px;
-  /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.315); */
   display: flex;
   align-items: center;
 }
@@ -489,40 +443,10 @@ button:hover {
   transition-delay: 0.3s;
 }
 
-.progress-circle .progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1em;
-  font-weight: bold;
-  color: #000000;
-}
-
 .missing-steps {
   margin-left: 20px;
 }
 
-.missing-steps p {
-  font-size: 0.9em;
-  color: #000000;
-}
-
-.missing-steps a {
-  display: block;
-  color: #1c592f;
-  text-decoration: none;
-  margin-bottom: 5px;
-  font-weight: bold;
-  font-size: 0.9em;
-}
-
-.missing-steps a:hover {
-  text-decoration: underline;
-  color: #1c592f;
-}
-
-/* Underlined Tabs Styling */
 .underlined-tabs {
   display: flex;
   justify-content: space-between;
@@ -536,16 +460,8 @@ button:hover {
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   border-bottom: 3px solid transparent;
   margin: 0;
-}
-
-.underlined-tabs button:hover {
-  background-color: #ebebeb;
 }
 
 .underlined-tabs .active-tab {
@@ -554,50 +470,6 @@ button:hover {
   background-color: #e4eee6;
 }
 
-/* Pagination Styles */
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-}
-
-.pagination-container button {
-  padding: 8px 12px;
-  margin: 0 5px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #f0f0f0;
-  transition: background-color 0.3s ease;
-}
-
-.pagination-container button.active {
-  background-color: #1c592f;
-  color: #fff;
-}
-
-.pagination-container button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* Transition for the filter drawer */
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-.slide-fade-enter {
-  transform: translateX(100%);
-  opacity: 0;
-}
-.slide-fade-enter-to {
-  transform: translateX(0%);
-  opacity: 1;
-}
-
-/* Filter Drawer Styling */
 .filter-drawer {
   height: 100vh;
   overflow-y: auto;

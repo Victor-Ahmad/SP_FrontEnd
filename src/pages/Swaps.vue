@@ -1,7 +1,11 @@
 <template>
   <div class="min-h-screen pb-20 lg:p-4 md:p-8 bg-gray-100 lg:bg-white">
-    <div v-if="isLoading" class="text-center">{{ $t("common.loading") }}</div>
-    <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
+    <div v-if="isLoading" class="text-center font-medium">
+      {{ $t("common.loading") }}
+    </div>
+    <div v-else-if="error" class="text-red-600 text-center font-medium">
+      {{ error }}
+    </div>
     <div v-else class="flex flex-col md:flex-row">
       <div class="w-full md:w-1/5 relative">
         <div class="tabs-wrapper">
@@ -17,7 +21,10 @@
           >
             <div class="tab-item">
               <button
-                :class="{ 'active-tab': activeTab === 'my_interests' }"
+                class="font-medium"
+                :class="{
+                  'active-tab font-medium': activeTab === 'my_interests',
+                }"
                 @click="setActiveTab('my_interests')"
               >
                 {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
@@ -25,7 +32,10 @@
             </div>
             <div class="tab-item">
               <button
-                :class="{ 'active-tab': activeTab === 'complete_profile' }"
+                class="font-medium"
+                :class="{
+                  'active-tab font-medium': activeTab === 'complete_profile',
+                }"
                 @click="setActiveTab('complete_profile')"
               >
                 {{ $t("profileTabs.completeProfile") }} ({{
@@ -35,7 +45,10 @@
             </div>
             <div class="tab-item">
               <button
-                :class="{ 'active-tab': activeTab === 'swap_with_me' }"
+                class="font-medium"
+                :class="{
+                  'active-tab font-medium': activeTab === 'swap_with_me',
+                }"
                 @click="setActiveTab('swap_with_me')"
               >
                 {{ $t("profileTabs.swapWithMe") }} ({{ swapWithMeCount }})
@@ -43,7 +56,10 @@
             </div>
             <div class="tab-item">
               <button
-                :class="{ 'active-tab': activeTab === 'my_favorites' }"
+                class="font-medium"
+                :class="{
+                  'active-tab font-medium': activeTab === 'my_favorites',
+                }"
                 @click="setActiveTab('my_favorites')"
               >
                 {{ $t("profileTabs.myFavorites") }} ({{ myFavoritesCount }})
@@ -51,7 +67,10 @@
             </div>
             <div class="tab-item">
               <button
-                :class="{ 'active-tab': activeTab === 'my_triangles' }"
+                class="font-medium"
+                :class="{
+                  'active-tab font-medium': activeTab === 'my_triangles',
+                }"
                 @click="setActiveTab('my_triangles')"
               >
                 {{ $t("profileTabs.myTriangleSwaps") }} ({{
@@ -400,10 +419,6 @@ export default {
       try {
         await fetchMyInterests();
         await updateSwapsCount();
-        // await fetchMyFavorites();
-        // await fetchSwapWithMe();
-        // await fetchCompleteInterest();
-        // await fetchMyTriangleSwaps();
       } finally {
         store.commit("setLoading", false); // Finish loading
       }
@@ -509,7 +524,7 @@ export default {
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.875rem;
+  /* font-size: 0.875rem; */
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -542,7 +557,7 @@ export default {
 
 .arrow-left,
 .arrow-right {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
   cursor: pointer;
   padding: 10px;
   /* background-color: rgba(0, 0, 0, 0.5); */

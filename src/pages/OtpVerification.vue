@@ -5,7 +5,7 @@
     <div class="flex justify-center p-4 md:p-8 w-full md:w-1/2">
       <div class="max-w-md w-full bg-white p-8 space-y-6">
         <div class="text-center border-gray-300 py-2 mb-10">
-          <h2 class="text-4xl font-bold text-[#1c592f]">
+          <h2 class="font-bold text-[#1c592f]">
             {{ $t("otp.title") }}
           </h2>
         </div>
@@ -18,7 +18,7 @@
                 :key="index"
                 type="text"
                 maxlength="1"
-                class="otp-input w-16 p-2 border border-gray-300 rounded text-center text-lg focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
+                class="otp-input w-16 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400"
                 v-model="otp[index]"
                 @input="onInput(index, $event)"
                 @keydown.backspace="onBackspace(index, $event)"
@@ -33,11 +33,8 @@
               {{ $t("otp.verify_button") }}
             </button>
           </div>
-          <div v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
-          <div
-            v-if="timeLeft > 0"
-            class="text-center text-sm mt-4 text-gray-500"
-          >
+          <div v-if="error" class="text-red-600 mt-2">{{ error }}</div>
+          <div v-if="timeLeft > 0" class="text-center mt-4 text-gray-500">
             {{ $t("otp.resend_wait") }} {{ timeLeft }}s
           </div>
           <div class="text-center mt-4">
@@ -83,7 +80,8 @@ export default {
       const otpValue = otp.value.join("");
       try {
         // Verify OTP using the API
-        await verifyOtpForForgetPassword(email, otpValue);
+        const response = await verifyOtpForForgetPassword(email, otpValue);
+        const specialCode = response.result;
         Swal.fire({
           icon: "success",
           title: "OTP verified",
@@ -92,7 +90,7 @@ export default {
         }).then(() => {
           router.push({
             name: "ResetPassword",
-            query: { email }, // Pass email correctly to the next page
+            query: { email, specialCode }, // Pass email and specialCode to the next page
           });
         });
       } catch (err) {

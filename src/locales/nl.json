@@ -264,12 +264,16 @@
         "myTriangleSwaps": "Perfecte Driehoeksruil"
     },
     "chat": {
-        "viewHouse": "Bekijk Huis"
+        "viewHouse": "Bekijk Huis",
+        "chats": "Chats",
+        "triangleChats": "Driehoek Chats"
+        
     },
     "otp": {
     "title": "Verifieer OTP",
     "instruction": "We hebben je een e-mail gestuurd met een eenmalig wachtwoord (OTP). Controleer je e-mail en voer de code hier in.",
     "verify_button": "Verifiëren",
+    "resend_button":"Opnieuw OTP verzenden",
     "error": "Ongeldige OTP. Probeer het opnieuw."
     },
     "bottomNav": {

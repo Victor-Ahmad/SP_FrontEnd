@@ -5,7 +5,7 @@
   >
     <div class="w-full md:w-3/5 mb-6 md:mb-0 md:pr-6">
       <div class="text-center border-gray-300 py-2 mb-4">
-        <h3 class="text-4xl font-bold text-[#1c592f]">
+        <h3 class="font-bold text-[#1c592f]">
           {{ $t("myHouse.title") }}
         </h3>
       </div>
@@ -14,14 +14,14 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.postCode") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.post_code"
                 :placeholder="$t('myHouse.postCodePlaceholder')"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 @input="handlePostCodeInput"
               />
               <div v-if="errors.post_code" class="invalid-feedback">
@@ -29,14 +29,14 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.houseNumber") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.house_number"
                 :placeholder="$t('myHouse.houseNumberPlaceholder')"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 @input="handleHouseNumberInput"
               />
               <div v-if="errors.house_number" class="invalid-feedback">
@@ -49,14 +49,14 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.location") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.location_name"
                 :placeholder="$t('myHouse.locationPlaceholder')"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 readonly
               />
               <div v-if="errors.location_name" class="invalid-feedback">
@@ -64,14 +64,14 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.street") }}
               </h3>
               <input
                 type="text"
                 v-model="formData.street"
                 :placeholder="$t('myHouse.streetPlaceholder')"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 readonly
               />
               <div v-if="errors.street" class="invalid-feedback">
@@ -84,7 +84,7 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.houseType") }}
               </h3>
               <div class="relative" ref="houseTypeDropdown">
@@ -93,7 +93,7 @@
                   v-model="selectedHouseTypeName"
                   :placeholder="$t('myHouse.houseTypePlaceholder')"
                   readonly
-                  class="input-field w-full p-2 border rounded cursor-pointer"
+                  class="input-field cursor-pointer"
                   @click="toggleDropdown('showDropdown')"
                 />
                 <span class="dropdown-icon" :class="{ open: showDropdown }">
@@ -117,7 +117,7 @@
                     v-for="(type, index) in houseTypes"
                     :key="index"
                     @click="selectHouseType(type)"
-                    class="p-2 hover:bg-gray-100 cursor-pointer"
+                    class="p-2 hover:bg-gray-100 cursor-pointer font-medium"
                   >
                     {{ type.type }}
                   </li>
@@ -128,14 +128,14 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.rentPrice") }}
               </h3>
               <input
                 type="number"
                 v-model="formData.price"
                 :placeholder="$t('myHouse.pricePlaceholder')"
-                class="input-field w-full p-2 border rounded"
+                class="input-field"
                 step="0.01"
               />
               <div v-if="errors.price" class="invalid-feedback">
@@ -148,7 +148,7 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.numberOfRooms") }}
               </h3>
               <ul class="flex w-full no-gap-list">
@@ -156,7 +156,7 @@
                   v-for="(number, index) in numberOfRooms"
                   :key="index"
                   @click="selectNumberOfRooms(number)"
-                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
                   :class="roomClasses(number)"
                 >
                   {{ number }}
@@ -167,7 +167,7 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.floor") }}
               </h3>
               <ul class="flex w-full no-gap-list">
@@ -175,7 +175,7 @@
                   v-for="(floor, index) in floorOptions"
                   :key="index"
                   @click="selectFloor(floor)"
-                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                  class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
                   :class="floorClasses(floor)"
                 >
                   {{ floor === 0 ? "G" : floor }}
@@ -191,7 +191,7 @@
         <div class="form-group mb-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.area") }}
               </h3>
               <div class="relative" ref="areaDropdown">
@@ -200,7 +200,7 @@
                   v-model="formData.area"
                   :placeholder="$t('myHouse.areaPlaceholder')"
                   readonly
-                  class="input-field w-full p-2 border rounded cursor-pointer"
+                  class="input-field cursor-pointer"
                   @click="toggleDropdown('showAreaDropdown')"
                 />
                 <span class="dropdown-icon" :class="{ open: showAreaDropdown }">
@@ -224,7 +224,7 @@
                     v-for="(area, index) in areas"
                     :key="index"
                     @click="selectArea(area)"
-                    class="p-2 hover:bg-gray-100 cursor-pointer"
+                    class="p-2 hover:bg-gray-100 cursor-pointer font-medium"
                   >
                     {{ area }}
                   </li>
@@ -235,7 +235,7 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 px-2">
-              <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+              <h3 class="font-semibold text-[#1c592f] mb-2">
                 {{ $t("myHouse.houseFeatures") }}
               </h3>
               <div class="relative" ref="featuresDropdown">
@@ -244,7 +244,7 @@
                   v-model="selectedFeatureNames"
                   :placeholder="$t('myHouse.featuresPlaceholder')"
                   readonly
-                  class="input-field w-full p-2 border rounded cursor-pointer"
+                  class="input-field cursor-pointer"
                   @click="toggleDropdown('showFeaturesDropdown')"
                 />
                 <span
@@ -271,7 +271,7 @@
                     v-for="(feature, index) in features"
                     :key="index"
                     @click="toggleFeature(feature)"
-                    class="p-2 hover:bg-gray-100 cursor-pointer"
+                    class="p-2 hover:bg-gray-100 cursor-pointer font-medium"
                     :class="{
                       'bg-gray-200': formData.features.includes(feature.id),
                     }"
@@ -286,20 +286,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="form-group mb-4">
-          <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
-            {{ $t("myHouse.housingCorporation") }}
-          </h3>
-          <input
-            type="text"
-            v-model="formData.swap_company"
-            :placeholder="$t('myHouse.housingCorporationPlaceholder')"
-            class="input-field w-full p-2 border rounded"
-          />
-          <div v-if="errors.swap_company" class="invalid-feedback">
-            {{ errors.swap_company }}
-          </div>
-        </div> -->
       </div>
     </div>
     <div class="w-full md:w-2/5 hidden lg:flex items-center md:pl-6">
@@ -576,7 +562,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .input-field {
   @apply w-full p-2 border border-gray-300 rounded;
@@ -628,19 +613,5 @@ export default {
 
 .dropdown-icon.open svg {
   transform: rotate(180deg); /* Rotate the arrow up */
-}
-
-.input-field {
-  @apply w-full p-2 border border-gray-300 rounded;
-}
-
-.dropdown-content,
-.multi-select-content {
-  @apply absolute bg-white shadow-lg max-h-48 overflow-y-auto z-10 w-full mt-1 border border-gray-300 rounded;
-}
-
-.dropdown-content li,
-.multi-select-content li {
-  @apply cursor-pointer p-2 hover:bg-gray-100;
 }
 </style>

@@ -1,0 +1,76 @@
+/* src/assets/global.css */
+
+/* Custom font size classes */
+.font-small {
+    font-size: 10px;
+  }
+  
+  .font-medium {
+    font-size: 12px;
+  }
+  
+  .font-large {
+    font-size: 14px;
+  }
+  
+  .font-extra-large {
+    font-size: 16px;
+  }
+  
+  /* Medium screens (tablets, small desktops) */
+  @media (min-width: 640px) {
+    .font-small {
+      font-size: 10px;
+    }
+  
+    .font-medium {
+      font-size: 14px;
+    }
+  
+    .font-large {
+      font-size: 16px;
+    }
+  
+    .font-extra-large {
+      font-size: 18px;
+    }
+  }
+  
+  /* Large screens (desktops, larger tablets) */
+  @media (min-width: 1024px) {
+    .font-small {
+      font-size: 12px;
+    }
+  
+    .font-medium {
+      font-size: 14px;
+    }
+  
+    .font-large {
+      font-size: 18px;
+    }
+  
+    .font-extra-large {
+      font-size: 20px;
+    }
+  }
+  
+  /* Extra large screens (large desktops) */
+  @media (min-width: 1280px) {
+    .font-small {
+      font-size: 12px;
+    }
+  
+    .font-medium {
+      font-size: 16px;
+    }
+  
+    .font-large {
+      font-size: 20px;
+    }
+  
+    .font-extra-large {
+      font-size: 22px;
+    }
+  }
+  

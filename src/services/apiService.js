@@ -650,10 +650,26 @@ export const verifyOtpForForgetPassword = async (email, otp) => {
       formData
     );
     console.log(response.data);
-    alert("verify Otp success");
     return response.data;
   } catch (error) {
-    alert("verify Otp failed");
+    throw error;
+  }
+};
+export const resetPasswordWithSpecialCode = async (
+  new_password,
+  special_code
+) => {
+  try {
+    const formData = new FormData();
+    formData.append("new_password", new_password);
+    formData.append("special_code", special_code);
+    const response = await axiosInstance.post(
+      "/resetPasswordWithSpecialCode",
+      formData
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };

@@ -1,19 +1,19 @@
 <template>
   <div class="container mx-auto p-4 mb-40">
-    <h1 class="text-2xl font-bold mb-4">{{ $t("completeProfile.title") }}</h1>
+    <h1 class="font-large font-bold mb-4">{{ $t("completeProfile.title") }}</h1>
 
-    <div v-if="isLoading" class="text-center">
+    <div v-if="isLoading" class="text-center font-medium">
       {{ $t("completeProfile.submitting") }}
     </div>
     <div v-else>
       <div v-if="showDescription" class="mb-4">
-        <label for="description" class="block text-gray-700 font-bold mb-2">
+        <label for="description" class="block text-gray-700 font-medium mb-2">
           {{ $t("completeProfile.descriptionLabel") }}:
         </label>
         <textarea
           id="description"
           v-model="description"
-          class="w-full p-2 border rounded"
+          class="w-full p-2 border rounded font-medium"
           :class="{ 'error-border': validationErrors.description }"
           rows="4"
           :placeholder="$t('completeProfile.descriptionPlaceholder')"
@@ -23,7 +23,7 @@
 
       <div v-if="showWishes" class="mb-4">
         <!-- Start of the Wishes Content from Step1 -->
-        <label for="city" class="block text-gray-700 font-bold mb-2">
+        <label for="city" class="block text-gray-700 font-medium mb-2">
           {{ $t("form.title") }}:
         </label>
 
@@ -31,14 +31,14 @@
           <div class="form-group mb-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.city") }}
                 </h3>
                 <input
                   type="text"
                   id="interestsAutocompleteInput"
                   :placeholder="$t('form.cityPlaceholder')"
-                  class="input-field w-full p-2 border rounded"
+                  class="input-field w-full p-2 border rounded font-medium"
                   :class="{ 'error-border': validationErrors.city }"
                   @input="validateInput($event, 'city')"
                 />
@@ -49,7 +49,7 @@
                   <span
                     v-for="(city, index) in selectedCities"
                     :key="index"
-                    class="tag bg-gray-200 p-2 rounded-full mr-2 mb-2"
+                    class="tag bg-gray-200 p-2 rounded-full mr-2 mb-2 font-small"
                   >
                     {{ city }}
                     <span
@@ -66,7 +66,7 @@
           <div class="form-group mb-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.houseType") }}
                 </h3>
                 <div class="relative" ref="houseTypeDropdown">
@@ -75,7 +75,7 @@
                     v-model="selectedHouseTypeName"
                     :placeholder="$t('form.houseTypePlaceholder')"
                     readonly
-                    class="input-field w-full p-2 border rounded cursor-pointer"
+                    class="input-field w-full p-2 border rounded cursor-pointer font-medium"
                     :class="{ 'error-border': validationErrors.houseType }"
                     @click="toggleDropdown('showDropdown')"
                   />
@@ -84,7 +84,7 @@
                       v-for="(type, index) in houseTypes"
                       :key="index"
                       @click="selectHouseType(type)"
-                      class="p-2 hover:bg-gray-100 cursor-pointer"
+                      class="p-2 hover:bg-gray-100 cursor-pointer font-small"
                     >
                       {{ type.type }}
                     </li>
@@ -95,14 +95,14 @@
                 </div>
               </div>
               <div class="w-full md:w-1/2 px-2">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.maxRentPrice") }}
                 </h3>
                 <input
                   type="number"
                   v-model="formData.wish.price"
                   :placeholder="$t('form.pricePlaceholder')"
-                  class="input-field w-full p-2 border rounded"
+                  class="input-field w-full p-2 border rounded font-medium"
                   :class="{ 'error-border': validationErrors.price }"
                   step="0.01"
                   @input="validateInput($event, 'price')"
@@ -117,7 +117,7 @@
           <div class="form-group mb-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/2 px-2">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.minRooms") }}
                 </h3>
                 <ul class="flex w-full no-gap-list">
@@ -125,7 +125,7 @@
                     v-for="(number, index) in numberOfRooms"
                     :key="index"
                     @click="selectNumberOfRooms(number)"
-                    class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                    class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
                     :class="[
                       roomClasses(number),
                       { 'error-border': validationErrors.rooms },
@@ -142,7 +142,7 @@
                 </div>
               </div>
               <div class="w-full md:w-1/2 px-2">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.floor") }}
                 </h3>
                 <ul class="flex w-full no-gap-list">
@@ -150,7 +150,7 @@
                     v-for="(floor, index) in floorOptions"
                     :key="index"
                     @click="selectFloor(floor)"
-                    class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item"
+                    class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
                     :class="[
                       floorClasses(floor),
                       { 'error-border': validationErrors.floor },
@@ -169,7 +169,7 @@
           <div class="form-group mb-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.minArea") }}
                 </h3>
                 <div class="relative" ref="areaDropdown">
@@ -178,7 +178,7 @@
                     v-model="formData.wish.area"
                     :placeholder="$t('form.areaPlaceholder')"
                     readonly
-                    class="input-field w-full p-2 border rounded cursor-pointer"
+                    class="input-field w-full p-2 border rounded cursor-pointer font-medium"
                     :class="{ 'error-border': validationErrors.area }"
                     @click="toggleDropdown('showAreaDropdown')"
                   />
@@ -187,7 +187,7 @@
                       v-for="(area, index) in areas"
                       :key="index"
                       @click="selectArea(area)"
-                      class="p-2 hover:bg-gray-100 cursor-pointer"
+                      class="p-2 hover:bg-gray-100 cursor-pointer font-small"
                     >
                       {{ area }}
                     </li>
@@ -198,7 +198,7 @@
                 </div>
               </div>
               <div class="w-full md:w-1/2 px-2">
-                <h3 class="text-lg font-semibold text-[#1c592f] mb-2">
+                <h3 class="font-medium text-[#1c592f] mb-2">
                   {{ $t("form.houseFeatures") }}
                 </h3>
                 <div class="relative" ref="featuresDropdown">
@@ -207,7 +207,7 @@
                     v-model="selectedFeatureNames"
                     :placeholder="$t('form.featuresPlaceholder')"
                     readonly
-                    class="input-field w-full p-2 border rounded cursor-pointer"
+                    class="input-field w-full p-2 border rounded cursor-pointer font-medium"
                     :class="{ 'error-border': validationErrors.features }"
                     @click="toggleDropdown('showFeaturesDropdown')"
                   />
@@ -221,7 +221,7 @@
                           feature.id
                         ),
                       }"
-                      class="p-2 hover:bg-gray-100 cursor-pointer"
+                      class="p-2 hover:bg-gray-100 cursor-pointer font-small"
                     >
                       {{ feature.name }}
                     </li>
@@ -238,7 +238,7 @@
       </div>
 
       <div v-if="showImages" class="mb-4">
-        <label for="images" class="block text-gray-700 font-bold mb-2">
+        <label for="images" class="block text-gray-700 font-medium mb-2">
           {{ $t("completeProfile.uploadImagesLabel") }}
         </label>
         <input
@@ -246,7 +246,7 @@
           type="file"
           multiple
           @change="onImageChange"
-          class="w-full p-2 border border-gray-300 rounded"
+          class="w-full p-2 border border-gray-300 rounded font-medium"
           :class="{ 'error-border': validationErrors.images }"
         />
       </div>
@@ -269,7 +269,7 @@
 
       <button
         @click="submitForm"
-        class="mt-4 complete-btn text-white p-2 rounded-lg"
+        class="mt-4 complete-btn text-white p-2 rounded-lg font-medium"
       >
         {{ $t("completeProfile.completeButton") }}
       </button>
@@ -695,7 +695,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .container {
   max-width: 1000px;
@@ -746,7 +745,7 @@ button.mt-4 {
 
 /* Wishes content styles */
 .input-field {
-  @apply w-full p-2 border border-gray-300 rounded;
+  @apply w-full p-2 border border-gray-300 rounded font-medium;
 }
 .input-field:focus {
   border-color: #1c592f;

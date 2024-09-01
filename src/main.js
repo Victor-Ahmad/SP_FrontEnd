@@ -4,6 +4,7 @@ import router from "./router";
 import i18n from "./i18n";
 import store from "./store";
 import "./assets/styles.css";
+import "./assets/global.css";
 
 import AOS from "aos";
 import "aos/dist/aos.css";

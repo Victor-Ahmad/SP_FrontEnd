@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen p-4 md:p-8">
-    <div v-if="isLoading" class="text-center">Loading...</div>
-    <div v-else-if="error" class="text-red-600 text-center">{{ error }}</div>
+    <div v-if="isLoading" class="text-center font-medium">Loading...</div>
+    <div v-else-if="error" class="text-red-600 text-center font-medium">
+      {{ error }}
+    </div>
     <div v-else class="house-detail-page flex flex-col items-center">
       <div class="house-detail-images-container w-full pt-4 px-2 md:px-10">
         <div
@@ -46,40 +48,42 @@
           <div
             class="house-detail-header flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-300 pb-2"
           >
-            <div class="text-2xl md:text-4xl font-bold text-gray-700">
+            <div class="text-gray-700 font-large font-bold">
               {{ house.street }}, {{ house.location }}
             </div>
-            <div class="text-lg text-[#1c592f] font-bold mt-2 md:mt-0">
+            <div class="text-[#1c592f] font-medium font-bold mt-2 md:mt-0">
               {{ house.price }} / month
             </div>
           </div>
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">
+              <h2 class="font-medium font-bold text-gray-800 mb-4">
                 House Details
               </h2>
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
                 <span class="font-medium text-gray-700">Type:</span>
-                <span>{{ house.house_type.type }}</span>
+                <span class="font-medium">{{ house.house_type.type }}</span>
               </div>
               <hr class="border-t border-gray-300 my-2" />
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
                 <span class="font-medium text-gray-700">Number of Rooms:</span>
-                <span>{{ house.number_of_rooms }}</span>
+                <span class="font-medium">{{ house.number_of_rooms }}</span>
               </div>
               <hr class="border-t border-gray-300 my-2" />
               <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
                 <span class="font-medium text-gray-700">Area:</span>
-                <span>{{ house.area || "N/A" }} m²</span>
+                <span class="font-medium">{{ house.area || "N/A" }} m²</span>
               </div>
             </div>
           </div>
 
           <div class="house-detail-info mt-5">
             <div class="info-section p-4 rounded-lg">
-              <h2 class="text-xl font-bold text-gray-800 mb-4">Description</h2>
+              <h2 class="font-medium font-bold text-gray-800 mb-4">
+                Description
+              </h2>
               <div class="info-item py-2">
-                <span>{{
+                <span class="font-medium">{{
                   house.description || "No description available"
                 }}</span>
               </div>
@@ -91,7 +95,9 @@
           class="contact-info-container bg-white p-4 md:p-5 rounded-lg shadow-lg w-full md:w-[25%] self-start"
         >
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-gray-800">Contact Info</h2>
+            <h2 class="font-medium font-semibold text-gray-800">
+              Contact Info
+            </h2>
             <button
               class="favorite-button w-10 h-10 bg-white text-red-500 border border-red-500 rounded-full hover:bg-red-500 hover:text-white flex items-center justify-center transition"
               @click="handleFavoriteClick($event)"
@@ -103,12 +109,14 @@
             class="info-item py-2 flex flex-col md:flex-row justify-between md:justify-evenly"
           >
             <span class="font-medium text-gray-700">Name:</span>
-            <span>{{ house.user.first_name }} {{ house.user.last_name }}</span>
+            <span class="font-medium"
+              >{{ house.user.first_name }} {{ house.user.last_name }}</span
+            >
           </div>
           <hr class="border-t border-gray-300 my-2" />
           <div class="info-item py-2">
             <button
-              class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4"
+              class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4 font-medium"
               @click="startChat($event)"
             >
               Chat
@@ -119,7 +127,7 @@
             class="info-item py-2 flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 space-x-0 md:space-x-2"
           >
             <button
-              class="interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition"
+              class="interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition font-medium"
               :class="[
                 isInterested
                   ? 'bg-interested-active text-white'
@@ -130,7 +138,7 @@
               Interested
             </button>
             <button
-              class="not-interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition"
+              class="not-interest-button w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition font-medium"
               :class="[
                 isNotInterested
                   ? 'bg-red-custom text-white'
@@ -143,7 +151,7 @@
           </div>
           <div class="info-item py-2 mt-4">
             <button
-              class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center"
+              class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center font-medium"
             >
               <i class="fas fa-share-alt mr-2"></i> Share
             </button>
@@ -162,17 +170,19 @@
         @click.stop
       >
         <div class="bg-white p-4 rounded-lg shadow-lg">
-          <p class="mb-4">{{ $t("page.areYouSureNotInterested") }}</p>
+          <p class="mb-4 font-medium">
+            {{ $t("page.areYouSureNotInterested") }}
+          </p>
           <div class="flex justify-end space-x-2">
             <button
               @click="confirmNotInterested(true)"
-              class="bg-red-500 text-white px-4 py-2 rounded"
+              class="bg-red-500 text-white px-4 py-2 rounded font-medium"
             >
               {{ $t("page.yes") }}
             </button>
             <button
               @click="confirmNotInterested(false)"
-              class="bg-gray-500 text-white px-4 py-2 rounded"
+              class="bg-gray-500 text-white px-4 py-2 rounded font-medium"
             >
               {{ $t("page.no") }}
             </button>
@@ -184,7 +194,7 @@
 </template>
 
 <script>
-import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
+import ImagePopup from "@/components/ImagePopup.vue";
 import {
   addToFavorites,
   removeFavorite,
@@ -193,7 +203,7 @@ import {
   disinterest,
   removeNotInterest,
   isChatExisting,
-} from "@/services/apiService"; // Adjust the import path as necessary
+} from "@/services/apiService";
 
 export default {
   name: "HouseDetailClone",
@@ -219,7 +229,7 @@ export default {
       isFavorite: false,
       isInterested: false,
       isNotInterested: false,
-      showConfirmationPopup: false, // State for confirmation popup
+      showConfirmationPopup: false,
     };
   },
   methods: {
@@ -298,13 +308,13 @@ export default {
     },
     toggleNotInterested(event) {
       event.stopPropagation();
-      this.showConfirmationPopup = true; // Show the confirmation popup
+      this.showConfirmationPopup = true;
     },
     async confirmNotInterested(confirm) {
       if (confirm) {
         await this.handleNotInterested();
       }
-      this.showConfirmationPopup = false; // Hide the confirmation popup
+      this.showConfirmationPopup = false;
     },
     async handleNotInterested() {
       this.isNotInterested = !this.isNotInterested;

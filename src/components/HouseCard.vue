@@ -53,33 +53,33 @@
       >
         <div class="flex justify-between items-start">
           <div>
-            <div class="font-bold text-lg">{{ house.street || "" }}</div>
-            <div class="text-xs mb-4">
+            <div class="font-large font-bold">{{ house.street || "" }}</div>
+            <div class="font-small mb-4">
               {{ house.location || "" }}, {{ house.post_code || "" }}
             </div>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-2 house-details">
-              <div class="text-gray-700 text-sm flex items-center user-icon">
+              <div class="font-small text-gray-700 flex items-center user-icon">
                 <i class="fas fa-user mr-2 icon_custom_color"></i>
                 {{ house.user.first_name || "" }}
                 {{ house.user.last_name || "" }}
               </div>
               <div
-                class="text-purple-custom text-base font-semibold flex items-center"
+                class="font-medium text-purple-custom font-semibold flex items-center"
               >
                 <i class="fas fa-euro-sign mr-2"></i>
                 {{ Math.floor(house.price) || "" }} /
                 {{ $t("page.month") }}
               </div>
-              <div class="text-gray-700 text-sm flex items-center">
+              <div class="font-small text-gray-700 flex items-center">
                 <i class="fas fa-home mr-2 icon_custom_color"></i>
                 {{ house.house_type?.type || "" }}
               </div>
-              <div class="text-gray-700 text-sm flex items-center">
+              <div class="font-small text-gray-700 flex items-center">
                 <i class="fas fa-door-open mr-2 icon_custom_color"></i>
                 <strong>{{ $t("page.rooms") }}: </strong>
                 {{ house.number_of_rooms || "" }}
               </div>
-              <div class="text-gray-700 text-sm flex items-center">
+              <div class="font-small text-gray-700 flex items-center">
                 <i class="fas fa-map-marker-alt mr-2 icon_custom_color"></i>
                 <strong>{{ $t("page.area") }}: </strong>
                 {{ truncatedArea }} (m²)
@@ -89,7 +89,7 @@
               <span
                 v-for="property in validProperties"
                 :key="property.id"
-                class="px-3 py-1 bg-purple-custom text-white rounded-full text-xs"
+                class="px-3 py-1 bg-purple-custom text-white rounded-full font-small"
               >
                 {{ property.specific_property.name || "" }}
               </span>
@@ -97,7 +97,7 @@
           </div>
           <button
             @click.stop="handleFavoriteClick($event)"
-            class="absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform"
+            class="absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none transition-transform transform font-medium"
           >
             <i
               :class="isFavorite ? 'fas fa-heart text-red-500' : 'far fa-heart'"
@@ -112,7 +112,7 @@
           <button
             @click.stop="toggleInterested($event)"
             :class="[
-              'w-1/3 lg:w-4/12 px-4 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95',
+              'w-1/3 lg:w-4/12 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
               isInterested
                 ? 'bg-interested-active text-white'
                 : 'border border-interested-active text-interested-active',
@@ -124,7 +124,7 @@
           <button
             @click.stop="toggleNotInterested($event)"
             :class="[
-              'w-1/3 lg:w-5/12 px-2 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 md:flex-2',
+              'w-1/3 lg:w-5/12 px-2 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 md:flex-2 font-small',
               isNotInterested
                 ? 'bg-gray-custom text-white '
                 : 'border border-gray-custom ',
@@ -135,7 +135,7 @@
           </button>
           <button
             @click.stop="startChat($event)"
-            class="w-1/3 lg:w-3/12 px-3 py-2 rounded-full flex items-center justify-center text-xs transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8]"
+            class="w-1/3 lg:w-3/12 px-3 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8] font-small"
           >
             <i class="fas fa-comment mr-1"></i>
             <span class="hidden custom_lg">{{ $t("page.chat") }}</span>
@@ -149,7 +149,7 @@
         class="absolute inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
         @click.stop
       >
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+        <div class="bg-white p-4 rounded-lg shadow-lg font-small">
           <p class="mb-4">{{ $t("page.areYouSureNotInterested") }}</p>
           <div class="flex justify-end space-x-2">
             <button
@@ -172,7 +172,7 @@
         class="absolute inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
         @click.stop
       >
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+        <div class="bg-white p-4 rounded-lg shadow-lg font-small">
           <p class="mb-4">{{ $t("page.areYouSureUnclickInterested") }}</p>
           <div class="flex justify-end space-x-2">
             <button
@@ -450,7 +450,7 @@ export default {
 </script>
 
 <style scoped>
-/* Tailwind CSS classes are used for styling */
+/* Additional styles */
 .swiper-container {
   height: 100%;
 }
@@ -458,12 +458,12 @@ export default {
 button i.fas.fa-heart,
 button i.far.fa-heart {
   transition: color 0.3s;
-  font-size: 24px;
+  font-size: 18px; /* Reduced for all screens */
 }
 
 button i.fas,
 button i.far {
-  font-size: 16px;
+  font-size: 12px; /* Reduced for all screens */
 }
 
 button.absolute {
@@ -474,7 +474,7 @@ button.absolute {
 }
 
 button.absolute i {
-  font-size: 24px;
+  font-size: 18px; /* Further reduced for all screens */
 }
 
 button:hover {
@@ -591,12 +591,12 @@ button:hover {
 }
 
 .lock-overlay i {
-  font-size: 24px;
+  font-size: 18px; /* Further reduced for all screens */
   margin-bottom: 8px;
 }
 
 .lock-overlay p {
-  font-size: 12px;
+  font-size: 10px; /* Further reduced for all screens */
   margin: 0;
 }
 @media (min-width: 1600px) {

@@ -5,13 +5,13 @@
     <div class="flex justify-center p-4 md:p-8 w-full md:w-1/2">
       <div class="max-w-md w-full bg-white p-8 space-y-6">
         <div class="text-center border-gray-300 py-2 mb-10">
-          <h2 class="text-4xl font-bold text-[#1c592f]">Reset Password</h2>
+          <h2 class="font-bold text-[#1c592f]">Reset Password</h2>
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="handleResetPassword">
           <div class="form-group mb-4">
             <label
               for="newPassword"
-              class="block text-lg font-semibold text-[#1c592f] mb-2"
+              class="block font-semibold text-[#1c592f] mb-2"
               >New Password</label
             >
             <input
@@ -26,7 +26,7 @@
           <div class="form-group mb-4">
             <label
               for="confirmPassword"
-              class="block text-lg font-semibold text-[#1c592f] mb-2"
+              class="block font-semibold text-[#1c592f] mb-2"
               >Confirm Password</label
             >
             <input
@@ -46,7 +46,7 @@
               Reset Password
             </button>
           </div>
-          <div v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
+          <div v-if="error" class="text-red-600 mt-2">{{ error }}</div>
         </form>
       </div>
     </div>
@@ -57,6 +57,7 @@
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import Swal from "sweetalert2";
+import { resetPasswordWithSpecialCode } from "@/services/apiService"; // Import the new API function
 
 export default {
   name: "ResetPassword",
@@ -64,7 +65,7 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const error = ref("");
-
+    const specialCode = route.query.specialCode;
     const handleResetPassword = async () => {
       const newPassword = document.getElementById("newPassword").value;
       const confirmPassword = document.getElementById("confirmPassword").value;
@@ -73,29 +74,29 @@ export default {
         return;
       }
       try {
-        // Dummy function to simulate password reset
-        await resetPassword(route.params.email, newPassword);
+        // Call the API to reset the password using the specialCode
+        await resetPasswordWithSpecialCode(newPassword, specialCode);
         Swal.fire({
           icon: "success",
           title: "Password reset successful",
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          router.push("/login");
+          router.push("/login"); // Redirect to login page after successful password reset
         });
       } catch (err) {
         error.value = "Failed to reset password. Please try again.";
       }
     };
 
-    const resetPassword = (email, newPassword) => {
-      // Dummy function to be replaced with actual API call
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 1000);
-      });
-    };
+    // const resetPassword = (email, newPassword) => {
+    //   // Dummy function to be replaced with actual API call
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve(true);
+    //     }, 1000);
+    //   });
+    // };
 
     return {
       error,
