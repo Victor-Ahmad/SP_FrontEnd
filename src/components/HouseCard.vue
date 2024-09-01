@@ -40,7 +40,7 @@
           <swiper-slide v-if="house.images.length === 0">
             <img
               src="@/assets/images/logo2.png"
-              class="w-full h-full object-contain"
+              class="w-full h-full object-contain p-6"
               :alt="$t('page.placeholder')"
             />
           </swiper-slide>
@@ -112,7 +112,7 @@
           <button
             @click.stop="toggleInterested($event)"
             :class="[
-              'w-1/3 lg:w-4/12 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
+              'w-1/3 lg:w-4/12 px-4 py-1 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
               isInterested
                 ? 'bg-interested-active text-white'
                 : 'border border-interested-active text-interested-active',
@@ -124,7 +124,7 @@
           <button
             @click.stop="toggleNotInterested($event)"
             :class="[
-              'w-1/3 lg:w-5/12 px-2 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 md:flex-2 font-small',
+              'w-1/3 lg:w-5/12 px-2 py-1 rounded-full flex items-center justify-center transition-transform transform active:scale-95 md:flex-2 font-small',
               isNotInterested
                 ? 'bg-gray-custom text-white '
                 : 'border border-gray-custom ',
@@ -135,7 +135,7 @@
           </button>
           <button
             @click.stop="startChat($event)"
-            class="w-1/3 lg:w-3/12 px-3 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8] font-small"
+            class="w-1/3 lg:w-3/12 px-3 py-1 rounded-full flex items-center justify-center transition-transform transform active:scale-95 bg-chat-custom2 bg-white text-[#154aa8] font-small"
           >
             <i class="fas fa-comment mr-1"></i>
             <span class="hidden custom_lg">{{ $t("page.chat") }}</span>

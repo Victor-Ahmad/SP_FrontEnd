@@ -29,7 +29,6 @@ export default defineComponent({
 <style scoped>
 /* Add any custom styles here if needed */
 </style> -->
-
 <template>
   <Loading
     :active="isActive"
@@ -65,5 +64,17 @@ export default defineComponent({
 .loading-gif {
   height: 700px;
   width: auto;
+}
+
+@media (max-width: 768px) {
+  .loading-gif {
+    height: 500px; /* Adjust the height for mobile screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-gif {
+    height: 300px; /* Further adjust for smaller screens */
+  }
 }
 </style>

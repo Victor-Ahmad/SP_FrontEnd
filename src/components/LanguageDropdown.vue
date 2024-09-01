@@ -4,12 +4,12 @@
       <button
         @click="toggleDropdown"
         type="button"
-        class="inline-flex justify-center w-12 rounded-md border border-gray-300 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition duration-300 ease-in-out"
+        class="inline-flex justify-center w-12 rounded-md border border-gray-300 shadow-sm px-2 py-1 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition duration-300 ease-in-out"
         id="options-menu"
       >
-        {{ currentLanguage }}
+        <span class="font-medium">{{ currentLanguage }}</span>
         <svg
-          class="-mr-1 ml-1 h-5 w-5"
+          class="-mr-1 ml-1 h-4 w-4 lg:h-5 lg:w-5 font-small"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -25,7 +25,7 @@
     </div>
     <div
       v-if="dropdownOpen"
-      class="origin-top-right absolute right-0 mt-2 w-16 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 transition duration-300 ease-in-out"
+      class="origin-top-right absolute right-0 mt-2 lg:w-16 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 transition duration-300 ease-in-out"
       @click.stop
     >
       <div
@@ -36,16 +36,18 @@
       >
         <a
           @click="setLanguage('en')"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          class="block px-4 py-2 font-small text-gray-700 hover:bg-gray-100"
           role="menuitem"
-          >en</a
         >
+          en
+        </a>
         <a
           @click="setLanguage('nl')"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          class="block px-4 py-2 font-small text-gray-700 hover:bg-gray-100"
           role="menuitem"
-          >nl</a
         >
+          nl
+        </a>
       </div>
     </div>
   </div>

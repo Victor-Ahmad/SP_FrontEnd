@@ -3,7 +3,7 @@
     <!-- Notification Bell Icon -->
     <div class="relative">
       <svg
-        class="w-6 h-6 cursor-pointer"
+        class="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -32,7 +32,7 @@
       <div
         class="flex justify-between items-center px-4 py-2 bg-gray-100 border-b border-gray-200"
       >
-        <span class="text-sm font-bold text-gray-700">Notifications</span>
+        <span class="font-medium text-gray-700">Notifications</span>
         <button
           @click.stop="markAllNotificationsAsRead"
           :disabled="markingAllAsRead || !hasUnreadNotifications"
@@ -42,7 +42,7 @@
             'text-gray-400 cursor-not-allowed':
               !hasUnreadNotifications || markingAllAsRead,
           }"
-          class="text-sm focus:outline-none"
+          class="font-small focus:outline-none"
         >
           <span v-if="!markingAllAsRead">Mark All as Read</span>
           <span v-else class="flex items-center">
@@ -94,7 +94,7 @@
               d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
             ></path>
           </svg>
-          <span class="text-sm text-gray-500 mt-2 block">Loading...</span>
+          <span class="font-small text-gray-500 mt-2 block">Loading...</span>
         </li>
 
         <!-- Notifications List -->
@@ -106,18 +106,18 @@
           @click="handleNotificationClick(notification, index)"
         >
           <div class="flex justify-between items-center">
-            <div class="font-bold">
+            <div class="font-medium">
               <span
                 v-if="!notification.read"
                 class="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"
               ></span>
               {{ notification.title }}
             </div>
-            <div class="text-sm text-gray-500">
+            <div class="font-small text-gray-500">
               {{ formatDate(notification.sent_at) }}
             </div>
           </div>
-          <div class="text-sm">{{ notification.body }}</div>
+          <div class="font-small">{{ notification.body }}</div>
         </li>
       </ul>
     </div>
@@ -162,7 +162,9 @@ export default {
             title: notification.title,
             body: notification.body,
             sent_at: notification.sent_at,
-            read: notification.read === 1,
+            read: notification.read_at !== null, // Assuming `read_at` is not null if read
+            data: notification.data, // Keep the data field
+            type: notification.type, // Keep the type field
           }));
         }
       } catch (error) {
@@ -171,6 +173,7 @@ export default {
         this.loading = false; // End loading
       }
     },
+
     async handleNotificationClick(notification, index) {
       if (!notification.read) {
         try {
@@ -182,7 +185,23 @@ export default {
           console.error("Failed to mark notification as read:", error);
         }
       }
+      // Check if the sub_type is 'new_interest'
+      if (notification.data.sub_type === "new_interest") {
+        // Navigate to HouseDetail route with house_a as the id
+        this.$router.push({
+          name: "HouseDetail",
+          params: { id: notification.data.house_a },
+        });
+      } else {
+        // If needed, handle other sub_types here
+        alert(
+          `Data: ${JSON.stringify(notification.data)}, Type: ${
+            notification.type
+          }`
+        );
+      }
     },
+
     async markAllNotificationsAsRead() {
       this.markingAllAsRead = true;
       try {

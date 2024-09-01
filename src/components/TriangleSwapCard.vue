@@ -8,43 +8,43 @@
       <!-- Card Content -->
       <div class="flex flex-col items-center">
         <div
-          class="w-full bg-white text-lg font-bold rounded px-2 lg:px-8 py-4 text-center border border-[#1c592f]"
+          class="w-full bg-white font-extra-large font-bold rounded px-2 lg:px-8 py-4 text-center border border-[#1c592f]"
         >
           <div>{{ myHouse.first_name }} {{ myHouse.last_name }}</div>
-          <div class="text-sm">{{ myHouse.my_house_location }}</div>
+          <div class="font-small">{{ myHouse.my_house_location }}</div>
           <div
             class="flex justify-between items-center lg:justify-center mt-4 ls:space-x-4"
           >
             <button
               @click.stop="handleTriangleSwapClick"
               :class="[
-                'w-4/12 px-2 py-2 rounded-full border duration-300',
+                'w-4/12 px-2 py-1 rounded-full border duration-300 font-small',
                 isInterested ? 'text-interested-active' : 'text-interested',
               ]"
             >
-              <i class="fas fa-thumbs-up mr-1"></i>
-              <span class="button-text">{{
+              <i class="fas fa-thumbs-up mr-1 font-small"></i>
+              <span class="button-text font-medium">{{
                 $t("triangle.joinTriangleSwap")
               }}</span>
             </button>
             <button
               @click.stop="toggleNotInterested"
               :class="[
-                ' w-4/12 px-2 py-2 rounded-full border duration-300 mx-2',
+                'w-4/12 px-2 py-1 rounded-full border duration-300 mx-2 font-small',
                 isNotInterested ? 'bg-gray-custom text-white' : 'gray-custom',
               ]"
             >
-              <i class="fas fa-thumbs-down mr-1"></i>
-              <span class="button-text">{{
+              <i class="fas fa-thumbs-down mr-1 font-small"></i>
+              <span class="button-text font-medium">{{
                 $t("triangle.notInterested")
               }}</span>
             </button>
             <button
               @click.stop="joinGroupChat"
-              class="w-4/12 px-2 py-2 rounded-full bg-chat-custom2 bg-white text-[#154aa8] duration-300"
+              class="w-4/12 px-2 py-1 rounded-full bg-chat-custom2 bg-white text-[#154aa8] duration-300 font-small"
             >
-              <i class="fas fa-comment mr-1"></i>
-              <span class="button-text">{{
+              <i class="fas fa-comment mr-1 font-small"></i>
+              <span class="button-text font-medium">{{
                 $t("triangle.joinGroupChat")
               }}</span>
             </button>

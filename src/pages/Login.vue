@@ -118,10 +118,13 @@ export default {
       if (validationError.value) return;
 
       try {
+        // Handle the login process
         await store.dispatch("login", {
           email: email.value,
           password: password.value,
         });
+
+        // Notify user of successful login
         Swal.fire({
           icon: "success",
           title: "Login successful",
@@ -131,6 +134,8 @@ export default {
           router.push("/home");
         });
       } catch (error) {
+        // If login fails, show an error message
+        console.error(error);
         Swal.fire({
           icon: "error",
           title: "Login failed",

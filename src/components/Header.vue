@@ -8,7 +8,7 @@
         class="p-2"
         aria-label="Go back"
       >
-        <i class="fas fa-arrow-left text-lg text-black"></i>
+        <i class="fas fa-arrow-left text-black font-large"></i>
       </button>
       <router-link to="/" class="flex items-center">
         <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
@@ -17,20 +17,20 @@
     <nav v-if="!isMobile && token" class="flex space-x-4 items-center">
       <router-link
         :to="{ path: '/home', query: { tab: 'houses' } }"
-        class="hover-color transition duration-300 ease-in-out"
+        class="hover-color transition duration-300 ease-in-out font-medium"
         active-class="active"
         >{{ $t("nav.home") }}</router-link
       >
       <router-link
         to="/swaps"
-        class="hover-color transition duration-300 ease-in-out"
+        class="hover-color transition duration-300 ease-in-out font-medium"
         active-class="active"
         >{{ $t("nav.swaps") }}</router-link
       >
       <div class="relative" :class="{ shake: isShakingMessage }">
         <router-link
           to="/chatPage"
-          class="hover-color transition duration-300 ease-in-out"
+          class="hover-color transition duration-300 ease-in-out font-medium"
           active-class="active"
           @click="resetMessageNotification"
           >{{ $t("nav.messages") }}</router-link
@@ -43,7 +43,7 @@
       </div>
       <router-link
         to="/profile"
-        class="hover-color transition duration-300 ease-in-out"
+        class="hover-color transition duration-300 ease-in-out font-medium"
         active-class="active"
         >{{ $t("nav.profile") }}</router-link
       >
@@ -60,21 +60,21 @@
       <router-link
         v-if="!isMobile && !token"
         to="/login"
-        class="hover-color transition duration-300 ease-in-out"
+        class="hover-color transition duration-300 ease-in-out font-medium"
         active-class="active"
         >{{ $t("nav.login") }}</router-link
       >
       <router-link
         v-if="!isMobile && !token"
         to="/register"
-        class="hover-color transition duration-300 ease-in-out"
+        class="hover-color transition duration-300 ease-in-out font-medium"
         active-class="active"
         >{{ $t("nav.register") }}</router-link
       >
       <button
         v-if="!isMobile && token"
         @click="handleLogout"
-        class="hover-color transition duration-300 ease-in-out"
+        class="hover-color transition duration-300 ease-in-out font-medium"
       >
         {{ $t("nav.logout") }}
       </button>
@@ -91,7 +91,8 @@ import LanguageDropdown from "@/components/LanguageDropdown.vue";
 import NotificationDropdown from "@/components/NotificationDropdown.vue";
 import { initializeApp } from "firebase/app";
 import { getMessaging, onMessage } from "firebase/messaging";
-
+import { storeFcmTokenOnServer } from "@/services/apiService";
+import { resetFirebase } from "@/services/firebaseService";
 export default {
   name: "Header",
   components: {
@@ -164,7 +165,7 @@ export default {
 
     const token = computed(() => store.getters.token);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
       store.dispatch("logout").then(() => {
         router.push("/login");
       });

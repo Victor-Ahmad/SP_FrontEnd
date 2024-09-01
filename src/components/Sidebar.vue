@@ -5,7 +5,7 @@
     @click.stop
   >
     <div class="flex justify-between items-center p-4">
-      <router-link to="/" class="flex items-center">
+      <router-link to="/" class="flex items-center" @click="closeSidebar">
         <img src="@/assets/images/logo.png" alt="Logo" class="h-10 md:h-12" />
       </router-link>
       <button @click="closeSidebar" class="close-btn">&times;</button>
@@ -63,7 +63,7 @@ export default {
       default: false,
     },
   },
-  setup() {
+  setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
     const token = computed(() => store.getters.token);
@@ -71,18 +71,20 @@ export default {
     const handleLogout = () => {
       store.dispatch("logout").then(() => {
         router.push("/login");
+        closeSidebar(); // Close sidebar after logout
       });
+    };
+
+    const closeSidebar = () => {
+      // Emit event to parent to close the sidebar
+      emit("close-sidebar");
     };
 
     return {
       token,
       handleLogout,
+      closeSidebar,
     };
-  },
-  methods: {
-    closeSidebar() {
-      this.$emit("close-sidebar");
-    },
   },
 };
 </script>
