@@ -89,10 +89,8 @@ import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import LanguageDropdown from "@/components/LanguageDropdown.vue";
 import NotificationDropdown from "@/components/NotificationDropdown.vue";
-import { initializeApp } from "firebase/app";
 import { getMessaging, onMessage } from "firebase/messaging";
-import { storeFcmTokenOnServer } from "@/services/apiService";
-import { resetFirebase } from "@/services/firebaseService";
+
 export default {
   name: "Header",
   components: {
@@ -120,25 +118,13 @@ export default {
       checkScreenSize();
       window.addEventListener("resize", checkScreenSize);
 
-      // Firebase initialization and onMessage handling
-      const firebaseConfig = {
-        apiKey: "AIzaSyD1pYbJOZtRoI6uP0CG2BJwbyiF66t8yhs",
-        authDomain: "snelwoningruil.firebaseapp.com",
-        projectId: "snelwoningruil",
-        storageBucket: "snelwoningruil.appspot.com",
-        messagingSenderId: "95029283842",
-        appId: "1:95029283842:web:cf6baac956ad264d7b2b1b",
-        measurementId: "G-ZB2PQERS5W",
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const messaging = getMessaging(app);
-
+      // Firebase Messaging - Handle incoming messages
+      const messaging = getMessaging();
       onMessage(messaging, (payload) => {
         console.log("Message received. ", payload);
 
         // Handle different types of notifications
-        if (payload.data.type === "message") {
+        if (payload.data && payload.data.type === "message") {
           hasNewMessage.value = true; // Show red dot on Messages link only
           isShakingMessage.value = true; // Trigger shake animation for Messages link
           setTimeout(() => {
@@ -166,9 +152,21 @@ export default {
     const token = computed(() => store.getters.token);
 
     const handleLogout = async () => {
-      store.dispatch("logout").then(() => {
+      try {
+        // Start the loading spinner
+        store.commit("startLoading");
+
+        // Dispatch the logout action
+        await store.dispatch("logout");
+
+        // Redirect to the login page after successful logout
         router.push("/login");
-      });
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        // Stop the loading spinner
+        store.commit("stopLoading");
+      }
     };
 
     const resetMessageNotification = () => {

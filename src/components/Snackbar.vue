@@ -2,8 +2,7 @@
 <template>
   <transition name="fade">
     <div
-      v-if="isVisible"
-      class="snackbar fixed top-50 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-md shadow-lg"
+      class="snackbar py-40 fixed z-50 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 rounded-md shadow-lg"
     >
       <div class="flex justify-between items-center">
         <span>{{ message }}</span>

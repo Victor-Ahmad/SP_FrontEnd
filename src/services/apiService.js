@@ -613,7 +613,21 @@ export const verifyOtpRegister = async (otp) => {
     throw error;
   }
 };
-export const storeFcmTokenOnServer = async (firebase_token) => {
+export const saveFcmTokenToBackend = async (firebase_token) => {
+  try {
+    const token = store.getters.token;
+    if (token) {
+      const response = await axiosInstance.post("/save-fcm-token", {
+        firebase_token,
+      });
+      return response.data;
+    }
+    return "no access token";
+  } catch (error) {
+    throw error;
+  }
+};
+export const revokeFcmTokenFromBackend = async (firebase_token) => {
   try {
     const token = store.getters.token;
     if (token) {
@@ -677,6 +691,16 @@ export const resetPasswordWithSpecialCode = async (
 export const getLandingSwaps = async () => {
   try {
     const response = await axiosInstance.get("/landing_page_houses");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = await axiosInstance.get("/logout");
     console.log(response.data);
     return response.data;
   } catch (error) {

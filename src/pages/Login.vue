@@ -90,10 +90,22 @@
 </template>
 
 <script>
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD1pYbJOZtRoI6uP0CG2BJwbyiF66t8yhs",
+  authDomain: "snelwoningruil.firebaseapp.com",
+  projectId: "snelwoningruil",
+  storageBucket: "snelwoningruil.appspot.com",
+  messagingSenderId: "95029283842",
+  appId: "1:95029283842:web:cf6baac956ad264d7b2b1b",
+  measurementId: "G-ZB2PQERS5W",
+};
 
 export default {
   name: "Login",
@@ -118,28 +130,61 @@ export default {
       if (validationError.value) return;
 
       try {
-        // Handle the login process
-        await store.dispatch("login", {
+        // Step 1: Handle the login process with your backend API
+        const response = await store.dispatch("login", {
           email: email.value,
           password: password.value,
         });
 
-        // Notify user of successful login
-        Swal.fire({
-          icon: "success",
-          title: "Login successful",
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
+        // Step 2: If login is successful, initialize Firebase and handle FCM
+        if (response.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Login successful",
+            showConfirmButton: false,
+            timer: 1500,
+          });
           router.push("/home");
-        });
+          const app = initializeApp(firebaseConfig);
+          const messaging = getMessaging(app);
+
+          // Register service worker for FCM
+          if ("serviceWorker" in navigator) {
+            try {
+              const registration = await navigator.serviceWorker.register(
+                "/firebase-messaging-sw.js"
+              );
+
+              // Request notification permission and get FCM token
+              const permission = await Notification.requestPermission();
+              if (permission === "granted") {
+                const fcmToken = await getToken(messaging, {
+                  serviceWorkerRegistration: registration,
+                });
+                console.log("fcm obtained:", fcmToken);
+
+                // Save the FCM token to your backend
+                await store.dispatch("saveFcmToken", fcmToken);
+              } else {
+                // Permission denied, notify the user but continue
+                Swal.fire({
+                  icon: "info",
+                  title: "Notifications Disabled",
+                  text: "You won't receive notifications because you've denied permission.",
+                  showConfirmButton: true,
+                });
+              }
+            } catch (error) {
+              console.error("Service Worker registration failed:", error);
+            }
+          }
+        }
       } catch (error) {
-        // If login fails, show an error message
-        console.error(error);
+        console.error("Login failed:", error);
         Swal.fire({
           icon: "error",
           title: "Login failed",
-          text: store.getters.error,
+          text: error.message || "An error occurred during login.",
         });
       }
     };

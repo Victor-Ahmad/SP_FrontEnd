@@ -147,15 +147,9 @@ import HouseCard from "@/components/HouseCard.vue";
 import TriangleSwapCard from "@/components/TriangleSwapCard.vue";
 import FilterBar from "@/components/FilterBar.vue";
 import BasePagination from "@/components/BasePagination.vue";
-import Snackbar from "@/components/Snackbar.vue";
+
 import { getProfileProgress } from "@/services/apiService";
 import { useScreenSize } from "@/utils/useScreenSize";
-import {
-  initializeFirebase,
-  getFirebaseMessaging,
-  updateToken,
-} from "@/services/firebaseService";
-import { getToken } from "firebase/messaging";
 
 export default {
   name: "Home",
@@ -164,7 +158,6 @@ export default {
     TriangleSwapCard,
     FilterBar,
     BasePagination,
-    Snackbar,
   },
   setup() {
     const store = useStore();
@@ -178,9 +171,12 @@ export default {
     );
     const pagination = computed(() => store.getters.pagination);
     const trianglePagination = computed(() => store.getters.trianglePagination);
-    const hasMoreThanTwoImages = computed(
-      () => store.getters.hasMoreThanTwoImages
-    );
+    const progress = ref(60);
+    const activeTab = computed(() => store.getters.activeTab);
+    const currentPage = ref(1);
+    const totalPages = ref(1);
+    const triangleCurrentPage = ref(1);
+    const triangleTotalPages = ref(1);
 
     const filters = ref({
       search: "",
@@ -191,20 +187,10 @@ export default {
       amenities: [],
     });
 
-    const progress = ref(60);
-    const activeTab = computed(() => store.getters.activeTab);
-    const currentPage = ref(1);
-    const totalPages = ref(1);
-    const triangleCurrentPage = ref(1);
-    const triangleTotalPages = ref(1);
     const showDescription = ref(false);
     const showImages = ref(false);
     const showWishes = ref(false);
-
     const showFilterDrawer = ref(false);
-
-    const showSnackbar = ref(false);
-    const snackbarMessage = ref("");
 
     const fetchFilteredHouses = async (page = 1, formData = null) => {
       try {
@@ -297,59 +283,7 @@ export default {
       fetchProfileProgress();
       fetchFilteredHouses();
       fetchTriangleSwapHouses();
-      handleNotificationPermissions(); // Moved to Home
     });
-
-    const handleNotificationPermissions = async () => {
-      if (localStorage.getItem("notificationPermissionRequested")) {
-        return;
-      }
-
-      if (Notification.permission === "default") {
-        try {
-          const permission = await Notification.requestPermission();
-          if (permission === "granted") {
-            await setupFirebaseMessaging();
-          } else {
-            console.log("snackbar");
-            snackbarMessage.value =
-              "Notification Permission Needed. Please enable notifications in your browser settings.";
-            showSnackbar.value = true;
-          }
-        } catch (err) {
-          console.error("Error during notification permission request: ", err);
-        }
-      } else if (Notification.permission === "granted") {
-        await setupFirebaseMessaging();
-      } else {
-        console.log("snackbar");
-        snackbarMessage.value =
-          "Notifications Disabled. You can enable them in your browser settings.";
-        showSnackbar.value = true;
-      }
-
-      localStorage.setItem("notificationPermissionRequested", "true");
-    };
-
-    const setupFirebaseMessaging = async () => {
-      const messaging = initializeFirebase();
-      try {
-        const currentToken = await getToken(messaging, {
-          vapidKey:
-            "BK2jDUAUj5G9pjfehRYRHJV7PA0Lv23hqVALEierhj9Ym4ZGUofPjISzPFSmwi7bO8uYHkmEfn6pkfYAwNR47p0",
-        });
-
-        if (currentToken) {
-          console.log("fcmToken: " + currentToken);
-          await updateToken(currentToken);
-          console.log("Token stored successfully.");
-        } else {
-          console.log("No registration token available.");
-        }
-      } catch (err) {
-        console.log("Error retrieving FCM token: ", err);
-      }
-    };
 
     const profileCompletionLink = computed(() => ({
       name: "ProfileCompletion",
@@ -408,9 +342,6 @@ export default {
       handleApplyFilters,
       removeFromFilteredHouses,
       clearFilters,
-      hasMoreThanTwoImages,
-      showSnackbar, // Include snackbar visibility state
-      snackbarMessage, // Include snackbar message
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -508,7 +439,6 @@ button:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   color: #000000;
 }
 

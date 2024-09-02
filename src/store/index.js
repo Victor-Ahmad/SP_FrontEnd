@@ -1,11 +1,28 @@
-// store/index.js
 import { createStore } from "vuex";
 import {
   login,
   registerUser,
   getSwapHouses,
   getTriangleSwapHouses,
+  saveFcmTokenToBackend,
+  logout as apiLogout,
 } from "@/services/apiService";
+import { initializeApp } from "firebase/app";
+import { getMessaging, deleteToken } from "firebase/messaging";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD1pYbJOZtRoI6uP0CG2BJwbyiF66t8yhs",
+  authDomain: "snelwoningruil.firebaseapp.com",
+  projectId: "snelwoningruil",
+  storageBucket: "snelwoningruil.appspot.com",
+  messagingSenderId: "95029283842",
+  appId: "1:95029283842:web:cf6baac956ad264d7b2b1b",
+  measurementId: "G-ZB2PQERS5W",
+};
+
+// Initialize Firebase once and reuse it
+const app = initializeApp(firebaseConfig);
 
 const store = createStore({
   state: {
@@ -13,6 +30,7 @@ const store = createStore({
     loading: false,
     user: null,
     token: localStorage.getItem("token") || null,
+    fcmToken: localStorage.getItem("fcmToken") || null, // Store the FCM token here
     error: null,
     filteredHouses: [],
     triangleSwapHouses: [],
@@ -31,11 +49,12 @@ const store = createStore({
     },
     currentLanguage: localStorage.getItem("language") || "nl",
     hasMoreThanTwoImages: false,
+    fcmInitialized: false,
   },
   mutations: {
     setActiveTab(state, tab) {
       state.activeTab = tab;
-      localStorage.setItem("activeTab", tab); // Persist tab choice in local storage
+      localStorage.setItem("activeTab", tab);
     },
     setLoading(state, status) {
       state.loading = status;
@@ -50,6 +69,18 @@ const store = createStore({
       } else {
         localStorage.removeItem("token");
       }
+    },
+    setFcmToken(state, token) {
+      state.fcmToken = token;
+      if (token) {
+        localStorage.setItem("fcmToken", token); // Store in localStorage
+      } else {
+        localStorage.removeItem("fcmToken"); // Remove if null
+      }
+    },
+    clearFcmToken(state) {
+      state.fcmToken = null;
+      localStorage.removeItem("fcmToken"); // Clear from localStorage
     },
     setError(state, error) {
       state.error = error;
@@ -72,8 +103,14 @@ const store = createStore({
     clearAuthData(state) {
       state.user = null;
       state.token = null;
+      state.fcmToken = null; // Clear FCM token
+      state.fcmInitialized = false;
       localStorage.removeItem("token");
+      localStorage.removeItem("fcmToken");
       state.error = null;
+    },
+    setFcmInitialized(state, initialized) {
+      state.fcmInitialized = initialized;
     },
     startLoading(state) {
       state.loading = true;
@@ -101,7 +138,7 @@ const store = createStore({
     },
     async login({ commit }, { email, password }) {
       commit("startLoading");
-      commit("setError", null); // Clear previous errors
+      commit("setError", null);
       try {
         const response = await login(email, password);
         if (response.success) {
@@ -111,6 +148,7 @@ const store = createStore({
           commit("setError", response.message);
           throw new Error(response.message);
         }
+        return response; // Return the response
       } catch (error) {
         commit(
           "setError",
@@ -123,7 +161,7 @@ const store = createStore({
     },
     async registerUser({ commit }, formData) {
       commit("startLoading");
-      commit("setError", null); // Clear previous errors
+      commit("setError", null);
       try {
         const response = await registerUser(formData);
         if (response.success) {
@@ -147,7 +185,7 @@ const store = createStore({
     },
     async fetchFilteredHouses({ commit }, { formData = null, page }) {
       commit("startLoading");
-      commit("setError", null); // Clear previous errors
+      commit("setError", null);
       try {
         const response = await getSwapHouses(formData, page);
         if (response.success) {
@@ -176,7 +214,7 @@ const store = createStore({
     },
     async fetchTriangleSwapHouses({ commit }, params) {
       commit("startLoading");
-      commit("setError", null); // Clear previous errors
+      commit("setError", null);
       try {
         const response = await getTriangleSwapHouses(params);
         if (response.success) {
@@ -200,8 +238,46 @@ const store = createStore({
         commit("stopLoading");
       }
     },
-    async logout({ commit }) {
-      commit("clearAuthData");
+    async saveFcmToken({ commit }, token) {
+      try {
+        await saveFcmTokenToBackend(token);
+        commit("setFcmToken", token);
+      } catch (error) {
+        console.error("Failed to save FCM token:", error);
+      }
+    },
+    async revokeFcmToken({ state, commit }) {
+      console.log("revokeFcmToken");
+      if (state.fcmToken) {
+        try {
+          const messaging = getMessaging(app);
+
+          // Delete the FCM token from the client
+          await deleteToken(messaging);
+          // Clear the FCM token from the Vuex state and localStorage
+          commit("clearFcmToken");
+          console.log("revokeFcmToken success");
+        } catch (error) {
+          console.error("Failed to revoke FCM token:", error);
+        }
+      }
+    },
+    async logout({ commit, dispatch }) {
+      try {
+        // Step 1: Call the logout API
+        await apiLogout();
+
+        // Step 2: Revoke FCM token before logging out
+        await dispatch("revokeFcmToken");
+
+        // Step 3: Clear auth data from the store and localStorage
+        commit("clearAuthData");
+
+        console.log("Logout successful and FCM token revoked.");
+      } catch (error) {
+        console.error("Logout API call failed:", error);
+        // Handle any errors that might occur during the API call
+      }
     },
     setCurrentLanguage({ commit }, language) {
       commit("setCurrentLanguage", language);
@@ -212,6 +288,7 @@ const store = createStore({
     isLoading: (state) => state.loading,
     user: (state) => state.user,
     token: (state) => state.token,
+    fcmToken: (state) => state.fcmToken,
     error: (state) => state.error,
     filteredHouses: (state) => state.filteredHouses,
     pagination: (state) => state.pagination,

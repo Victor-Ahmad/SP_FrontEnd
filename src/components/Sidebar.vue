@@ -68,11 +68,23 @@ export default {
     const router = useRouter();
     const token = computed(() => store.getters.token);
 
-    const handleLogout = () => {
-      store.dispatch("logout").then(() => {
+    const handleLogout = async () => {
+      try {
+        // Start the loading spinner
+        store.commit("startLoading");
+
+        // Dispatch the logout action
+        await store.dispatch("logout");
+
+        // Redirect to the login page after successful logout
         router.push("/login");
-        closeSidebar(); // Close sidebar after logout
-      });
+        closeSidebar();
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        // Stop the loading spinner
+        store.commit("stopLoading");
+      }
     };
 
     const closeSidebar = () => {
