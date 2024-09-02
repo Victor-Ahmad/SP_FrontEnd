@@ -129,7 +129,8 @@ import {
   getNotifications,
   markNotificationAsRead,
   markAllNotificationAsRead,
-} from "@/services/apiService"; // Update the path as needed
+  getHousesByIds,
+} from "@/services/apiService";
 
 export default {
   data() {
@@ -142,7 +143,11 @@ export default {
   },
   computed: {
     hasUnreadNotifications() {
-      return this.notifications.some((notification) => !notification.read);
+      // Check if there are unread notifications of type "notification"
+      return this.notifications.some(
+        (notification) =>
+          !notification.read && notification.type === "notification"
+      );
     },
   },
   methods: {
@@ -176,24 +181,39 @@ export default {
 
     async handleNotificationClick(notification, index) {
       if (!notification.read) {
+        // Immediately mark as read in the UI
+        this.notifications[index].read = true;
+
         try {
           const response = await markNotificationAsRead(notification.id);
-          if (response && response.success) {
-            this.notifications[index].read = true; // Mark as read in the UI
+          if (!response || !response.success) {
+            // Revert the UI update if the server update fails
+            this.notifications[index].read = false;
+            console.error("Failed to mark notification as read on the server.");
           }
         } catch (error) {
-          console.error("Failed to mark notification as read:", error);
+          // Revert the UI update if there's an error
+          this.notifications[index].read = false;
+          console.error("Error marking notification as read:", error);
         }
       }
-      // Check if the sub_type is 'new_interest'
+
+      // Handle navigation based on the notification type or sub_type
       if (notification.data.sub_type === "new_interest") {
-        // Navigate to HouseDetail route with house_a as the id
         this.$router.push({
           name: "HouseDetail",
           params: { id: notification.data.house_a },
         });
+      } else if (notification.data.sub_type === "swap_waiting_for_you") {
+        this.$router.push({
+          name: "TriangleSwapPage",
+          params: {
+            house_a: notification.data.house_a,
+            house_b: notification.data.house_b,
+          },
+        });
       } else {
-        // If needed, handle other sub_types here
+        // Handle other sub_types if needed
         alert(
           `Data: ${JSON.stringify(notification.data)}, Type: ${
             notification.type
@@ -235,15 +255,23 @@ export default {
         this.closeDropdown();
       }
     },
-    addNotification(notification) {
-      // Add the new notification to the list and set it as unread
-      this.notifications.unshift({
-        id: notification.messageId,
-        title: notification.notification.title,
-        body: notification.notification.body,
-        sent_at: new Date().toISOString(), // Set the current time
-        read: false,
-      });
+    addNotification(payload) {
+      if (payload.data.type === "message") {
+        // This should update the message notification only
+        this.$root.$emit("fcmMessageReceived", payload);
+      } else if (payload.data.type === "notification") {
+        // This should update the general notification dot
+        this.notifications.unshift({
+          id: payload.messageId,
+          title: payload.notification.title,
+          body: payload.notification.body,
+          sent_at: new Date().toISOString(),
+          read: false,
+          type: payload.data.type,
+          sub_type: payload.data.sub_type,
+          chat_id: payload.data.chat_id,
+        });
+      }
     },
   },
   mounted() {

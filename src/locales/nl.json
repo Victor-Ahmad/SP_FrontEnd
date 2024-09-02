@@ -281,7 +281,19 @@
         "swaps": "Ruilen",
         "chats": "Chats",
         "menu": "Menu"
-    }
+    },
+    "app": {
+        "snackbar": {
+          "allowNotifications": "Meldingen inschakelen is cruciaal voor de beste ervaring."
+        },
+        "firebase": {
+          "existingTokenDeleted": "Bestaand FCM-token gevonden, het wordt verwijderd...",
+          "newTokenObtained": "Nieuw FCM-token verkregen:",
+          "failedToObtainToken": "Het verkrijgen van een nieuw FCM-token is mislukt.",
+          "notificationPermissionBlocked": "Meldingsmachtiging is geblokkeerd:",
+          "failedToRegisterServiceWorker": "Service worker registreren of FCM-token verkrijgen mislukt:"
+        }
+      }
 
     
 }

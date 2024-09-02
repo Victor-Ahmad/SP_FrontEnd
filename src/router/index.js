@@ -16,7 +16,6 @@ import MessageInterfacePage from "@/pages/MessageInterface.vue";
 import ForgetPassword from "@/pages/ForgetPassword.vue";
 import OtpVerification from "@/pages/OtpVerification.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
-import TriangleSwapDetails from "@/pages/TriangleSwapDetails.vue";
 import LandingPage from "@/views/LandingPage.vue";
 
 const routes = [
@@ -116,10 +115,11 @@ const routes = [
         props: true,
       },
       {
-        path: "/triangle-swap-details",
-        name: "TriangleSwapDetails",
-        component: TriangleSwapDetails,
-        props: (route) => ({ triangle: route.query.triangle }),
+        path: "/triangle-swap/:house_a/:house_b",
+        name: "TriangleSwapPage",
+        component: () => import("@/pages/TriangleSwapPage.vue"),
+        props: true,
+        meta: { requiresAuth: true },
       },
     ],
   },

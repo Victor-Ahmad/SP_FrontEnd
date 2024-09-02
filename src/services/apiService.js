@@ -310,6 +310,20 @@ export const getHouseById = async (houseId) => {
   }
 };
 
+export const getHousesByIds = async (first_id, second_id) => {
+  try {
+    const response = await axiosInstance.get(`/get_house_details`, {
+      params: {
+        first_id: first_id,
+        second_id: second_id,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getChats = async () => {
   try {
     const response = await axiosInstance.get(`/chats`);
@@ -584,9 +598,7 @@ export const markAllNotificationAsRead = async () => {
 
 export const markNotificationAsRead = async (notificationId) => {
   try {
-    const response = await axiosInstance.post(
-      `/mark_as_read/${notificationId}`
-    );
+    const response = await axiosInstance.get(`/mark_as_read/${notificationId}`);
     return response.data;
   } catch (error) {
     throw error;

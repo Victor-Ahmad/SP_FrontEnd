@@ -9,8 +9,10 @@ const messages = {
 };
 
 const i18n = createI18n({
+  legacy: false,
   locale: localStorage.getItem("language") || "nl", // Initialize locale from localStorage
   fallbackLocale: "en",
+  globalInjection: true,
   messages,
 });
 

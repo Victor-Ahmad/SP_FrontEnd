@@ -280,6 +280,18 @@
     "swaps": "Swaps",
     "chats": "Chats",
     "menu": "Menu"
-    }
+    },
+    "app": {
+        "snackbar": {
+          "allowNotifications": "Allowing notifications is crucial for the best experience."
+        },
+        "firebase": {
+          "existingTokenDeleted": "Existing FCM token found, deleting it...",
+          "newTokenObtained": "New FCM token obtained:",
+          "failedToObtainToken": "Failed to obtain a new FCM token.",
+          "notificationPermissionBlocked": "Notification permission was blocked:",
+          "failedToRegisterServiceWorker": "Failed to register service worker or obtain FCM token:"
+        }
+      }
    
 }

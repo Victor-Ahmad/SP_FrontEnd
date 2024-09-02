@@ -38,7 +38,7 @@
         <!-- Red Dot Indicator for New Messages -->
         <span
           v-if="hasNewMessage"
-          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
+          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 message-dot"
         ></span>
       </div>
       <router-link
@@ -54,7 +54,7 @@
         <!-- Red Dot Indicator for General Notifications -->
         <span
           v-if="hasNewNotification"
-          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
+          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 notification-dot"
         ></span>
       </div>
       <router-link
@@ -121,16 +121,22 @@ export default {
       // Firebase Messaging - Handle incoming messages
       const messaging = getMessaging();
       onMessage(messaging, (payload) => {
-        console.log("Message received. ", payload);
+        console.log("Message received:", payload);
 
-        // Handle different types of notifications
+        // Reset the notification states
+        hasNewMessage.value = false;
+        hasNewNotification.value = false;
+
+        // Handle different types of notifications based on the payload type
         if (payload.data && payload.data.type === "message") {
+          console.log("has message");
           hasNewMessage.value = true; // Show red dot on Messages link only
           isShakingMessage.value = true; // Trigger shake animation for Messages link
           setTimeout(() => {
             isShakingMessage.value = false; // Stop shaking after 0.5s
           }, 500);
-        } else {
+        } else if (payload.data && payload.data.type === "notification") {
+          console.log("has notification");
           hasNewNotification.value = true; // Show red dot on Notification icon only
           isShakingNotification.value = true; // Trigger shake animation for Notification icon
           setTimeout(() => {
@@ -247,6 +253,16 @@ export default {
 
 .bg-red-500 {
   background-color: #f56565;
+}
+
+.message-dot {
+  top: 0;
+  right: 0;
+}
+
+.notification-dot {
+  top: 0;
+  right: 0;
 }
 
 .relative {
