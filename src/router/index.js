@@ -93,7 +93,7 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "/house/:id",
+        path: "/home_ad/:id",
         component: HouseDetail,
         name: "HouseDetail",
         meta: { requiresAuth: false },

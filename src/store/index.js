@@ -297,6 +297,7 @@ const store = createStore({
     triangleSwapHousesMyHouse: (state) => state.triangleSwapHousesMyHouse,
     currentLanguage: (state) => state.currentLanguage,
     hasMoreThanTwoImages: (state) => state.hasMoreThanTwoImages,
+    isAuthenticated: (state) => !!state.user && !!state.token,
   },
 });
 

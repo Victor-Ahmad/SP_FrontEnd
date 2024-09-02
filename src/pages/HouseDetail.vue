@@ -65,7 +65,7 @@
           class="house-detail-info-container bg-white lg:p-4 md:p-5 w-full md:w-[74%] mb-4 md:mb-0"
         >
           <div
-            v-if="showProgress && progress < 100"
+            v-if="isAuthenticated && progress < 100"
             class="progress-background col-span-full w-full rounded-full shadow-lg h-min"
           >
             <div class="progress-container">
@@ -78,9 +78,9 @@
               </div>
               <div class="missing-steps">
                 <p class="font-small">{{ $t("page.completeAccount") }}</p>
-                <router-link :to="profileCompletionLink" class="font-small">{{
-                  $t("page.goToProfile")
-                }}</router-link>
+                <router-link :to="profileCompletionLink" class="font-small">
+                  {{ $t("page.goToProfile") }}
+                </router-link>
               </div>
             </div>
           </div>
@@ -132,9 +132,9 @@
                 {{ $t("page.description") }}
               </h2>
               <div class="info-item py-2">
-                <span class="font-small">{{
-                  house.description || $t("page.noDescription")
-                }}</span>
+                <span class="font-small">
+                  {{ house.description || $t("page.noDescription") }}
+                </span>
               </div>
             </div>
           </div>
@@ -153,18 +153,18 @@
                   <span class="font-medium text-gray-700">
                     {{ $t("page.houseType") }}:
                   </span>
-                  <span class="font-small">{{
-                    wish.house_type ? wish.house_type.type : $t("page.na")
-                  }}</span>
+                  <span class="font-small">
+                    {{ wish.house_type ? wish.house_type.type : $t("page.na") }}
+                  </span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
                   <span class="font-medium text-gray-700">
                     {{ $t("page.numberOfRooms") }}:
                   </span>
-                  <span class="font-small">{{
-                    wish.number_of_rooms || $t("page.na")
-                  }}</span>
+                  <span class="font-small">
+                    {{ wish.number_of_rooms || $t("page.na") }}
+                  </span>
                 </div>
                 <hr class="border-t border-gray-300 my-2" />
                 <div class="info-item py-2 grid grid-cols-1 md:grid-cols-2">
@@ -217,7 +217,7 @@
             </h2>
             <button
               class="favorite-button w-10 h-10 bg-white text-red-500 border border-red-500 rounded-full hover:bg-red-500 hover:text-white flex items-center justify-center transition"
-              @click="handleFavoriteClick($event)"
+              @click="handleButtonClick('favorite', $event)"
             >
               <i :class="isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
             </button>
@@ -236,7 +236,7 @@
           <div class="info-item py-2">
             <button
               class="chat-button w-full py-3 bg-[#154aa8] text-white rounded-lg hover:bg-green-600 mb-4 font-small"
-              @click="startChat($event)"
+              @click="handleButtonClick('chat', $event)"
             >
               <i class="fas fa-comment mr-1"></i>
               {{ $t("page.chat") }}
@@ -246,7 +246,7 @@
             class="info-item py-2 flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 space-x-0 md:space-x-2"
           >
             <button
-              @click="handleInterestedClick($event)"
+              @click="handleButtonClick('interested', $event)"
               :class="[
                 'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95 font-small',
                 isInterested
@@ -258,7 +258,7 @@
               {{ $t("page.interested") }}
             </button>
             <button
-              @click="toggleNotInterested($event)"
+              @click="handleButtonClick('notInterested', $event)"
               :class="[
                 'w-full md:w-1/2 py-3 flex items-center justify-center rounded-lg transition-transform transform active:scale-95 font-small',
                 isNotInterested
@@ -272,7 +272,7 @@
           </div>
           <div class="info-item py-2 mt-4">
             <button
-              @click="copyLink"
+              @click="handleButtonClick('share')"
               class="share-button w-full py-3 bg-[#1c592f] text-white rounded-lg hover:bg-green-600 flex items-center justify-center font-small"
             >
               <i class="fas fa-share-alt mr-2"></i> {{ $t("page.share") }}
@@ -291,7 +291,7 @@
       class="bottom-nav-bar fixed md:hidden lg:hidden bottom-0 left-0 w-full bg-white shadow-lg flex justify-around items-center z-50 gap-3 p-3"
     >
       <button
-        @click="handleInterestedClick"
+        @click="handleButtonClick('interested')"
         :class="[
           'w-1/3 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
           isInterested
@@ -302,7 +302,7 @@
         <i class="fas fa-thumbs-up"></i>
       </button>
       <button
-        @click="toggleNotInterested"
+        @click="handleButtonClick('notInterested')"
         :class="[
           'w-1/3 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 font-small',
           isNotInterested
@@ -313,7 +313,7 @@
         <i class="fas fa-thumbs-down"></i>
       </button>
       <button
-        @click="startChat"
+        @click="handleButtonClick('chat')"
         class="w-1/3 px-4 py-2 rounded-full flex items-center justify-center transition-transform transform active:scale-95 bg-[#154aa8] text-white font-small"
       >
         <i class="fas fa-comment"></i>
@@ -333,19 +333,19 @@ import {
   disinterest,
   removeNotInterest,
 } from "@/services/apiService";
-import ImagePopup from "@/components/ImagePopup.vue"; // Adjust the import path as necessary
-import ImageGalleryPopup from "@/components/ImageGalleryPopup.vue"; // Import the new component
-import LockOverlay from "@/components/LockOverlay.vue"; // Import the LockOverlay component
-import anime from "animejs"; // Import animejs
-import Swal from "sweetalert2"; // Import SweetAlert2
-import { getProfileProgress } from "@/services/apiService"; // Import the progress API
+import ImagePopup from "@/components/ImagePopup.vue";
+import ImageGalleryPopup from "@/components/ImageGalleryPopup.vue";
+import LockOverlay from "@/components/LockOverlay.vue";
+import anime from "animejs";
+import Swal from "sweetalert2";
+import { getProfileProgress } from "@/services/apiService";
 
 export default {
   name: "HouseDetail",
   components: {
     ImagePopup,
     ImageGalleryPopup,
-    LockOverlay, // Register the LockOverlay component
+    LockOverlay,
   },
   data() {
     return {
@@ -360,7 +360,6 @@ export default {
       isLoading: true,
       error: null,
       showCopyMessage: false,
-      // Progress related data
       progress: 0,
       showDescription: false,
       showImages: false,
@@ -368,11 +367,25 @@ export default {
       showProgress: true,
     };
   },
+  computed: {
+    isAuthenticated() {
+      return !!this.$store.getters.token;
+    },
+    profileCompletionLink() {
+      return {
+        name: "ProfileCompletion",
+        query: {
+          showDescription: this.showDescription,
+          showImages: this.showImages,
+          showWishes: this.showWishes,
+        },
+      };
+    },
+  },
   async created() {
     const houseId = this.$route.params.id;
     try {
       const response = await getHouseById(houseId);
-      console.log(response.result);
       if (response.success) {
         this.house = response.result.house;
         this.houseOwner = response.result.house_owner;
@@ -386,7 +399,9 @@ export default {
       this.error = "API call failed: " + error.message;
     } finally {
       this.isLoading = false;
-      this.fetchProfileProgress(); // Fetch profile progress when the component is created
+      if (this.isAuthenticated) {
+        this.fetchProfileProgress();
+      }
     }
   },
   methods: {
@@ -396,31 +411,47 @@ export default {
     openGallery() {
       this.isGalleryVisible = true;
     },
+    handleButtonClick(action, event) {
+      if (!this.isAuthenticated && action != "share") {
+        this.$router.push({ path: "/register" });
+        return;
+      }
+      switch (action) {
+        case "favorite":
+          this.handleFavoriteClick(event);
+          break;
+        case "interested":
+          this.handleInterestedClick(event);
+          break;
+        case "notInterested":
+          this.toggleNotInterested(event);
+          break;
+        case "chat":
+          this.startChat(event);
+          break;
+        case "share":
+          this.copyLink();
+          break;
+        default:
+          break;
+      }
+    },
     async startChat(event) {
       event.stopPropagation();
       try {
         const response = await isChatExisting(this.houseOwner.id);
-        console.log(response.result);
         let chatId;
         if (response.success) {
-          if (response.result && response.result.chat) {
-            chatId = response.result?.chat?.id;
-          } else {
-            chatId = response.result.id;
-          }
-
+          chatId = response.result?.chat?.id || response.result.id;
           if (chatId) {
             if (window.innerWidth <= 768) {
               this.$router.push({
                 name: "MessageInterfacePage",
-                params: { chatId: chatId },
+                params: { chatId },
                 query: { otherPersonHouseId: this.house.id },
               });
             } else {
-              this.$router.push({
-                path: "/chatPage",
-                query: { chatId },
-              });
+              this.$router.push({ path: "/chatPage", query: { chatId } });
             }
           } else {
             console.error("Chat ID not found in the response:", response);
@@ -459,7 +490,6 @@ export default {
         try {
           const response = await expressInterest(this.house.id);
           console.log("Interest expressed successfully:", response);
-          // Trigger the exploding button effect
           this.triggerExplodingButton(event.target);
         } catch (error) {
           console.error("Error expressing interest:", error);
@@ -549,7 +579,6 @@ export default {
         });
       }
     },
-    // Progress related methods
     async fetchProfileProgress() {
       try {
         const response = await getProfileProgress();
@@ -592,18 +621,6 @@ export default {
       return this.$store.getters.hasMoreThanTwoImages === false && index >= 0;
     },
   },
-  computed: {
-    profileCompletionLink() {
-      return {
-        name: "ProfileCompletion",
-        query: {
-          showDescription: this.showDescription,
-          showImages: this.showImages,
-          showWishes: this.showWishes,
-        },
-      };
-    },
-  },
   mounted() {
     this.updateProgress();
   },
@@ -618,7 +635,6 @@ export default {
   background-color: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
-/* Ensure fixed height for the swiper */
 .swiper-container {
   height: 100%;
 }
@@ -627,13 +643,11 @@ button i.fas.fa-heart,
 button i.far.fa-heart {
   transition: color 0.3s;
   font-size: 24px;
-  /* Increase font size for larger icon */
 }
 
 button i.fas,
 button i.far {
   font-size: 16px;
-  /* Decrease icon size for smaller buttons */
 }
 
 .house-card {
@@ -651,7 +665,6 @@ button.absolute i {
   font-size: 24px;
 }
 
-/* Button hover effects */
 button:hover {
   transform: none;
 }
@@ -705,60 +718,6 @@ button:hover {
   background-color: #ff6500;
 }
 
-/* Additional CSS for the grid layout */
-
-/* Background for the progress section */
-.progress-background {
-  padding: 20px;
-  margin-bottom: 40px !important;
-  display: flex;
-  align-items: center;
-}
-
-.progress-container {
-  display: flex;
-  align-items: center;
-}
-
-.progress-circle {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-
-.progress-circle svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.progress-circle circle {
-  fill: none;
-  stroke-width: 10;
-}
-
-.progress-circle .background {
-  stroke: #e4eee6;
-}
-
-.progress-circle .foreground {
-  stroke: #1c592f;
-  stroke-linecap: round;
-  stroke-dasharray: 0 100;
-  transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
-  transition-delay: 0.3s;
-}
-
-.progress-circle .progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1em;
-  font-weight: bold;
-  color: #000000;
-}
-
 .missing-steps {
   margin-left: 20px;
 }
@@ -782,7 +741,6 @@ button:hover {
   color: #1c592f;
 }
 
-/* Underlined Tabs Styling */
 .underlined-tabs {
   display: flex;
   justify-content: space-between;
@@ -814,7 +772,6 @@ button:hover {
   background-color: #e4eee6;
 }
 
-/* Pagination Styles */
 .pagination-container {
   display: flex;
   justify-content: center;
@@ -843,7 +800,6 @@ button:hover {
   cursor: not-allowed;
 }
 
-/* Transition for the filter drawer */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -857,172 +813,13 @@ button:hover {
   opacity: 1;
 }
 
-/* Filter Drawer Styling */
 .filter-drawer {
   height: 100vh;
   overflow-y: auto;
   z-index: 100;
-  padding-bottom: 80px; /* Ensure space for close button */
+  padding-bottom: 80px;
 }
 
-/* Ensure fixed height for the swiper */
-.swiper-container {
-  height: 100%;
-}
-
-button i.fas.fa-heart,
-button i.far.fa-heart {
-  transition: color 0.3s;
-  font-size: 24px;
-}
-
-button i.fas,
-button i.far {
-  font-size: 16px;
-}
-
-button.absolute {
-  padding: 8px;
-  background-color: transparent;
-  border-radius: 50%;
-  box-shadow: none;
-}
-
-button.absolute i {
-  font-size: 24px;
-}
-
-button:hover {
-  transform: none;
-}
-
-.bg-light-orange {
-  width: 500px;
-  background-color: rgba(255, 166, 0, 0.2);
-}
-
-.bg-blue-custom {
-  background-color: #fc3025;
-}
-
-.text-blue-custom {
-  color: #154aa8;
-}
-
-.text-purple-custom {
-  color: #1c592f;
-}
-
-.text-green-custom {
-  color: #22893c;
-}
-
-.text-orange-custom {
-  color: #ff6500;
-}
-
-.custom_hover:hover {
-  border-color: #ff6500;
-}
-
-.bg-green-custom {
-  background-color: #22893c;
-}
-
-.bg-purple-custom {
-  background-color: #1c592f;
-}
-
-.bg-red-custom {
-  background-color: #8a8a8a;
-}
-
-.bg-blue-custom {
-  background-color: #154aa8;
-}
-
-.bg-orange-custom {
-  background-color: #ff6500;
-}
-
-/* Additional CSS for the grid layout */
-
-/* Background for the progress section */
-.progress-background {
-  padding: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.progress-container {
-  display: flex;
-  align-items: center;
-}
-
-.progress-circle {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-
-.progress-circle svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.progress-circle circle {
-  fill: none;
-  stroke-width: 10;
-}
-
-.progress-circle .background {
-  stroke: #e4eee6;
-}
-
-.progress-circle .foreground {
-  stroke: #1c592f;
-  stroke-linecap: round;
-  stroke-dasharray: 0 100;
-  transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
-  transition-delay: 0.3s;
-}
-
-.progress-circle .progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1em;
-  font-weight: bold;
-  color: #000000;
-}
-
-.missing-steps {
-  margin-left: 20px;
-}
-
-.missing-steps p {
-  font-size: 0.9em;
-  color: #000000;
-}
-
-.missing-steps a {
-  display: block;
-  color: #1c592f;
-  text-decoration: none;
-  margin-bottom: 5px;
-  font-weight: bold;
-  font-size: 0.9em;
-}
-
-.missing-steps a:hover {
-  text-decoration: underline;
-  color: #1c592f;
-}
-
-/* Styles for blur and overlay */
 .blur-no-opacity {
   filter: blur(10px);
   opacity: 1 !important;

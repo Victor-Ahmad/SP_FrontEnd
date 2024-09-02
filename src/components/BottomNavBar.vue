@@ -27,13 +27,18 @@
     </router-link>
     <router-link
       :to="isMobile ? '/chatslist' : '/chatPage'"
-      class="nav-item"
+      class="nav-item relative"
       active-class="active"
       @click.native="handleNavItemClick(isMobile ? '/chatslist' : '/chatPage')"
     >
       <div class="icon-text">
         <i class="fas fa-comments"></i>
         <span class="font-small">{{ $t("bottomNav.chats") }}</span>
+        <!-- Red Dot Indicator for New Messages -->
+        <span
+          v-if="hasNewMessage"
+          class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 message-dot"
+        ></span>
       </div>
     </router-link>
     <button @click="handleMenuClick" class="nav-item sidebar">
@@ -48,6 +53,7 @@
 <script>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "BottomNavBar",
@@ -60,7 +66,13 @@ export default {
   setup(props, { emit }) {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore(); // Access the Vuex store
     const isMobile = ref(window.innerWidth <= 768);
+
+    // Watch for window resize to update mobile state
+    const checkScreenSize = () => {
+      isMobile.value = window.innerWidth <= 768;
+    };
 
     const hiddenRoutesOnMobile = ["/login", "/register", "/anotherRoute"];
     const dynamicRoutePattern = /^\/house\/\d+$/;
@@ -75,10 +87,6 @@ export default {
       return true;
     });
 
-    const checkScreenSize = () => {
-      isMobile.value = window.innerWidth <= 768;
-    };
-
     const toggleSidebar = () => {
       emit("toggle-sidebar");
     };
@@ -88,6 +96,11 @@ export default {
         toggleSidebar();
       } else {
         router.push(routePath);
+      }
+
+      // Reset the red dot if navigating to the messages page
+      if (routePath === "/chatPage" || routePath === "/chatslist") {
+        store.commit("resetMessageNotification"); // Correctly commit the mutation
       }
     };
 
@@ -108,6 +121,7 @@ export default {
       shouldShowBottomNav,
       handleNavItemClick,
       handleMenuClick,
+      hasNewMessage: computed(() => store.getters.hasNewMessage), // Correctly access the getter
     };
   },
 };
@@ -138,12 +152,11 @@ export default {
 }
 
 .icon-text i {
-  font-size: 20px; /* Slightly reduced size */
+  font-size: 20px;
 }
 
 .icon-text span {
   margin-top: 4px;
-  /* font size is now controlled by .font-small */
 }
 
 .active {
@@ -165,5 +178,10 @@ export default {
 
 .hover-color:hover {
   color: #1c592f;
+}
+
+.message-dot {
+  top: 0;
+  right: 0;
 }
 </style>

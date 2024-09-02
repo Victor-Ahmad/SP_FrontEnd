@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     handleJoinClick() {
-      alert("Thank you for joining us!");
+      this.$router.push({ path: "register" });
     },
   },
 };

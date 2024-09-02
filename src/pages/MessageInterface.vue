@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'flex flex-col h-full mt-14',
+      'flex flex-col h-full',
       localSelectedChat?.second_person ? ' lg:pt-0' : ' lg:pt-0',
     ]"
   >
@@ -61,7 +61,7 @@
 
     <!-- Dropdown for Mobile Screens -->
     <div
-      class="mobile_dropdown fixed z-50 lg:z-0 lg:static top-0 w-full flex md:hidden lg:hidden flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
+      class="mobile_dropdown z-50 lg:z-0 lg:static w-full flex md:hidden lg:hidden flex-col md:flex-row mb-1 bg-white shadow-lg justify-between items-center"
     >
       <div class="relative w-full">
         <div

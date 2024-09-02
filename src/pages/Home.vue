@@ -131,6 +131,7 @@
         </div>
         <div class="p-4 overflow-y-auto">
           <FilterBar
+            :filters="filters"
             @applyFilters="handleApplyFilters"
             @clearFilters="closeFilterDrawer"
           />
@@ -394,53 +395,6 @@ button:hover {
 }
 
 /* Additional styles for progress and layout */
-.progress-background {
-  padding: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.progress-container {
-  display: flex;
-  align-items: center;
-}
-
-.progress-circle {
-  position: relative;
-  width: 100px;
-  height: auto;
-}
-
-.progress-circle svg {
-  width: 100%;
-  height: auto;
-  transform: rotate(-90deg);
-}
-
-.progress-circle circle {
-  fill: none;
-  stroke-width: 10;
-}
-
-.progress-circle .background {
-  stroke: #e4eee6;
-}
-
-.progress-circle .foreground {
-  stroke: #1c592f;
-  stroke-linecap: round;
-  stroke-dasharray: 0 100;
-  transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
-  transition-delay: 0.3s;
-}
-.progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #000000;
-}
 
 .missing-steps {
   margin-left: 20px;

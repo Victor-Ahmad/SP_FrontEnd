@@ -1,5 +1,55 @@
 /* src/assets/global.css */
 
+
+
+.progress-background {
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+}
+
+.progress-circle {
+  position: relative;
+  width: 100px;
+  height: auto;
+}
+
+.progress-circle svg {
+  width: 100%;
+  height: auto;
+  transform: rotate(-90deg);
+}
+
+.progress-circle circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.progress-circle .background {
+  stroke: #e4eee6;
+}
+
+.progress-circle .foreground {
+  stroke: #1c592f;
+  stroke-linecap: round;
+  stroke-dasharray: 0 100;
+  transition: stroke-dasharray 1s ease, stroke-dashoffset 1s ease;
+  transition-delay: 0.3s;
+}
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000000;
+}
+
 /* Custom font size classes */
 .font-small {
     font-size: 10px;
