@@ -4,7 +4,7 @@
     class="flex flex-col items-center mb-10 space-y-8 shadow-lg py-8 lg:px-8 duration-300 rounded custom_hover bg-white no-underline cursor-pointer"
   >
     <!-- Desktop Only -->
-    <div class="w-full px-2 md:w-10/12 lg:w-10/12 relative">
+    <div class="w-full p-2 md:w-10/12 lg:w-10/12 relative">
       <!-- Card Content -->
       <div class="flex flex-col items-center">
         <div
