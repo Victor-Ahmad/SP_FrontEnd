@@ -1,18 +1,12 @@
 <template>
   <div
-    class="flex justify-center mb-4 duration-300 rounded overflow-hidden shadow-lg hover:scale-[1.02] custom_hover"
+    class="flex justify-center mb-4 duration-300 rounded overflow-hidden shadow-lg hover:scale-[1.02] custom_hover max-w-40 md:max-w-full"
     @click="handleCardClick"
   >
-    <div
-      class="flex flex-col w-full max-w-full bg-white cursor-pointer relative min-h-full"
-    >
+    <div class="flex flex-col w-full bg-white cursor-pointer relative">
       <!-- Swiper Component -->
-      <div class="flex-shrink-0" style="width: 100%; height: 200px">
-        <swiper
-          :slides-per-view="1"
-          class="swiper-container"
-          style="height: 100%"
-        >
+      <div class="flex-shrink-0 w-full max-h-20 lg:max-h-64">
+        <swiper :slides-per-view="1" class="swiper-container h-full">
           <swiper-slide
             v-for="(image, index) in house?.images || []"
             :key="index"
@@ -34,39 +28,49 @@
 
       <!-- House Details -->
       <div
-        class="px-2 py-2 flex flex-col justify-between w-full relative house-card-content min-h-[210px]"
+        class="p-1 md:px-2 md:py-2 flex flex-col justify-between w-full relative house-card-content lg:min-h-[210px]"
       >
         <div class="flex justify-between items-start">
           <div>
-            <div class="font-large font-bold">{{ house?.street || "" }}</div>
-            <div class="font-small mb-4">
+            <div class="font-large-custom font-bold">
+              {{ house?.street || "" }}
+            </div>
+            <div class="font-small-custom mb-4">
               {{ house?.location || "" }}, {{ house?.post_code || "" }}
             </div>
             <div
-              class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-2 house-details"
+              class="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-1 mb-1 md:gap-x-4 md:gap-y-2 md:mb-2 house-details"
             >
-              <div class="text-gray-700 font-small flex items-center user-icon">
-                <i class="fas fa-user mr-2 icon_custom_color font-small"></i>
+              <div
+                class="text-gray-700 font-small-custom flex items-center user-icon"
+              >
+                <i
+                  class="fas fa-user mr-2 icon_custom_color font-small-custom"
+                ></i>
                 {{ house?.user?.first_name || "" }}
                 {{ house?.user?.last_name || "" }}
               </div>
-              <div class="text-purple-custom font-medium flex items-center">
-                <i class="fas fa-euro-sign mr-2 font-small"></i>
+              <div
+                class="text-purple-custom font-medium-custom flex items-center"
+              >
+                <i class="fas fa-euro-sign mr-2 font-small-custom"></i>
                 {{ Math.floor(house?.price) || "" }} / month
               </div>
-              <div class="text-gray-700 font-small flex items-center">
-                <i class="fas fa-home mr-2 icon_custom_color font-small"></i>
+              <div class="text-gray-700 font-small-custom flex items-center">
+                <i
+                  class="fas fa-home mr-2 icon_custom_color font-small-custom"
+                ></i>
                 {{ house?.house_type?.type || "" }}
               </div>
-              <div class="text-gray-700 font-small flex items-center">
+              <div class="text-gray-700 font-small-custom flex items-center">
                 <i
-                  class="fas fa-door-open mr-2 icon_custom_color font-small"
+                  class="fas fa-door-open mr-2 icon_custom_color font-small-custom"
                 ></i>
                 <strong>Kamers: </strong> {{ house?.number_of_rooms || "" }}
               </div>
-              <div class="text-gray-700 font-small flex items-center">
+              <div class="text-gray-700 font-small-custom flex items-center">
                 <i
-                  class="fas fa-map-marker-alt mr-2 icon_custom_color font-small"
+                  class="fas fa-map-marker-alt mr-2 icon_custom_color font-small-custom"
                 ></i>
                 <strong>Area: </strong> {{ Math.floor(house?.area) || "" }} (m²)
               </div>
@@ -75,7 +79,7 @@
               <span
                 v-for="property in validProperties"
                 :key="property.id"
-                class="px-3 py-1 bg-purple-custom text-white rounded-full font-small"
+                class="px-3 py-1 bg-purple-custom text-white rounded-full font-small-custom"
               >
                 {{ property?.specific_property?.name || "" }}
               </span>
@@ -144,9 +148,6 @@ export default {
 
 <style scoped>
 /* Tailwind CSS classes are used for styling */
-.swiper-container {
-  height: 100%;
-}
 
 button i.fas.fa-heart,
 button i.far.fa-heart {
@@ -243,16 +244,13 @@ button:hover {
 .house-details {
   display: grid;
   grid-template-columns: repeat(1, 1fr); /* One column for mobile */
-  gap: 4px 16px;
 }
 
 .custom_hover:hover {
   box-shadow: 0 0 10px #1c592f;
 }
 
-@media (min-width: 640px) {
-  .house-details {
-    grid-template-columns: repeat(2, 1fr); /* Two columns for larger screens */
-  }
+.house-details {
+  grid-template-columns: repeat(2, 1fr); /* Two columns for larger screens */
 }
 </style>

@@ -124,3 +124,81 @@
     }
   }
   
+
+
+
+
+
+
+  .font-small-custom {
+    font-size: 5px;
+  }
+  
+  .font-medium-custom {
+    font-size: 7px;
+  }
+  
+  .font-large-custom {
+    font-size: 10px;
+  }
+  
+  .font-extra-large-custom {
+    font-size: 12px;
+  }
+  
+  /* Medium screens (tablets, small desktops) */
+  @media (min-width: 640px) {
+    .font-small-custom {
+      font-size: 10px;
+    }
+  
+    .font-medium-custom {
+      font-size: 14px;
+    }
+  
+    .font-large-custom {
+      font-size: 16px;
+    }
+  
+    .font-extra-large-custom {
+      font-size: 18px;
+    }
+  }
+  
+  /* Large screens (desktops, larger tablets) */
+  @media (min-width: 1024px) {
+    .font-small-custom {
+      font-size: 12px;
+    }
+  
+    .font-medium-custom {
+      font-size: 14px;
+    }
+  
+    .font-large-custom {
+      font-size: 18px;
+    }
+  
+    .font-extra-large-custom {
+      font-size: 20px;
+    }
+  }
+  
+  /* Extra large screens (large desktops) */
+  @media (min-width: 1280px) {
+    .font-small-custom {
+      font-size: 12px;
+    }
+  
+    .font-medium-custom {
+      font-size: 16px;
+    }
+  
+    .font-large-custom {
+      font-size: 20px;
+    }
+  
+    .font-extra-large-custom {
+      font-size: 22px;
+    }
+  }

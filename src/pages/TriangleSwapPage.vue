@@ -4,47 +4,51 @@
     class="flex flex-col items-center mb-10 space-y-8 shadow-lg py-8 lg:px-8 duration-300 rounded custom_hover bg-white no-underline cursor-pointer"
   >
     <!-- Desktop Only -->
-    <div class="w-11/12 md:w-10/12 lg:w-10/12 relative">
+    <div class="w-full px-2 md:w-10/12 lg:w-10/12 relative">
       <!-- Card Content -->
       <div class="flex flex-col items-center">
         <div
-          class="w-full bg-white font-extra-large font-bold rounded px-2 lg:px-8 py-4 text-center border border-[#1c592f]"
+          class="w-full bg-white font-extra-large-custom font-bold rounded px-2 lg:px-8 py-1 md:py-4 text-center border border-[#1c592f]"
         >
           <div>{{ myHouse.first_name }} {{ myHouse.last_name }}</div>
-          <div class="font-small">{{ myHouse.my_house_location }}</div>
-          <div
-            class="flex justify-between items-center lg:justify-center mt-4 ls:space-x-4"
-          >
+          <div class="font-small-custom">{{ myHouse.my_house_location }}</div>
+          <div class="flex justify-center mt-2 md:mt-4 ls:space-x-4">
             <button
               @click.stop="handleTriangleSwapClick"
               :class="[
-                'w-4/12 px-2 py-1 rounded-full border duration-300 font-small',
+                'w-4/12 px-1 md:px-2 py-1 rounded-full border duration-300 font-small-custom',
                 isInterested ? 'text-interested-active' : 'text-interested',
               ]"
             >
-              <i class="fas fa-thumbs-up mr-1 font-small"></i>
-              <span class="button-text font-medium">{{
+              <i
+                class="fas fa-thumbs-up mr-1 font-medium-custom md:font-small-custom"
+              ></i>
+              <span class="button-text font-medium-custom">{{
                 $t("triangle.joinTriangleSwap")
               }}</span>
             </button>
             <button
               @click.stop="toggleNotInterested"
               :class="[
-                'w-4/12 px-2 py-1 rounded-full border duration-300 mx-2 font-small',
+                'w-4/12 px-1 md:px-2 py-1 rounded-full border duration-300 mx-2 font-small-custom',
                 isNotInterested ? 'bg-gray-custom text-white' : 'gray-custom',
               ]"
             >
-              <i class="fas fa-thumbs-down mr-1 font-small"></i>
-              <span class="button-text font-medium">{{
+              <i
+                class="fas fa-thumbs-down mr-1 font-medium-custom md:font-small-custom"
+              ></i>
+              <span class="button-text font-medium-custom">{{
                 $t("triangle.notInterested")
               }}</span>
             </button>
             <button
               @click.stop="joinGroupChat"
-              class="w-4/12 px-2 py-1 rounded-full bg-chat-custom2 bg-white text-[#154aa8] duration-300 font-small"
+              class="w-4/12 px-1 md:px-2 py-1 rounded-full bg-chat-custom2 bg-white text-[#154aa8] duration-300 font-small-custom"
             >
-              <i class="fas fa-comment mr-1 font-small"></i>
-              <span class="button-text font-medium">{{
+              <i
+                class="fas fa-comment mr-1 font-medium-custom md:font-small-custom"
+              ></i>
+              <span class="button-text font-medium-custom">{{
                 $t("triangle.joinGroupChat")
               }}</span>
             </button>
@@ -54,7 +58,7 @@
 
       <!-- Arrows Row -->
       <div class="flex justify-between relative w-full my-4">
-        <div class="flex justify-center w-1/2 max-w-sm">
+        <div class="flex justify-center w-full md:w-1/2 max-w-sm">
           <img
             :class="{
               'green-arrow': triangle.is_c_interested_in_a,
@@ -62,11 +66,12 @@
             }"
             src="@/assets/icons/arrow-fat.png"
             alt="Down Arrow"
-            class="h-20 w-20"
+            class="h-auto w-1/4 lg:h-20 lg:w-20"
             style="transform: rotate(180deg)"
           />
         </div>
-        <div class="flex justify-center w-1/2 max-w-sm">
+        <div class="flex md:hidden justify-center w-1/3 max-w-sm"></div>
+        <div class="flex justify-center w-full md:w-1/2 max-w-sm">
           <img
             :class="{
               'green-arrow': triangle.is_b_interested_in_c,
@@ -74,20 +79,18 @@
             }"
             src="@/assets/icons/arrow-fat.png"
             alt="Up Arrow"
-            class="h-20 w-20"
+            class="h-auto w-1/4 lg:h-20 lg:w-20"
           />
         </div>
       </div>
 
       <!-- House Cards Section -->
-      <div
-        class="hidden md:flex md:flex-row lg:flex lg:flex-row items-stretch justify-between lg:items-center relative"
-      >
+      <div class="flex flex-row justify-between items-center relative">
         <!-- First House Card -->
-        <div class="flex flex-col w-full lg:w-1/2 max-w-sm relative">
+        <div class="flex flex-col w-full max-w-sm relative">
           <HouseCardTriangle :house="triangle.house_a" />
         </div>
-        <div class="flex flex-col justify-center max-w-sm">
+        <div class="flex justify-center w-1/3 max-w-sm">
           <img
             :class="{
               'green-arrow': triangle.is_a_interested_in_b,
@@ -95,30 +98,28 @@
             }"
             src="@/assets/icons/arrow-fat.png"
             alt="Right Arrow"
-            class="h-20 w-20"
+            class="h-auto w-3/6 lg:h-20 lg:w-20"
             style="transform: rotate(90deg)"
           />
         </div>
         <!-- Second House Card -->
-        <div class="flex flex-col w-full lg:w-1/2 max-w-sm relative">
+        <div class="flex flex-col w-full max-w-sm relative">
           <HouseCardTriangle :house="triangle.house_b" />
         </div>
       </div>
 
       <!-- Mobile Only: House Cards Side by Side -->
-      <div
+      <!-- <div
         class="flex lg:hidden lg:flex-row items-center justify-center w-full space-x-4"
       >
-        <!-- First House Card -->
         <div class="flex flex-col w-1/2 max-w-xs h-auto">
           <HouseCardTriangle :house="triangle.house_a" />
         </div>
 
-        <!-- Second House Card -->
         <div class="flex flex-col w-1/2 max-w-xs h-auto">
           <HouseCardTriangle :house="triangle.house_b" />
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div v-else class="flex items-center justify-center min-h-screen">
@@ -406,7 +407,8 @@ export default {
 /* Hide button text on mobile */
 @media (max-width: 640px) {
   .button-text {
-    display: none;
+    /* display: none; */
+    font-size: 6px !important;
   }
 }
 </style>
