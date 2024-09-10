@@ -1,5 +1,84 @@
 <template>
   <div class="min-h-screen pb-20 lg:p-4 md:p-8 bg-gray-100 lg:bg-white">
+    <div class="w-full md:w-1/5 relative">
+      <div class="tabs-wrapper">
+        <!-- Left Arrow -->
+        <div class="arrow-left" @click="scrollLeft">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+
+        <div
+          class="tabs-container lg:p-4 md:mr-6 md:grid-cols-1 md:flex md:flex-col"
+          ref="tabsContainer"
+          @scroll="handleScroll"
+        >
+          <div class="tab-item">
+            <button
+              class="font-medium"
+              :class="{
+                'active-tab font-medium': activeTab === 'my_interests',
+              }"
+              @click="setActiveTab('my_interests')"
+            >
+              {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="font-medium"
+              :class="{
+                'active-tab font-medium': activeTab === 'complete_profile',
+              }"
+              @click="setActiveTab('complete_profile')"
+            >
+              {{ $t("profileTabs.completeProfile") }} ({{
+                completeProfileCount
+              }})
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="font-medium"
+              :class="{
+                'active-tab font-medium': activeTab === 'swap_with_me',
+              }"
+              @click="setActiveTab('swap_with_me')"
+            >
+              {{ $t("profileTabs.swapWithMe") }} ({{ swapWithMeCount }})
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="font-medium"
+              :class="{
+                'active-tab font-medium': activeTab === 'my_favorites',
+              }"
+              @click="setActiveTab('my_favorites')"
+            >
+              {{ $t("profileTabs.myFavorites") }} ({{ myFavoritesCount }})
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="font-medium"
+              :class="{
+                'active-tab font-medium': activeTab === 'my_triangles',
+              }"
+              @click="setActiveTab('my_triangles')"
+            >
+              {{ $t("profileTabs.myTriangleSwaps") }} ({{
+                myTriangleSwapsCount
+              }})
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <div class="arrow-right" @click="scrollRight">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
     <div v-if="isLoading" class="text-center font-medium">
       {{ $t("common.loading") }}
     </div>
@@ -7,85 +86,6 @@
       {{ error }}
     </div>
     <div v-else class="flex flex-col md:flex-row">
-      <div class="w-full md:w-1/5 relative">
-        <div class="tabs-wrapper">
-          <!-- Left Arrow -->
-          <div v-if="showLeftArrow" class="arrow-left" @click="scrollLeft">
-            <i class="fas fa-chevron-left"></i>
-          </div>
-
-          <div
-            class="tabs-container lg:p-4 md:mr-6 md:grid-cols-1 md:flex md:flex-col"
-            ref="tabsContainer"
-            @scroll="handleScroll"
-          >
-            <div class="tab-item">
-              <button
-                class="font-medium"
-                :class="{
-                  'active-tab font-medium': activeTab === 'my_interests',
-                }"
-                @click="setActiveTab('my_interests')"
-              >
-                {{ $t("profileTabs.myInterests") }} ({{ myInterestsCount }})
-              </button>
-            </div>
-            <div class="tab-item">
-              <button
-                class="font-medium"
-                :class="{
-                  'active-tab font-medium': activeTab === 'complete_profile',
-                }"
-                @click="setActiveTab('complete_profile')"
-              >
-                {{ $t("profileTabs.completeProfile") }} ({{
-                  completeProfileCount
-                }})
-              </button>
-            </div>
-            <div class="tab-item">
-              <button
-                class="font-medium"
-                :class="{
-                  'active-tab font-medium': activeTab === 'swap_with_me',
-                }"
-                @click="setActiveTab('swap_with_me')"
-              >
-                {{ $t("profileTabs.swapWithMe") }} ({{ swapWithMeCount }})
-              </button>
-            </div>
-            <div class="tab-item">
-              <button
-                class="font-medium"
-                :class="{
-                  'active-tab font-medium': activeTab === 'my_favorites',
-                }"
-                @click="setActiveTab('my_favorites')"
-              >
-                {{ $t("profileTabs.myFavorites") }} ({{ myFavoritesCount }})
-              </button>
-            </div>
-            <div class="tab-item">
-              <button
-                class="font-medium"
-                :class="{
-                  'active-tab font-medium': activeTab === 'my_triangles',
-                }"
-                @click="setActiveTab('my_triangles')"
-              >
-                {{ $t("profileTabs.myTriangleSwaps") }} ({{
-                  myTriangleSwapsCount
-                }})
-              </button>
-            </div>
-          </div>
-
-          <!-- Right Arrow -->
-          <div v-if="showRightArrow" class="arrow-right" @click="scrollRight">
-            <i class="fas fa-chevron-right"></i>
-          </div>
-        </div>
-      </div>
       <div class="w-full md:w-4/5 lg:pt-4 px-4 lg:py-4">
         <!-- My Interests Tab -->
         <div
@@ -510,7 +510,6 @@ export default {
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   flex-grow: 1;
-  margin: 0 20px; /* Add space between arrows and tabs */
 }
 
 .tab-item {
@@ -559,7 +558,7 @@ export default {
 .arrow-right {
   /* font-size: 1.5rem; */
   cursor: pointer;
-  padding: 10px;
+  padding: 0 10px;
   /* background-color: rgba(0, 0, 0, 0.5); */
   color: black;
   border-radius: 50%;

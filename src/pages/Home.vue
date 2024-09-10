@@ -118,7 +118,7 @@
     <!-- Mobile Filter Drawer -->
     <transition name="slide-fade">
       <div
-        v-if="showFilterDrawer"
+        v-show="showFilterDrawer"
         class="fixed inset-0 z-100 bg-white shadow-lg lg:hidden filter-drawer"
       >
         <div class="flex justify-between items-center mb-4 p-4">
@@ -255,7 +255,8 @@ export default {
 
     const closeFilterDrawer = () => {
       showFilterDrawer.value = false;
-      document.body.style.overflow = "";
+      // showFilterDrawer.value = false;
+      // document.body.style.overflow = "";
     };
 
     const setActiveTab = (tab) => {
