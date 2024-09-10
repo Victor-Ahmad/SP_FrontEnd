@@ -9,8 +9,8 @@
         "noAccount": "Nog geen account?"
     },
     "triangle":{
-        "joinGroupChat": "Deelnemen aan Groepschat",
-        "joinTriangleSwap": "Deelnemen aan Driehoeksruil",
+        "joinGroupChat": "Groepschat",
+        "joinTriangleSwap": "Driehoeksruil",
         "notInterested": "Niet Geïnteresseerd"
     },
     "register": {
