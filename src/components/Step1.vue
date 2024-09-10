@@ -22,6 +22,8 @@
                 id="interestsAutocompleteInput"
                 :placeholder="$t('form.cityPlaceholder')"
                 class="input-field"
+                :class="{ 'border-red-500': errors.step1?.city }"
+                @input="clearError('city')"
               />
               <p class="font-small text-gray-600 mt-2">
                 {{ $t("form.locationHint") }}
@@ -60,7 +62,11 @@
                   :placeholder="$t('form.houseTypePlaceholder')"
                   readonly
                   class="input-field cursor-pointer"
-                  @click="toggleDropdown('houseType')"
+                  @click="
+                    toggleDropdown('houseType');
+                    clearError('house_type_id');
+                  "
+                  :class="{ 'border-red-500': errors.step1?.house_type_id }"
                 />
                 <span
                   class="dropdown-icon"
@@ -105,6 +111,8 @@
                 v-model="formData.wish.price"
                 :placeholder="$t('form.pricePlaceholder')"
                 class="input-field"
+                :class="{ 'border-red-500': errors.step1?.price }"
+                @input="clearError('price')"
                 step="0.01"
               />
               <div v-if="errors.price_wish" class="invalid-feedback">
@@ -124,9 +132,15 @@
                 <li
                   v-for="(number, index) in numberOfRooms"
                   :key="index"
-                  @click="selectNumberOfRooms(number)"
+                  @click="
+                    selectNumberOfRooms(number);
+                    clearError('number_of_rooms');
+                  "
                   class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
-                  :class="roomClasses(number)"
+                  :class="[
+                    roomClasses(number),
+                    errors.step1?.number_of_rooms ? 'border-red-500' : '',
+                  ]"
                 >
                   {{ number }}
                 </li>
@@ -143,9 +157,15 @@
                 <li
                   v-for="(floor, index) in floorOptions"
                   :key="index"
-                  @click="selectFloor(floor)"
+                  @click="
+                    selectFloor(floor);
+                    clearError('floor_number');
+                  "
                   class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
-                  :class="floorClasses(floor)"
+                  :class="[
+                    floorClasses(floor),
+                    errors.step1?.floor_number ? 'border-red-500' : '',
+                  ]"
                 >
                   {{ floor === 0 ? "G" : floor }}
                 </li>
@@ -170,7 +190,12 @@
                   :placeholder="$t('form.areaPlaceholder')"
                   readonly
                   class="input-field cursor-pointer"
-                  @click="toggleDropdown('area')"
+                  :class="{ 'border-red-500': errors.step1?.area }"
+                  @input="clearError('area')"
+                  @click="
+                    toggleDropdown('area');
+                    clearError('area');
+                  "
                 />
                 <span class="dropdown-icon" :class="{ open: showAreaDropdown }">
                   <svg
@@ -214,7 +239,11 @@
                   :placeholder="$t('form.featuresPlaceholder')"
                   readonly
                   class="input-field cursor-pointer"
-                  @click="toggleDropdown('features')"
+                  :class="{ 'border-red-500': errors.step1?.features }"
+                  @click="
+                    toggleDropdown('features');
+                    clearError('features');
+                  "
                 />
                 <span
                   class="dropdown-icon"
@@ -321,6 +350,11 @@ export default {
         this.showFeaturesDropdown = !this.showFeaturesDropdown;
         this.showHouseTypeDropdown = false;
         this.showAreaDropdown = false;
+      }
+    },
+    clearError(field) {
+      if (this.errors.step1 && this.errors.step1[field]) {
+        delete this.errors.step1[field]; // Remove the error for the specific field
       }
     },
     selectHouseType(type) {
@@ -524,5 +558,8 @@ export default {
 
 .dropdown-icon.open svg {
   transform: rotate(180deg); /* Rotate the arrow up */
+}
+.border-red-500 {
+  border-color: red;
 }
 </style>

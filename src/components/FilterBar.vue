@@ -1,5 +1,23 @@
 <template>
   <div class="bg-white mr-6 mb-20">
+    <!-- Search Bar -->
+    <div
+      class="flex items-center mb-4 p-2 border border-gray-300 rounded bg-gray-100"
+    >
+      <i class="fas fa-search text-gray-500 mr-2"></i>
+      <input
+        v-model="searchQuery"
+        @keyup.enter="applySearch"
+        type="text"
+        placeholder="Search..."
+        class="flex-grow bg-transparent focus:outline-none text-sm"
+      />
+      <i
+        v-if="searchQuery"
+        class="fas fa-times text-gray-500 cursor-pointer ml-2"
+        @click="clearSearch"
+      ></i>
+    </div>
     <h2 class="text-xl font-large mb-4 text-[#1c592f]">
       {{ $t("filters.title") }}
     </h2>
@@ -186,8 +204,13 @@ export default {
       type: Object,
       required: true,
     },
+    filteredHouses: {
+      type: Array,
+      default: () => [], // Ensure an empty array by default
+    },
   },
   setup() {
+    const filteredHouses = ref([]);
     const isMobile = ref(window.innerWidth <= 768);
 
     const checkScreenSize = () => {
@@ -204,10 +227,13 @@ export default {
 
     return {
       isMobile,
+      filteredHouses,
     };
   },
   data() {
     return {
+      searchQuery: "",
+      originalHouses: [],
       localFilters: {
         search: "",
         amenities: null,
@@ -388,6 +414,35 @@ export default {
         this.loadingAmenities = false;
       }
     },
+    applySearch() {
+      if (this.searchQuery.trim() === "") {
+        this.filteredHouses = [...this.originalHouses];
+        return;
+      }
+
+      const searchTerm = this.searchQuery.toLowerCase();
+
+      const filtered = this.originalHouses.filter((house) => {
+        return (
+          house.street.toLowerCase().includes(searchTerm) ||
+          house.post_code.toLowerCase().includes(searchTerm) ||
+          house.location.toLowerCase().includes(searchTerm) ||
+          house.first_name.toLowerCase().includes(searchTerm) ||
+          house.last_name.toLowerCase().includes(searchTerm) ||
+          house.type.toLowerCase().includes(searchTerm)
+        );
+      });
+
+      this.$emit("updateFilteredHouses", filtered);
+
+      // this.closeFilterDrawerOnMobile();
+    },
+
+    // Clear the search bar and reset the filtered houses
+    clearSearch() {
+      this.searchQuery = "";
+      this.$emit("updateFilteredHouses", this.originalHouses);
+    },
   },
   watch: {
     filters: {
@@ -396,8 +451,12 @@ export default {
       },
       deep: true,
     },
+    filteredHouses(newValue) {
+      this.originalHouses = [...newValue];
+    },
   },
   mounted() {
+    this.originalHouses = [...this.filteredHouses];
     this.loadGoogleMapsScript();
     this.loadHouseFeatures();
     document.addEventListener("click", this.handleClickOutside);

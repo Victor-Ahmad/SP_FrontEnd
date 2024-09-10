@@ -21,7 +21,10 @@
                 type="text"
                 v-model="formData.post_code"
                 :placeholder="$t('myHouse.postCodePlaceholder')"
-                class="input-field"
+                :class="[
+                  'input-field',
+                  errors.step2?.post_code ? 'border-red-500' : '',
+                ]"
                 @input="handlePostCodeInput"
               />
               <div v-if="errors.post_code" class="invalid-feedback">
@@ -36,7 +39,10 @@
                 type="text"
                 v-model="formData.house_number"
                 :placeholder="$t('myHouse.houseNumberPlaceholder')"
-                class="input-field"
+                :class="[
+                  'input-field',
+                  errors.step2?.house_number ? 'border-red-500' : '',
+                ]"
                 @input="handleHouseNumberInput"
               />
               <div v-if="errors.house_number" class="invalid-feedback">
@@ -93,8 +99,14 @@
                   v-model="selectedHouseTypeName"
                   :placeholder="$t('myHouse.houseTypePlaceholder')"
                   readonly
-                  class="input-field cursor-pointer"
-                  @click="toggleDropdown('showDropdown')"
+                  @click="
+                    toggleDropdown('showDropdown');
+                    clearError('house_type');
+                  "
+                  :class="[
+                    'input-field',
+                    errors.step2?.house_type ? 'border-red-500' : '',
+                  ]"
                 />
                 <span class="dropdown-icon" :class="{ open: showDropdown }">
                   <svg
@@ -135,7 +147,11 @@
                 type="number"
                 v-model="formData.price"
                 :placeholder="$t('myHouse.pricePlaceholder')"
-                class="input-field"
+                :class="[
+                  'input-field',
+                  errors.step2?.price ? 'border-red-500' : '',
+                ]"
+                @input="clearError('price')"
                 step="0.01"
               />
               <div v-if="errors.price" class="invalid-feedback">
@@ -155,9 +171,15 @@
                 <li
                   v-for="(number, index) in numberOfRooms"
                   :key="index"
-                  @click="selectNumberOfRooms(number)"
+                  @click="
+                    selectNumberOfRooms(number);
+                    clearError('number_of_rooms');
+                  "
                   class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
-                  :class="roomClasses(number)"
+                  :class="[
+                    roomClasses(number),
+                    errors.step2?.number_of_rooms ? 'border-red-500' : '',
+                  ]"
                 >
                   {{ number }}
                 </li>
@@ -174,9 +196,15 @@
                 <li
                   v-for="(floor, index) in floorOptions"
                   :key="index"
-                  @click="selectFloor(floor)"
+                  @click="
+                    selectFloor(floor);
+                    clearError('floor');
+                  "
                   class="flex-1 p-2 border border-gray-300 rounded cursor-pointer text-center room-item font-medium"
-                  :class="floorClasses(floor)"
+                  :class="[
+                    floorClasses(floor),
+                    errors.step2?.floor ? 'border-red-500' : '',
+                  ]"
                 >
                   {{ floor === 0 ? "G" : floor }}
                 </li>
@@ -201,7 +229,11 @@
                   :placeholder="$t('myHouse.areaPlaceholder')"
                   readonly
                   class="input-field cursor-pointer"
-                  @click="toggleDropdown('showAreaDropdown')"
+                  :class="{ 'border-red-500': errors.step2?.area }"
+                  @click="
+                    toggleDropdown('showAreaDropdown');
+                    clearError('area');
+                  "
                 />
                 <span class="dropdown-icon" :class="{ open: showAreaDropdown }">
                   <svg
@@ -245,7 +277,11 @@
                   :placeholder="$t('myHouse.featuresPlaceholder')"
                   readonly
                   class="input-field cursor-pointer"
-                  @click="toggleDropdown('showFeaturesDropdown')"
+                  :class="{ 'border-red-500': errors.step2?.features }"
+                  @click="
+                    toggleDropdown('showFeaturesDropdown');
+                    clearError('features');
+                  "
                 />
                 <span
                   class="dropdown-icon"
@@ -302,7 +338,7 @@
 import { getHouseTypes, getHouseFeatures } from "@/services/apiService";
 
 export default {
-  props: ["formData", "image"],
+  props: ["formData", "image", "errors"],
   data() {
     return {
       houseTypes: [],
@@ -315,7 +351,6 @@ export default {
       showDropdown: false,
       showAreaDropdown: false,
       showFeaturesDropdown: false,
-      errors: {},
     };
   },
   methods: {
@@ -332,6 +367,11 @@ export default {
         this.showFeaturesDropdown = !this.showFeaturesDropdown;
         this.showDropdown = false;
         this.showAreaDropdown = false;
+      }
+    },
+    clearError(field) {
+      if (this.errors.step2 && this.errors.step2[field]) {
+        delete this.errors.step2[field];
       }
     },
     selectHouseType(type) {
@@ -541,10 +581,12 @@ export default {
       return regex.test(postCode);
     },
     handlePostCodeInput() {
+      this.clearError("post_code");
       this.capitalize("post_code");
       this.fetchCityFromPostCode();
     },
     handleHouseNumberInput() {
+      this.clearError("house_number");
       this.capitalize("house_number");
       this.fetchStreetFromPostCodeAndHouseNumber();
     },
@@ -613,5 +655,8 @@ export default {
 
 .dropdown-icon.open svg {
   transform: rotate(180deg); /* Rotate the arrow up */
+}
+.border-red-500 {
+  border-color: red;
 }
 </style>

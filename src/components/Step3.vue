@@ -20,11 +20,13 @@
                 :placeholder="$t('myInfo.firstNamePlaceholder')"
                 :disabled="disabled"
                 class="input-field"
+                :class="{ 'border-red-500': errors.first_name }"
                 required
+                @input="clearError('first_name')"
               />
-              <div class="invalid-feedback" v-if="errors.first_name">
+              <!-- <div class="invalid-feedback" v-if="errors.first_name">
                 {{ errors.first_name }}
-              </div>
+              </div> -->
             </div>
             <div class="w-full md:w-1/2 px-2">
               <h3 class="font-semibold text-[#1c592f] mb-2">
@@ -36,11 +38,13 @@
                 :placeholder="$t('myInfo.lastNamePlaceholder')"
                 :disabled="disabled"
                 class="input-field"
+                :class="{ 'border-red-500': errors.last_name }"
                 required
+                @input="clearError('last_name')"
               />
-              <div class="invalid-feedback" v-if="errors.last_name">
+              <!-- <div class="invalid-feedback" v-if="errors.last_name">
                 {{ errors.last_name }}
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -57,7 +61,9 @@
                 :placeholder="$t('myInfo.emailPlaceholder')"
                 :disabled="disabled"
                 class="input-field"
+                :class="{ 'border-red-500': errors.email }"
                 required
+                @input="clearError('email')"
               />
               <div class="invalid-feedback" v-if="emailError">
                 {{ emailErrorMessage }}
@@ -73,7 +79,9 @@
                 :placeholder="$t('myInfo.phoneNumberPlaceholder')"
                 :disabled="disabled"
                 class="input-field"
+                :class="{ 'border-red-500': errors.phone_number }"
                 required
+                @input="clearError('phone_number')"
               />
               <div class="invalid-feedback" v-if="phoneError">
                 {{ phoneErrorMessage }}
@@ -94,8 +102,10 @@
                 :placeholder="$t('myInfo.passwordPlaceholder')"
                 :disabled="disabled"
                 class="input-field"
+                :class="{ 'border-red-500': errors.password }"
                 required
                 @blur="validatePassword"
+                @input="clearError('password')"
               />
               <div class="invalid-feedback" v-if="passwordError">
                 {{ passwordErrorMessage }}
@@ -111,8 +121,10 @@
                 :placeholder="$t('myInfo.confirmPasswordPlaceholder')"
                 :disabled="disabled"
                 class="input-field"
+                :class="{ 'border-red-500': errors.password_confirmation }"
                 required
                 @blur="validatePassword"
+                @input="clearError('password_confirmation')"
               />
             </div>
           </div>
@@ -128,7 +140,9 @@
                     v-model="privacyPolicyAndTerms"
                     :disabled="disabled"
                     class="checkbox required"
+                    :class="{ 'border-red-500': errors.privacyPolicyAndTerms }"
                     required
+                    @change="clearError('privacyPolicyAndTerms')"
                   />
                   <span>
                     {{ $t("myInfo.agreeTo") }}
@@ -137,7 +151,10 @@
                     {{ $t("myInfo.termsOfUse") }}
                   </span>
                 </label>
-                <div class="invalid-feedback" v-if="showPrivacyPolicyError">
+                <div
+                  class="invalid-feedback"
+                  v-if="showPrivacyPolicyError || errors.privacyPolicyAndTerms"
+                >
                   {{ $t("myInfo.privacyPolicyError") }}
                 </div>
               </div>
@@ -159,6 +176,7 @@
                 maxlength="1"
                 class="otp-input"
                 v-model="otp[index]"
+                :class="{ 'border-red-500': errors.otp }"
                 @input="onInput(index, $event)"
                 @keydown.backspace="onBackspace(index, $event)"
               />
@@ -196,12 +214,13 @@ export default {
     "showOtp",
     "otp",
     "disabled",
+    "errors",
   ],
+
   data() {
     return {
       passwordError: false,
       passwordErrorMessage: "",
-      errors: {},
     };
   },
   computed: {
@@ -238,6 +257,11 @@ export default {
     },
   },
   methods: {
+    clearError(field) {
+      if (this.errors[field]) {
+        delete this.errors[field];
+      }
+    },
     validatePassword() {
       if (this.formData.password !== this.formData.password_confirmation) {
         this.passwordError = true;
@@ -250,6 +274,7 @@ export default {
       this.showPrivacyPolicyError = !this.privacyPolicyAndTerms;
     },
     onInput(index, event) {
+      this.clearError("otp");
       const value = event.target.value;
       if (!/^[0-9]$/.test(value)) {
         this.otp[index] = "";
@@ -290,5 +315,8 @@ export default {
 }
 .otp-input {
   @apply w-16 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring-[#1c592f] focus:border-[#1c592f] placeholder-gray-400;
+}
+.border-red-500 {
+  border-color: red;
 }
 </style>

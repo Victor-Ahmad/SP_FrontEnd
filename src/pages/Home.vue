@@ -2,7 +2,12 @@
   <div class="min-h-screen pb-20 md:py-8 lg:p-8 bg-gray-100 lg:bg-white">
     <div class="flex flex-col lg:flex-row">
       <div v-if="!isMobile" class="hidden lg:block w-full lg:w-1/5">
-        <FilterBar :filters="filters" @applyFilters="applyFilters" />
+        <FilterBar
+          :filters="filters"
+          :filteredHouses="filteredHouses"
+          @applyFilters="applyFilters"
+          @updateFilteredHouses="setFilteredHouses"
+        />
       </div>
       <div
         class="w-full lg:w-4/5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 pt-8 lg:p-0"
@@ -132,8 +137,11 @@
         <div class="p-4 overflow-y-auto">
           <FilterBar
             :filters="filters"
+            :filteredHouses="filteredHouses"
             @applyFilters="handleApplyFilters"
             @clearFilters="closeFilterDrawer"
+            @closeFilterDrawer="closeFilterDrawer"
+            @updateFilteredHouses="setFilteredHouses"
           />
         </div>
       </div>
@@ -256,7 +264,7 @@ export default {
     const closeFilterDrawer = () => {
       showFilterDrawer.value = false;
       // showFilterDrawer.value = false;
-      // document.body.style.overflow = "";
+      document.body.style.overflow = "";
     };
 
     const setActiveTab = (tab) => {
@@ -310,7 +318,8 @@ export default {
     const clearFilters = async () => {
       filters.value = {
         search: "",
-        minSize: 1,
+        maxRent: 3000, // Reset to the maximum
+        minSize: 1, // Reset to the minimum
         maxFloor: 10,
         numberOfRooms: [],
         areas: [],
@@ -358,6 +367,9 @@ export default {
   },
   methods: {
     updateCounts() {},
+    setFilteredHouses(houses) {
+      this.filteredHouses = houses; // Update the filtered houses
+    },
   },
 };
 </script>

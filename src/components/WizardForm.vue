@@ -203,7 +203,206 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
+    validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    },
+    validateStep1() {
+      let valid = true;
+      this.errors.step1 = {}; // Reset previous errors
+
+      // Validate city (checking if at least one city is selected)
+      if (
+        !this.formData.wish.locations ||
+        this.formData.wish.locations?.length === 0
+      ) {
+        this.errors.step1.city = true;
+        valid = false;
+      }
+
+      // Validate house type (selectedHouseTypeName must have a value)
+      if (!this.formData.wish.house_type_id) {
+        this.errors.step1.house_type_id = true;
+        valid = false;
+      }
+
+      // Validate price (must be a number and non-empty)
+      if (!this.formData?.wish?.price) {
+        this.errors.step1.price = true;
+        valid = false;
+      }
+
+      // Validate number of rooms (must have a selection)
+      if (!this.formData?.wish?.number_of_rooms) {
+        this.errors.step1.number_of_rooms = true;
+        valid = false;
+      }
+
+      // Validate floor (must have a selection)
+      if (!this.formData?.wish?.floor_number) {
+        this.errors.step1.floor_number = true;
+        valid = false;
+      }
+
+      // Validate area (must have a value)
+      if (!this.formData?.wish?.area) {
+        this.errors.step1.area = true;
+        valid = false;
+      }
+
+      // Validate features (must have at least one feature selected)
+      if (this.formData?.wish?.features?.length === 0) {
+        this.errors.step1.features = true;
+        valid = false;
+      }
+
+      return valid;
+    },
+    validateStep2() {
+      let valid = true;
+      this.errors.step2 = {}; // Reset previous errors for step 2
+
+      // Validate postcode (must not be empty)
+      if (!this.formData.post_code) {
+        this.errors.step2.post_code = true;
+        valid = false;
+      }
+
+      // Validate house number (must not be empty)
+      if (!this.formData.house_number) {
+        this.errors.step2.house_number = true;
+        valid = false;
+      }
+
+      // Validate location (must not be empty)
+      if (!this.formData.location_name) {
+        this.errors.step2.location_name = true;
+        valid = false;
+      }
+
+      // Validate street (must not be empty)
+      if (!this.formData.street) {
+        this.errors.step2.street = true;
+        valid = false;
+      }
+
+      // Validate house type (must have a value)
+      if (!this.formData.house_type) {
+        this.errors.step2.house_type = true;
+        valid = false;
+      }
+
+      // Validate rent price (must not be empty and a valid number)
+      if (!this.formData.price || isNaN(this.formData.price)) {
+        this.errors.step2.price = true;
+        valid = false;
+      }
+
+      // Validate number of rooms (must be selected)
+      if (!this.formData.number_of_rooms) {
+        this.errors.step2.number_of_rooms = true;
+        valid = false;
+      }
+
+      // Validate floor (must be selected)
+      if (!this.formData.floor && this.formData.floor !== 0) {
+        this.errors.step2.floor = true;
+        valid = false;
+      }
+
+      // Validate area (must not be empty)
+      if (!this.formData.area) {
+        this.errors.step2.area = true;
+        valid = false;
+      }
+
+      // Validate features (must have at least one feature selected)
+      if (!this.formData.features || this.formData.features.length === 0) {
+        this.errors.step2.features = true;
+        valid = false;
+      }
+      return valid;
+    },
+    validateStep3() {
+      let valid = true;
+      this.errors.step3 = {}; // Reset previous errors for step 3
+
+      // Validate first name (must not be empty)
+      if (!this.formData.first_name) {
+        this.errors.first_name = true;
+        valid = false;
+      }
+
+      // Validate last name (must not be empty)
+      if (!this.formData.last_name) {
+        this.errors.last_name = true;
+        valid = false;
+      }
+
+      // Validate email (must be a valid email and non-empty)
+      if (!this.formData.email || !this.validateEmail(this.formData.email)) {
+        this.errors.email = true;
+        valid = false;
+      }
+
+      // Validate phone number (must not be empty)
+      if (!this.formData.phone_number) {
+        this.errors.phone_number = true;
+        valid = false;
+      }
+
+      // Validate password (must match confirmation and not be empty)
+      if (
+        !this.formData.password ||
+        this.formData.password !== this.formData.password_confirmation
+      ) {
+        this.errors.password = true;
+        valid = false;
+      }
+
+      // Validate confirm password (must not be empty and match password)
+      if (
+        !this.formData.password_confirmation ||
+        this.formData.password !== this.formData.password_confirmation
+      ) {
+        this.errors.password_confirmation = true;
+        valid = false;
+      }
+
+      // Validate privacy policy and terms agreement (must be checked)
+      if (
+        !this.formData.agreed_privacy_policy ||
+        !this.formData.agreed_terms_of_use
+      ) {
+        this.errors.privacyPolicyAndTerms = true;
+        valid = false;
+      }
+
+      // If OTP is required, validate OTP (must not be empty and have correct length)
+      if (
+        this.showOtp &&
+        (this.otp.some((digit) => !digit) || this.otp.length !== 4)
+      ) {
+        this.errors.otp = true;
+        valid = false;
+      }
+
+      return valid;
+    },
+
     async nextStep() {
+      if (this.currentStep === 0) {
+        const isValid = this.validateStep1();
+        if (!isValid) return;
+      }
+      if (this.currentStep === 1) {
+        const isValid = this.validateStep2(); // Validate step 1 fields
+        if (!isValid) return; // If validation fails, don't proceed
+      }
+      if (this.currentStep === 2) {
+        const isValid = this.validateStep3(); // Validate step 1 fields
+        if (!isValid) return; // If validation fails, don't proceed
+      }
       if (this.currentStep === 2) {
         if (!this.showOtp) {
           // Email and phone validation step
@@ -218,11 +417,13 @@ export default {
               if (response.success === 1) {
                 this.emailError = false;
                 this.phoneError = false;
-
+                this.isLoading = true;
                 await this.submitForm();
+                this.isLoading = false;
                 // Scroll to top after navigating to the next step
               } else {
                 this.handleValidationErrors(response.message);
+                this.isLoading = false;
               }
             } catch (error) {
               console.error("Validation error:", error);
